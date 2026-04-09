@@ -8,7 +8,40 @@ CREATE TYPE "Occupancy" AS ENUM ('Empty', 'Moderate', 'Crowded');
 
 CREATE TYPE "NoiseLevel" AS ENUM ('Quiet', 'Moderate', 'Loud');
 
-CREATE TYPE "FoodAllowed" AS ENUM ('Permitted', 'Prohibited', 'Water');
+CREATE TYPE "FoodAllowed" AS ENUM ('Permitted', 'Prohibited', 'Water Only');
+
+
+CREATE TABLE "Listing" (
+    "listingID"    SERIAL NOT NULL,
+    "buildingName" TEXT NOT NULL, 
+    "roomNumber"   TEXT NOT NULL,
+    "times"        TEXT[] NOT NULL,
+    "pictures"     TEXT[] NOT NULL,
+    "occupancy"        "Occupancy"    NOT NULL DEFAULT 'Empty',
+    "foodAllowed"      "FoodAllowed"  NOT NULL DEFAULT 'Permitted',
+    "noiseLevel"       "NoiseLevel"   NOT NULL DEFAULT 'Moderate'
+
+    CONSTRAINT "Listing_pkey" PRIMARY KEY ("listingID")
+)
+
+
+CREATE TABLE "Image" (
+    "imageID" SERIAL NOT NULL,
+    "listingID" INTEGER NOT NULL,
+    "fileName" TEXT NOT NULL
+
+    CONSTRAINT "Image_pkey" PRIMARY KEY ("imageID"),
+);
+
+CREATE TABLE "TimeSlot" (
+    "timeID" SERIAL NOT NULL,
+    "listingID" INTEGER NOT NULL,
+    "startTime" TIME NOT NULL,
+    "endTime" TIME NOT NULL
+
+    CONSTRAINT "Time_pkey" PRIMARY KEY ("timeID"),
+);
+
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -32,35 +65,5 @@ CREATE TABLE "Stuff" (
 );
 
 
-CREATE TABLE "Listing" (
-    "listingID"    SERIAL NOT NULL,
-    "buildingName" TEXT NOT NULL, 
-    "roomNumber"   TEXT NOT NULL,
-    "times"        TEXT[] NOT NULL,
-    "pictures"     TEXT[] NOT NULL,
-    "occupancy"        "Occupancy"    NOT NULL DEFAULT 'Empty',
-    "foodAllowed"      "FoodAllowed"  NOT NULL DEFAULT 'Permitted',
-    "noiseLevel"       "NoiseLevel"   NOT NULL DEFAULT 'Moderate',
-
-    CONSTRAINT "Listing_pkey" PRIMARY KEY ("listingID")
-);
-
-
-CREATE TABLE "Image" (
-    "imageID" SERIAL NOT NULL,
-    "listingID" INTEGER NOT NULL,
-    "fileName" TEXT NOT NULL,
-
-    CONSTRAINT "Image_pkey" PRIMARY KEY ("imageID")
-);
-
-CREATE TABLE "TimeSlot" (
-    "timeID" SERIAL NOT NULL,
-    "listingID" INTEGER NOT NULL,
-    "startTime" TIME NOT NULL,
-    "endTime" TIME NOT NULL,
-
-    CONSTRAINT "Time_pkey" PRIMARY KEY ("timeID")
-);
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
