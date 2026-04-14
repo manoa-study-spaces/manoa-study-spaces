@@ -65,6 +65,8 @@ CREATE TABLE "Stuff" (
     CONSTRAINT "Stuff_pkey" PRIMARY KEY ("id")
 );
 
+ALTER TABLE "User" ADD "fullName" TEXT NOT NULL;
+
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
