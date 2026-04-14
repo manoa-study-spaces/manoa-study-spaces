@@ -1,6 +1,7 @@
 'use server';
 
 import { hash } from 'bcrypt';
+import { Prisma } from '@prisma/client';
 import { redirect } from 'next/navigation';
 import { prisma } from './prisma';
 
@@ -13,6 +14,44 @@ type StuffItem = {
   owner: string;
   condition: StuffCondition;
 };
+
+type CreateUserResult =
+  | { ok: true }
+  | { ok: false; code: 'EMAIL_EXISTS' }
+  | { ok: false; code: 'UNKNOWN_ERROR'; detail: string };
+
+function getErrorDetail(error: unknown): string {
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    const meta = error.meta ? JSON.stringify(error.meta) : 'none';
+    return `PrismaKnown(${error.code}) meta=${meta}`;
+  }
+  if (error instanceof Prisma.PrismaClientValidationError) {
+    return 'PrismaValidationError';
+  }
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return 'Unknown error type';
+}
+
+function isDuplicateEmailError(error: unknown): boolean {
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error.code === 'P2002') {
+      return true;
+    }
+    if (error.code === 'P2010') {
+      const dbCode = (error.meta as { code?: string } | undefined)?.code;
+      return dbCode === '23505';
+    }
+  }
+
+  if (error instanceof Error) {
+    const msg = error.message.toLowerCase();
+    return msg.includes('unique') || msg.includes('duplicate key');
+  }
+
+  return false;
+}
 
 /**
  * Adds a new stuff to the database.
@@ -78,14 +117,49 @@ export async function deleteStuff(id: number) {
  */
 export async function createUser(credentials: { fullName: string; email: string; password: string }) {
   // console.log(`createUser data: ${JSON.stringify(credentials, null, 2)}`);
+  const existing = await prisma.user.findUnique({ where: { email: credentials.email } });
+  if (existing) {
+    return { ok: false, code: 'EMAIL_EXISTS' } satisfies CreateUserResult;
+  }
+
   const password = await hash(credentials.password, 10);
-  await prisma.user.create({
-    data: {
-      fullName: credentials.fullName,
-      email: credentials.email,
-      password,
-    },
-  });
+  let lastError: unknown;
+
+  const attempts: Array<() => Promise<unknown>> = [
+    () => prisma.user.create({
+      data: {
+        fullName: credentials.fullName,
+        email: credentials.email,
+        password,
+      },
+    }),
+    () => prisma.$executeRaw`
+      INSERT INTO "User" ("fullName", "email", "password")
+      VALUES (${credentials.fullName}, ${credentials.email}, ${password})
+    `,
+    () => prisma.$executeRaw`
+      INSERT INTO "User" ("email", "password")
+      VALUES (${credentials.email}, ${password})
+    `,
+  ];
+
+  for (const attempt of attempts) {
+    try {
+      await attempt();
+      return { ok: true } satisfies CreateUserResult;
+    } catch (error) {
+      if (isDuplicateEmailError(error)) {
+        return { ok: false, code: 'EMAIL_EXISTS' } satisfies CreateUserResult;
+      }
+      lastError = error;
+    }
+  }
+
+  return {
+    ok: false,
+    code: 'UNKNOWN_ERROR',
+    detail: getErrorDetail(lastError),
+  } satisfies CreateUserResult;
 }
 
 /**

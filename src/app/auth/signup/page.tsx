@@ -3,7 +3,6 @@
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { createUser } from '@/lib/dbActions';
 import { SignUpSchema } from '@/lib/validationSchemas';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -36,25 +35,44 @@ const SignUp = () => {
     setIsLoading(true);
 
     try {
-      await createUser(data);
-      const result = await signIn('credentials', {
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fullName: data.fullName,
+          email: data.email,
+          password: data.password,
+        }),
+      });
+
+      const result = (await response.json()) as { message?: string };
+
+      if (!response.ok) {
+        if (response.status === 409) {
+          setErrorMessage('An account with this email already exists. Please sign in or use a different email.');
+        } else {
+          setErrorMessage(result.message || 'Error creating account. Please try again.');
+        }
+        setIsLoading(false);
+        return;
+      }
+
+      const signInResult = await signIn('credentials', {
         email: data.email,
         password: data.password,
         redirect: false,
       });
 
-      if (result?.ok) {
+      if (signInResult?.ok) {
         router.push('/add');
       } else {
         setErrorMessage('Account created successfully, but login failed. Please sign in manually.');
         setIsLoading(false);
       }
-    } catch (error) {
-      if (error instanceof Error && error.message.includes('Unique constraint failed')) {
-        setErrorMessage('An account with this email already exists. Please sign in or use a different email.');
-      } else {
-        setErrorMessage('Error creating account. Please try again.');
-      }
+    } catch {
+      setErrorMessage('Error creating account. Please try again.');
       setIsLoading(false);
     }
   };

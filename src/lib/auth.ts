@@ -29,7 +29,16 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
         ) {
           return null;
         }
-        const user = await prisma.user.findUnique({ where: { email: credentials.email } });
+        const rows = await prisma.$queryRaw<
+          Array<{ id: number; email: string; password: string; role: string }>
+        >`
+          SELECT "id", "email", "password", "role"
+          FROM "User"
+          WHERE "email" = ${credentials.email}
+          LIMIT 1
+        `;
+
+        const user = rows[0];
         if (!user || typeof user.password !== 'string') return null;
         const isValid = await bcrypt.compare(credentials.password, user.password);
         if (!isValid) return null;
