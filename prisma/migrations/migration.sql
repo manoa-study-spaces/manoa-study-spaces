@@ -65,7 +65,6 @@ CREATE TABLE "Stuff" (
     CONSTRAINT "Stuff_pkey" PRIMARY KEY ("id")
 );
 
-ALTER TABLE "User" ADD "fullName" TEXT NOT NULL;
 
 
 -- CreateIndex
