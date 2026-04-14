@@ -20,6 +20,7 @@ enum Role {
 model User {
   id       Int      @id @default(autoincrement())
   email    String   @unique
+  fullName String
   password String
   role     Role     @default(USER)
 }
@@ -67,7 +68,7 @@ model Listing {
   foodAllowed      FoodAllowed  @default(Prohibited)
   noiseLevel       NoiseLevel   @default(Moderate)
   amenities        Amenity[]
-  spaceType        SpaceType    @default(Indoor)
+  spaceType        spaceType    @default(Indoor)
   capacity         Int 
 }
 
