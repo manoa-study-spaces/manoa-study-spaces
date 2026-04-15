@@ -20,7 +20,7 @@ enum Role {
 model User {
   id       Int      @id @default(autoincrement())
   email    String   @unique
-  fullName String?
+  fullName String
   password String
   role     Role     @default(USER)
 }
@@ -41,21 +41,6 @@ enum FoodAllowed {
   Permitted
   Prohibited
   Water
-}
-
-enum SpaceType {
-  Indoor
-  Outdoor
-}
-
-enum Amenity {
-  Outlets
-  AirConditioning
-  WiFi
-  Printing
-  Whiteboards
-  ReservableRooms
-  Accessible
 }
 
 model Listing {
