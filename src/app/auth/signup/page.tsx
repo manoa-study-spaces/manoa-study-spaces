@@ -100,7 +100,7 @@ const SignUp = () => {
         )}
 
         <div className="auth-form-group">
-          <label className="auth-form-label">Full name</label>
+          <label className="auth-form-label">Full Name</label>
           <input
             type="text"
             {...register('fullName')}
@@ -111,7 +111,7 @@ const SignUp = () => {
         </div>
 
         <div className="auth-form-group">
-          <label className="auth-form-label">UH email address</label>
+          <label className="auth-form-label">UH Email Address</label>
           <input
             type="email"
             {...register('email')}
@@ -143,7 +143,7 @@ const SignUp = () => {
         </div>
 
         <div className="auth-form-group">
-          <label className="auth-form-label">Confirm password</label>
+          <label className="auth-form-label">Confirm Password</label>
           <div className="auth-input-wrap">
             <input
               type={showConfirmPassword ? 'text' : 'password'}

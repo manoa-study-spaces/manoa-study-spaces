@@ -1,6 +1,7 @@
 'use client';
 
 import { signIn } from 'next-auth/react';
+import type { SignInResponse } from 'next-auth/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -13,6 +14,22 @@ type SignInForm = {
   password: string;
   rememberMe?: boolean;
 };
+
+function getSignInErrorMessage(result: SignInResponse | undefined): string {
+  if (result?.code === 'user_not_found') {
+    return 'No account found with that email address.';
+  }
+
+  if (result?.code === 'invalid_password') {
+    return 'Incorrect password. Please try again.';
+  }
+
+  if (result?.error?.includes('CredentialsSignin')) {
+    return 'Invalid email or password. Please try again.';
+  }
+
+  return 'An error occurred during sign in. Please try again.';
+}
 
 const SignIn = () => {
   const router = useRouter();
@@ -32,25 +49,28 @@ const SignIn = () => {
     setErrorMessage('');
     setIsLoading(true);
 
-    const result = await signIn('credentials', {
-      email: data.email,
-      password: data.password,
-      redirect: false,
-    });
+    try {
+      const result = await signIn('credentials', {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      });
 
-    if (!result?.ok) {
       if (result?.error) {
-        if (result.error.includes('CredentialsSignin')) {
-          setErrorMessage('Invalid email or password. Please try again.');
-        } else {
-          setErrorMessage(result.error);
-        }
-      } else {
-        setErrorMessage('An error occurred during sign in. Please try again.');
+        setErrorMessage(getSignInErrorMessage(result));
+        return;
       }
+
+      if (result?.ok) {
+        router.push('/list');
+        return;
+      }
+
+      setErrorMessage(getSignInErrorMessage(result));
+    } catch {
+      setErrorMessage('An unexpected error occurred during sign in. Please try again.');
+    } finally {
       setIsLoading(false);
-    } else {
-      router.push('/list');
     }
   };
 
@@ -77,7 +97,7 @@ const SignIn = () => {
         )}
 
         <div className="auth-form-group">
-          <label className="auth-form-label">UH Email address</label>
+          <label className="auth-form-label">UH Email Address</label>
           <input
             type="email"
             {...register('email')}
