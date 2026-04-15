@@ -17,7 +17,7 @@ async function main() {
       },
       create: {
         email: account.email,
-        fullName,
+        fullName: account.fullName,
         password,
         role,
       },
