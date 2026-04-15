@@ -88,6 +88,31 @@ const NavBar: React.FC = () => {
               </Nav.Link>
             )}
           </Nav>
+          <Nav>
+            {session ? (
+              <NavDropdown id="login-dropdown" title={currentUser}>
+                <NavDropdown.Item id="login-dropdown-sign-out" href="/api/auth/signout">
+                  <BoxArrowRight />
+                  Sign Out
+                </NavDropdown.Item>
+                <NavDropdown.Item id="login-dropdown-change-password" href="/auth/change-password">
+                  <Lock />
+                  Change Password
+                </NavDropdown.Item>
+              </NavDropdown>
+            ) : (
+              <NavDropdown id="login-dropdown" title="Login">
+                <NavDropdown.Item id="login-dropdown-sign-in" href="/auth/signin">
+                  <PersonFill />
+                  Sign in
+                </NavDropdown.Item>
+                <NavDropdown.Item id="login-dropdown-sign-up" href="/auth/signup">
+                  <PersonPlusFill />
+                  Sign up
+                </NavDropdown.Item>
+              </NavDropdown>
+            )}
+          </Nav>
         </Navbar.Collapse>
       </Navbar>
     </>
