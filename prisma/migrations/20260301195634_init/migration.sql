@@ -16,7 +16,6 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "role" "Role" NOT NULL DEFAULT 'USER',
-    "fullName" TEXT NOT NULL DEFAULT 'Anon',
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
