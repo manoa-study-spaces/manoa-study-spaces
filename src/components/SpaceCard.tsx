@@ -14,6 +14,7 @@ type SpaceCardProps = {
     foodAllowed: string;
     spaceType: string;
     capacity: number;
+    image: string;
   };
 };
 
