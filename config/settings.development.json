@@ -1,7 +1,7 @@
 {
   "defaultAccounts": [
-    { "email": "admin@foo.com", "password": "changeme", "role": "ADMIN", "fullName":"Admin Smith" },
-    { "email": "john@foo.com", "password": "changeme", "fullName":"John Vercel" }
+    { "email": "admin@foo.com", "password": "changeme", "role": "ADMIN"},
+    { "email": "john@foo.com", "password": "changeme" }
   ],
   "defaultData": [
     { "name": "Basket", "quantity": 3, "owner": "john@foo.com", "condition": "excellent" },
