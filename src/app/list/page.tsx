@@ -15,7 +15,43 @@ const ListPage = async () => {
     } | null,
   );
 
-  const listings = await prisma.listing.findMany();
+  // const listings = await prisma.listing.findMany();
+  // For now, we will use hardcoded listings until we have the add space form
+  const listings = [
+  {
+    listingID: 1,
+    buildingName: 'Hamilton Library',
+    roomNumber: '1st Floor Addition',
+    occupancy: 'Moderate',
+    noiseLevel: 'Quiet',
+    foodAllowed: 'Prohibited',
+    spaceType: 'Indoor',
+    capacity: 50,
+    image: '/hamilton.jpg',
+  },
+  {
+    listingID: 2,
+    buildingName: 'Paradise Palms',
+    roomNumber: 'N/A',
+    occupancy: 'Crowded',
+    noiseLevel: 'Loud',
+    foodAllowed: 'Permitted',
+    spaceType: 'Indoor',
+    capacity: 80,
+    image: '/paradise-palms.jpg',
+  },
+  {
+    listingID: 3,
+    buildingName: 'Sustainability Courtyard',
+    roomNumber: 'N/A',
+    occupancy: 'Empty',
+    noiseLevel: 'Moderate',
+    foodAllowed: 'Permitted',
+    spaceType: 'Outdoor',
+    capacity: 30,
+    image: '/sustainability-courtyard.jpg',
+  },
+];
 
   return (
       <main>

@@ -3,6 +3,9 @@
 import { useState } from 'react';
 import { Container, Form, Row, Col } from 'react-bootstrap';
 import SpaceCard from '@/components/SpaceCard';
+import { InputGroup, Button } from 'react-bootstrap';
+import { LiaTimesSolid } from "react-icons/lia";
+import { CiSearch } from "react-icons/ci";
 
 /**
  * Type definition for single Listing object coming from Prisma.
@@ -16,6 +19,7 @@ type Listing = {
   foodAllowed: string;
   spaceType: string;
   capacity: number;
+  image: string;
 };
 
 // listings: array of Listing objects fetched from the database 
@@ -35,28 +39,49 @@ const SpaceListClient = ({ listings }: SpaceCardProps) => {
   );
 
   return (
-    <Container>
-      {/* Search bar */}
+    <Container fluid>
       <Row className="mb-3">
-        <Col md={6}>
-          <Form.Control
-            className="space-search"
-            type="text"
-            placeholder="Search by building name..."
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-          />
+        <Col className="d-flex align-items-center">
+
+          {/* Search Bar */}
+          <InputGroup style={{ maxWidth: '700px', width: '100%' }}>
+            <InputGroup.Text>
+              <CiSearch />
+            </InputGroup.Text>
+
+            <Form.Control
+              className="space-search"
+              type="text"
+              placeholder="Search by building name..."
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+            />
+
+            {search && (
+              <Button
+                variant="outline-secondary"
+                onClick={() => setSearch('')}
+              >
+                <LiaTimesSolid />
+              </Button>
+            )}
+          </InputGroup>
+
+          {/* Add Space Button */}
+          <Button variant="success" className="add-space-btn ms-3">
+            + Add Space
+          </Button>
         </Col>
       </Row>
 
       {/* Cards */}
-      <Row>
-        <Col>
-          {filteredListings.map((listing) => (
-            <SpaceCard key={listing.listingID} listing={listing} />
-          ))}
-        </Col>
-      </Row>
+      <Row xs={1} md={2} className="g-3">
+        {filteredListings.map((listing) => (
+          <Col key={listing.listingID}>
+            <SpaceCard listing={listing} />
+          </Col>
+        ))}
+      </Row>   
     </Container>
   );
 };

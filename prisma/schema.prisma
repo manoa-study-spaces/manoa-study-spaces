@@ -70,6 +70,7 @@ model Listing {
   amenities        Amenity[]
   spaceType        SpaceType    @default(Indoor)
   capacity         Int 
+  image            String
 }
 
 model Image {
