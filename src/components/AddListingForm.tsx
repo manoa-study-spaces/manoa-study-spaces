@@ -67,7 +67,8 @@ const onSubmit = async (data: {
         body: uploadData,
       });
       if (!result.ok) {
-        throw new Error('Time upload failed');
+        throw new Error('Times upload failed');
+      }
     }
     
   }
@@ -80,7 +81,7 @@ const onSubmit = async (data: {
   });
 };
 
-const AddLListingForm: React.FC = () => {
+const AddListingForm: React.FC = () => {
   const { data: session, status } = useSession();
   // console.log('AddListingForm', status, session);
   const currentUser = session?.user?.email || '';
