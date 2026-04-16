@@ -10,22 +10,47 @@ import { prisma } from './prisma';
  * Adds a new stuff to the database.
  * @param stuff, an object with the following properties: name, quantity, owner, condition.
  */
-export async function addStuff(stuff: { name: string; quantity: number; owner: string; condition: string }) {
+export async function addStuff(listing: { listingID: number; buildingName: string; roomNumber: string; times: string; pictures: string; occupancy: string; foodAllowed: string; noiseLevel: string }) {
   // console.log(`addStuff data: ${JSON.stringify(stuff, null, 2)}`);
-  let condition: Condition = 'good';
-  if (stuff.condition === 'poor') {
-    condition = 'poor';
-  } else if (stuff.condition === 'excellent') {
-    condition = 'excellent';
+
+  let occupancy: Occupancy = 'moderate';
+  if (listing.occupancy === 'crowded') {
+    occupancy = 'crowded';
+  } else
+    occupancy = 'empty';
+
+  let foodAllowed: FoodAllowed = 'prohibited';
+  if (listing.foodAllowed === 'permitted') {
+    foodAllowed = 'permitted';
   } else {
-    condition = 'fair';
+    foodAllowed = 'water okay';
   }
+
+  let noiseLevel: NoiseLevel = 'moderate';
+  if (listing.noiseLevel === 'quiet') {
+    noiseLevel = 'quiet';
+  } else if (listing.noiseLevel === 'loud') {
+    noiseLevel = 'loud';
+  }
+
+  let occupancy: Occupancy = 'moderate';
+  if (listing.occupancy === 'crowded') {
+    occupancy = 'crowded';
+  } else
+    occupancy = 'empty';
+
+
+  }
+
+
   await prisma.stuff.create({
     data: {
-      name: stuff.name,
-      quantity: stuff.quantity,
-      owner: stuff.owner,
-      condition,
+      buildingName: listing.buildingName,
+      roomNumber: listing.roomNumber,
+      times: listing.times,
+      occupancy,
+      foodAllowed,
+      noiseLevel,
     },
   });
   // After adding, redirect to the list page
