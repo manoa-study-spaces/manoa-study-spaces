@@ -14,9 +14,7 @@ const AddStuff = async () => {
   );
   return (
     <main>
-      <NavBar />
       <AddStuffForm />
-      <Footer />
     </main>
   );
 };
