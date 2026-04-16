@@ -33,13 +33,13 @@ export default function AuthLayout({ children, activeTab, onTabChange }: AuthLay
             className={`auth-tab ${activeTab === 'signin' ? 'active' : ''}`}
             onClick={() => onTabChange('signin')}
           >
-            Log in
+            Sign In
           </button>
           <button
             className={`auth-tab ${activeTab === 'signup' ? 'active' : ''}`}
             onClick={() => onTabChange('signup')}
           >
-            Sign up
+            Sign Up
           </button>
         </div>
         <div className="auth-form-area">{children}</div>
