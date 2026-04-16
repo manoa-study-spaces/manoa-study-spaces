@@ -14,7 +14,6 @@ CREATE TABLE "ProfileImage" (
 CREATE TABLE "Profile" (
     "id" INTEGER NOT NULL,
     "profileID" SERIAL NOT NULL,
-    "fullName" TEXT NOT NULL,
     "major" TEXT NOT NULL,
     "classes" TEXT NOT NULL,
     "Interests" TEXT NOT NULL,
