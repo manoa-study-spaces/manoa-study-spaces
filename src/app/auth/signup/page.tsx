@@ -163,7 +163,7 @@ const SignUp = () => {
         </div>
 
         <button type="submit" className="auth-submit-btn" disabled={isLoading}>
-          {isLoading ? 'Creating account...' : 'Create account'}
+          {isLoading ? 'Creating account...' : 'Create Account'}
         </button>
       </form>
     </AuthLayout>

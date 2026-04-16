@@ -130,15 +130,15 @@ const SignIn = () => {
         <div className="auth-row">
           <label className="auth-check-wrap">
             <input type="checkbox" {...register('rememberMe')} />
-            Remember me
+            Remember Me
           </label>
           <a href="/auth/forgot-password" className="auth-forgot-btn">
-            Forgot password?
+            Forgot Password?
           </a>
         </div>
 
         <button type="submit" className="auth-submit-btn" disabled={isLoading}>
-          {isLoading ? 'Logging in...' : 'Log in'}
+          {isLoading ? 'Logging in...' : 'Sign In'}
         </button>
       </form>
     </AuthLayout>
