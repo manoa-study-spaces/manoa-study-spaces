@@ -14,7 +14,7 @@ const onSubmit = async (data: {
   buildingName: string; 
   roomNumber: string; 
   times: number[]; 
-  image: number[];
+  pictures: number[];
   occupancy: string; 
   foodAllowed: string; 
   noiseLevel: string; 
