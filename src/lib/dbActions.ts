@@ -89,8 +89,8 @@ export async function addStuff(stuff: { name: string; quantity: number; owner: s
 export async function addListing(listing: { 
   buildingName: string; 
   roomNumber: string; 
-  times: string; 
-  pictures: string; 
+  times: number[]; 
+  pictures: number[]; 
   occupancy: string; 
   foodAllowed: string; 
   noiseLevel: string; 
