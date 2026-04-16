@@ -23,7 +23,7 @@ const onSubmit = async (data: {
   capacity: number
 }) => {
   // console.log(`onSubmit data: ${JSON.stringify(data, null, 2)}`);
-  await addContact(data);
+  await addListing(data);
   swal('Success', 'Your listing has been added', 'success', {
     timer: 2000,
   });
