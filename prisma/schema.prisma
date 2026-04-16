@@ -57,7 +57,7 @@ enum FoodAllowed {
   Water Okay
 }
 
-model Stuff {
+model Listing {
   listingID        Int          @id @default(autoincrement())
   buildingName     String 
   roomNumber       String
@@ -72,7 +72,7 @@ model Image {
   imageID          Int      @id @default(autoincrement())
   listingID        Int
   fileName         String
-  stuff          Stuff  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
+  listing          Listing  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
 }
 
 model Times {
@@ -80,5 +80,5 @@ model Times {
   listingID        Int
   startTime        DateTime @db.Time
   endTime          DateTime @db.Time
-  stuff          Stuff  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
+  listing          Listing  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
 }
