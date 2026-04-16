@@ -1,7 +1,5 @@
 import { loggedInProtectedPage } from '@/lib/page-protection';
 import AddStuffForm from '@/components/AddStuffForm';
-import NavBar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { auth } from '@/lib/auth';
 
 const AddStuff = async () => {
