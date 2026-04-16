@@ -1,7 +1,11 @@
 'use server';
 
+<<<<<<< Updated upstream
 import { Condition } from '@prisma/client';
 import { Stuff } from '@prisma/client';
+=======
+import { Listing } from '@prisma/client'; 
+>>>>>>> Stashed changes
 import { hash } from 'bcrypt';
 import { redirect } from 'next/navigation';
 import { prisma } from './prisma';
@@ -29,6 +33,58 @@ export async function addStuff(stuff: { name: string; quantity: number; owner: s
     },
   });
   // After adding, redirect to the list page
+  redirect('/list');
+}
+
+/**
+ * 
+ * @param listing 
+ */
+export async function addListing(listing: { 
+  buildingName: string; 
+  roomNumber: string; 
+  times: string; 
+  pictures: string; 
+  occupancy: string; 
+  foodAllowed: string; 
+  noiseLevel: string; 
+  amenities: string; 
+  spaceType: string; 
+  capacity: number 
+}) {
+  await prisma.listing.create({
+    data: {
+      buildingName: listing.buildingName,
+      roomNumber: listing.roomNumber,
+      times: listing.times, 
+      pictures: listing.pictures,
+      occupancy: listing.occupancy,
+      foodAllowed: listing.foodAllowed,
+      noiseLevel: listing.noiseLevel,
+      amenities: listing.amenities,
+      spaceType: listing.spaceType,
+      capacity: listing.capacity
+    },
+  });
+  redirect('list'); 
+}
+
+export async function editListing(listing: listing) {
+  await prisma.contact.update({
+    where: { id: listing.id }, 
+    data: {
+      buildingName: listing.buildingName,
+      roomNumber: listing.roomNumber,
+      times: listing.times,
+      pictures: listing.pictures,
+      occupancy: listing.occupancy,
+      foodAllowed: listing.foodAllowed,
+      noiseLevel: listing.noiseLevel,
+      amenities: listing.amenities,
+      spaceType: listing.spaceType,
+      capacity: listing.capacity,
+    },
+  }); 
   redirect('/list');
 }
 
