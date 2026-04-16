@@ -1,5 +1,7 @@
 'use server';
 
+import { Condition } from '@prisma/client';
+import { Stuff } from '@prisma/client';
 import { Listing } from '@prisma/client'; 
 import { hash } from 'bcrypt';
 import { Prisma } from '@prisma/client';
@@ -113,7 +115,7 @@ export async function addListing(listing: {
   redirect('list'); 
 }
 
-export async function editListing(listing: listing) {
+export async function editListing(listing: Listing) {
   await prisma.contact.update({
     where: { id: listing.id }, 
     data: {

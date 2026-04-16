@@ -15,7 +15,7 @@ export const EditStuffSchema = Yup.object({
   owner: Yup.string().required(),
 });
 
-export const EditListingSchema = Yup.object({
+export const AddListingSchema = Yup.object({
   id: Yup.number().required(),
   buildingName: Yup.string().required(),
   roomNumber: Yup.string().required(),
