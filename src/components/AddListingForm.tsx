@@ -13,8 +13,8 @@ import { AddListingSchema } from '@/lib/validationSchemas';
 const onSubmit = async (data: {  
   buildingName: string; 
   roomNumber: string; 
-  times: string; 
-  pictures: string; 
+  times: number[]; 
+  image: number[];
   occupancy: string; 
   foodAllowed: string; 
   noiseLevel: string; 
