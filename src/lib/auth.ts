@@ -1,8 +1,20 @@
 
-import NextAuth, { type DefaultSession } from 'next-auth';
+import NextAuth, { CredentialsSignin, type DefaultSession } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { prisma } from './prisma';
 import bcrypt from 'bcrypt';
+
+class UserNotFoundSigninError extends CredentialsSignin {
+  code = 'user_not_found';
+}
+
+class InvalidPasswordSigninError extends CredentialsSignin {
+  code = 'invalid_password';
+}
+
+class InvalidRequestSigninError extends CredentialsSignin {
+  code = 'invalid_request';
+}
 
 declare module 'next-auth' {
   interface Session {
@@ -27,12 +39,27 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
           typeof credentials.email !== 'string' ||
           typeof credentials.password !== 'string'
         ) {
-          return null;
+          throw new InvalidRequestSigninError();
         }
-        const user = await prisma.user.findUnique({ where: { email: credentials.email } });
-        if (!user || typeof user.password !== 'string') return null;
+        const rows = await prisma.$queryRaw<
+          Array<{ id: number; email: string; password: string; role: string }>
+        >`
+          SELECT "id", "email", "password", "role"
+          FROM "User"
+          WHERE "email" = ${credentials.email}
+          LIMIT 1
+        `;
+
+        const user = rows[0];
+        if (!user || typeof user.password !== 'string') {
+          throw new UserNotFoundSigninError();
+        }
+
         const isValid = await bcrypt.compare(credentials.password, user.password);
-        if (!isValid) return null;
+        if (!isValid) {
+          throw new InvalidPasswordSigninError();
+        }
+
         // Return user object for session
         return {
           id: user.id.toString(),
