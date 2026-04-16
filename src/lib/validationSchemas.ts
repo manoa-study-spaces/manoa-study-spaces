@@ -31,6 +31,20 @@ export const EditListingSchema = Yup.object({
   capacity: Yup.number().positive().required(), 
 });
 
+export const EditListingSchema = Yup.object({
+  id: Yup.number().required(),
+  buildingName: Yup.string().required(),
+  roomNumber: Yup.string().required(),
+  times: Yup.string().required(),
+  pictures: Yup.string().required(),
+  occupancy: Yup.string().required(),
+  foodAllowed: Yup.string().required(),
+  noiseLevel: Yup.string().required(),
+  amenities: Yup.string().required(),
+  spaceType: Yup.string().required(),
+  capacity: Yup.number().positive().required(), 
+});
+
 export const SignUpSchema = Yup.object({
   fullName: Yup.string().required('Full name is required').min(2, 'Full name must be at least 2 characters'),
   email: Yup.string()
