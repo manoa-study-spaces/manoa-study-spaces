@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
 type SignUpRequestBody = {
-  fullName?: string;
+  //fullName?: string;
   email?: string;
   password?: string;
 };
@@ -61,25 +61,49 @@ export async function POST(request: Request) {
   }
 
   try {
-    const fullName = typeof body.fullName === 'string' ? body.fullName.trim() : '';
+    //const fullName = typeof body.fullName === 'string' ? body.fullName.trim() : '';
     const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : '';
     const passwordRaw = typeof body.password === 'string' ? body.password : '';
 
-    if (!fullName || !email || !passwordRaw) {
+    //if (!fullName || !email || !passwordRaw) {
+      //return NextResponse.json({ message: 'Missing required fields.' }, { status: 400 });
+    //}
+
+    if ( !email || !passwordRaw) {
       return NextResponse.json({ message: 'Missing required fields.' }, { status: 400 });
     }
 
     const password = await hash(passwordRaw, 10);
 
-    const attempts: Array<() => Promise<unknown>> = [
-      () => prisma.user.create({ data: { fullName, email, password } }),
+    //const attempts: Array<() => Promise<unknown>> = [
+     // () => prisma.user.create({ data: { fullName, email, password } }),
+      //() => prisma.$executeRaw`
+      //  INSERT INTO "User" ("fullName", "email", "password", "role")
+      //  VALUES (${fullName}, ${email}, ${password}, 'USER')
+      //`,
+     // () => prisma.$executeRaw`
+     //   INSERT INTO "User" ("fullName", "email", "password")
+     //   VALUES (${fullName}, ${email}, ${password})
+     // `,
+     // () => prisma.$executeRaw`
+     //   INSERT INTO "User" ("email", "password", "role")
+     //   VALUES (${email}, ${password}, 'USER')
+     // `,
+     // () => prisma.$executeRaw`
+     //   INSERT INTO "User" ("email", "password")
+      //  VALUES (${email}, ${password})
+     // `,
+    //];
+
+       const attempts: Array<() => Promise<unknown>> = [
+      () => prisma.user.create({ data: { email, password } }),
       () => prisma.$executeRaw`
-        INSERT INTO "User" ("fullName", "email", "password", "role")
-        VALUES (${fullName}, ${email}, ${password}, 'USER')
+        INSERT INTO "User" ("email", "password", "role")
+        VALUES (${email}, ${password}, 'USER')
       `,
       () => prisma.$executeRaw`
-        INSERT INTO "User" ("fullName", "email", "password")
-        VALUES (${fullName}, ${email}, ${password})
+        INSERT INTO "User" ("email", "password")
+        VALUES (${email}, ${password})
       `,
       () => prisma.$executeRaw`
         INSERT INTO "User" ("email", "password", "role")
