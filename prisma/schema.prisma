@@ -100,6 +100,8 @@ model Image {
   imageID          Int      @id @default(autoincrement())
   listingID        Int
   fileName         String
+  MIMEType         String
+  datasource       Bytes
   listing          Listing  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
 }
 

@@ -87,6 +87,7 @@ export async function addStuff(stuff: { name: string; quantity: number; owner: s
  * @param listing 
  */
 export async function addListing(listing: { 
+  listingID: number;
   buildingName: string; 
   roomNumber: string; 
   occupancy: string; 
@@ -98,6 +99,7 @@ export async function addListing(listing: {
 }) {
   await prisma.listing.create({
     data: {
+      listingID: listing.listingID,
       buildingName: listing.buildingName,
       roomNumber: listing.roomNumber,
       occupancy: listing.occupancy,
@@ -115,6 +117,7 @@ export async function editListing(listing: Listing) {
   await prisma.contact.update({
     where: { id: listing.id }, 
     data: {
+      listingID: listing.listingID,
       buildingName: listing.buildingName,
       roomNumber: listing.roomNumber,
       occupancy: listing.occupancy,

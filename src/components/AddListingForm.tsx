@@ -1,31 +1,82 @@
 'use client';
 
+import { Maybe } from 'yup';
 import { useSession } from 'next-auth/react'; // v5 compatible
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import swal from 'sweetalert';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { redirect } from 'next/navigation';
 import { addListing } from '@/lib/dbActions';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { AddListingSchema } from '@/lib/validationSchemas';
 
 const onSubmit = async (data: {  
+  listingID: number;
   buildingName: string; 
   roomNumber: string; 
-  times?: number[]; 
-  pictures?: number[];
+  times?: Maybe<number[] | undefined>; 
+  pictures?: Maybe<FileList | undefined>;
   occupancy: string; 
   foodAllowed: string; 
   noiseLevel: string; 
   amenities: string; 
   spaceType: string; 
-  capacity: number
-}) => {
-  // console.log(`onSubmit data: ${JSON.stringify(data, null, 2)}`);
-  await addListing(data);
+  capacity: number;
+}, router: AppRouterInstance) => {
+  const newListing = await addListing ({
+    listingID: data.listingID,
+    buildingName: data.buildingName,
+    roomNumber: data.roomNumber,
+    occupancy: data.occupancy,
+    foodAllowed: data.foodAllowed,
+    noiseLevel: data.noiseLevel,
+    amenities: data.amenities,
+    spaceType: data.spaceType,
+    capacity: data.capacity,
+
+  });
+  const images = data.pictures;
+  const times = data.times;
+  if (images && images.length > 0) {
+    // Vercel rejects overly large payload/request,
+    // so upload images one by one instead of all together.
+    /* eslint-disable no-await-in-loop */
+    for (const image of images) {
+      const uploadData = new FormData();
+      uploadData.append('listingID', String(newListing.listingID));
+      uploadData.append('pictures', image);
+      const result = await fetch('/api/upload/merch-images', {
+        method: 'POST',
+        body: uploadData,
+      });
+      if (!result.ok) {
+        throw new Error('Image upload failed');
+      }
+    }
+    /* eslint-enable no-await-in-loop */
+  }
+  if (times && times.length > 0 && times.length < 7) {
+    for (const time of times) {
+      const uploadData = new FormData();
+      uploadData.append('listingID', String(newListing.listingID));
+      uploadData.append('times', time);
+      const result = await fetch('/api/upload/merch-images', {
+        method: 'POST',
+        body: uploadData,
+      });
+      if (!result.ok) {
+        throw new Error('Time upload failed');
+    }
+    
+  }
+
+
   swal('Success', 'Your listing has been added', 'success', {
     timer: 2000,
+  }).then(() => {
+    router.push(`/merch-detail/${newListing.listingID}`);
   });
 };
 
