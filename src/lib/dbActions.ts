@@ -48,6 +48,7 @@ export async function addStuff(listing: { listingID: number; buildingName: strin
       buildingName: listing.buildingName,
       roomNumber: listing.roomNumber,
       times: listing.times,
+      pictures: listing.pictures,
       occupancy,
       foodAllowed,
       noiseLevel,
