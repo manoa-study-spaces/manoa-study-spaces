@@ -17,11 +17,70 @@ enum Role {
   ADMIN
 }
 
+enum SpaceType {
+  Indoor
+  Outdoor
+}
+
+enum Amenity {
+  Outlets
+  AirConditioning
+  WiFi
+  Printing
+  Whiteboards
+  ReservableRooms
+  Accessible
+}
+
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
   password String
-  role     Role   @default(USER)
+  role     Role     @default(USER)
+}
+
+enum Occupancy {
+  Empty
+  Moderate
+  Crowded
+}
+
+enum NoiseLevel {
+  Quiet
+  Moderate
+  Loud
+}
+
+enum FoodAllowed {
+  Permitted
+  Prohibited
+  Water
+}
+
+model Listing {
+  listingID        Int          @id @default(autoincrement())
+  buildingName     String 
+  roomNumber       String
+  times            Times[]
+  pictures         Image[]
+  occupancy        Occupancy    @default(Moderate)
+  foodAllowed      FoodAllowed  @default(Prohibited)
+  noiseLevel       NoiseLevel   @default(Moderate)
+}
+
+model Image {
+  imageID          Int      @id @default(autoincrement())
+  listingID        Int
+  fileName         String
+  listing          Listing  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
+}
+
+model Times {
+  timeID           Int      @id @default(autoincrement())
+  listingID        Int
+  startTime        DateTime @db.Time
+  endTime          DateTime @db.Time
+  listing          Listing  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
 }
 
 enum Condition {
