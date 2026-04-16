@@ -115,7 +115,7 @@ export async function deleteStuff(id: number) {
  * Creates a new user in the database.
  * @param credentials, an object with the following properties: fullName, email, password.
  */
-export async function createUser(credentials: { fullName: string; email: string; password: string }) {
+export async function createUser(credentials: { email: string; password: string }) {
   // console.log(`createUser data: ${JSON.stringify(credentials, null, 2)}`);
   const existing = await prisma.user.findUnique({ where: { email: credentials.email } });
   if (existing) {
@@ -128,15 +128,19 @@ export async function createUser(credentials: { fullName: string; email: string;
   const attempts: Array<() => Promise<unknown>> = [
     () => prisma.user.create({
       data: {
-        fullName: credentials.fullName,
+        //fullName: credentials.fullName,
         email: credentials.email,
         password,
       },
     }),
     () => prisma.$executeRaw`
-      INSERT INTO "User" ("fullName", "email", "password")
-      VALUES (${credentials.fullName}, ${credentials.email}, ${password})
+      INSERT INTO "User" ("email", "password")
+      VALUES (${credentials.email}, ${password})
     `,
+    // () => prisma.$executeRaw`
+    //  INSERT INTO "User" ("fullName", "email", "password")
+    //  VALUES (${credentials.fullName}, ${credentials.email}, ${password})
+    //`,
     () => prisma.$executeRaw`
       INSERT INTO "User" ("email", "password")
       VALUES (${credentials.email}, ${password})
