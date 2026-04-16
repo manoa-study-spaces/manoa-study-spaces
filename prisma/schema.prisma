@@ -17,6 +17,21 @@ enum Role {
   ADMIN
 }
 
+enum SpaceType {
+  Indoor
+  Outdoor
+}
+
+enum Amenity {
+  Outlets
+  AirConditioning
+  WiFi
+  Printing
+  Whiteboards
+  ReservableRooms
+  Accessible
+}
+
 model User {
   id       Int      @id @default(autoincrement())
   email    String   @unique
