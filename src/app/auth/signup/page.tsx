@@ -1,12 +1,12 @@
 'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { SignUpSchema } from '@/lib/validationSchemas';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import AuthLayout from '@/components/AuthLayout';
+import { SignUpSchema } from '@/lib/validationSchemas';
 
 type SignUpForm = {
   fullName: string;
@@ -17,14 +17,15 @@ type SignUpForm = {
 
 const SignUp = () => {
   const router = useRouter();
-  const [errorMessage, setErrorMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<SignUpForm>({
     resolver: yupResolver(SignUpSchema),
@@ -55,7 +56,6 @@ const SignUp = () => {
         } else {
           setErrorMessage(result.message || 'Error creating account. Please try again.');
         }
-        setIsLoading(false);
         return;
       }
 
@@ -67,12 +67,13 @@ const SignUp = () => {
 
       if (signInResult?.ok) {
         router.push('/add');
-      } else {
-        setErrorMessage('Account created successfully, but login failed. Please sign in manually.');
-        setIsLoading(false);
+        return;
       }
+
+      setErrorMessage('Account created successfully, but login failed. Please sign in manually.');
     } catch {
       setErrorMessage('Error creating account. Please try again.');
+    } finally {
       setIsLoading(false);
     }
   };
@@ -118,7 +119,6 @@ const SignUp = () => {
             className={`auth-form-input ${errors.email ? 'is-invalid' : ''}`}
             placeholder="student@hawaii.edu"
           />
-          <div className="auth-hint">Must be a @hawaii.edu address</div>
           {errors.email && <div className="auth-error">{errors.email.message}</div>}
         </div>
 
