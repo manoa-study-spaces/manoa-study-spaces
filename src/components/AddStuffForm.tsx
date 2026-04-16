@@ -42,39 +42,82 @@ const AddStuffForm: React.FC = () => {
       <Row className="justify-content-center">
         <Col xs={5}>
           <Col className="text-center">
-            <h2>Add Stuff</h2>
+            <h2>Add Space</h2>
           </Col>
           <Card>
             <Card.Body>
               <Form onSubmit={handleSubmit(onSubmit)}>
                 <Form.Group>
-                  <Form.Label>Name</Form.Label>
+
+                  <Form.Label>Building Name</Form.Label>
                   <input
                     type="text"
-                    {...register('name')}
-                    className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                    {...register('buildingName')}
+                    className={`form-control ${errors.buildingName ? 'is-invalid' : ''}`}
                   />
-                  <div className="invalid-feedback">{errors.name?.message}</div>
+                  <div className="invalid-feedback">{errors.buildingName?.message}</div>
                 </Form.Group>
+
                 <Form.Group>
-                  <Form.Label>Quantity</Form.Label>
+                  <Form.Label>Room Number [N/A if none]</Form.Label>
                   <input
-                    type="number"
-                    {...register('quantity')}
-                    className={`form-control ${errors.quantity ? 'is-invalid' : ''}`}
+                    type="string"
+                    {...register('roomNumber')}
+                    className={`form-control ${errors.roomNumber ? 'is-invalid' : ''}`}
                   />
-                  <div className="invalid-feedback">{errors.quantity?.message}</div>
+                  <div className="invalid-feedback">{errors.roomNumber?.message}</div>
                 </Form.Group>
+
                 <Form.Group>
-                  <Form.Label>Condition</Form.Label>
-                  <select {...register('condition')} className={`form-control ${errors.condition ? 'is-invalid' : ''}`}>
-                    <option value="excellent">Excellent</option>
-                    <option value="good">Good</option>
-                    <option value="fair">Fair</option>
-                    <option value="poor">Poor</option>
-                  </select>
-                  <div className="invalid-feedback">{errors.condition?.message}</div>
+                  <Form.Label>Times</Form.Label>
+                  <input
+                    type="times[]"
+                    {...register('times')}
+                    className={`form-control ${errors.times ? 'is-invalid' : ''}`}
+                  />
+                  <div className="invalid-feedback">{errors.times?.message}</div>
                 </Form.Group>
+
+                <Form.Group>
+                  <Form.Label>Pictures</Form.Label>
+                  <input
+                    type="image[]"
+                    {...register('pictures')}
+                    className={`form-control ${errors.pictures ? 'is-invalid' : ''}`}
+                  />
+                  <div className="invalid-feedback">{errors.pictures?.message}</div>
+                </Form.Group>
+
+                <Form.Group>
+                  <Form.Label>Occupancy</Form.Label>
+                  <select {...register('occupancy')} className={`form-control ${errors.occupancy ? 'is-invalid' : ''}`}>
+                    <option value="empty">Empty</option>
+                    <option value="moderate">Moderate</option>
+                    <option value="crowded">Crowded</option>
+                  </select>
+                  <div className="invalid-feedback">{errors.occupancy?.message}</div>
+                </Form.Group>
+
+                <Form.Group>
+                  <Form.Label>Food Allowed</Form.Label>
+                  <select {...register('foodAllowed')} className={`form-control ${errors.foodAllowed ? 'is-invalid' : ''}`}>
+                    <option value="permitted">Permitted</option>
+                    <option value="prohibited">Prohibited</option>
+                    <option value="water okay">Water Okay</option>
+                  </select>
+                  <div className="invalid-feedback">{errors.foodAllowed?.message}</div>
+                </Form.Group>
+
+                <Form.Group>
+                  <Form.Label>Noise Level</Form.Label>
+                  <select {...register('noiseLevel')} className={`form-control ${errors.noiseLevel ? 'is-invalid' : ''}`}>
+                    <option value="quiet">Quiet</option>
+                    <option value="moderate">Moderate</option>
+                    <option value="loud">Loud</option>
+                  </select>
+                  <div className="invalid-feedback">{errors.noiseLevel?.message}</div>
+                </Form.Group>
+
                 <input type="hidden" {...register('owner')} value={currentUser} />
                 <Form.Group className="form-group">
                   <Row className="pt-3">

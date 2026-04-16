@@ -54,7 +54,7 @@ enum NoiseLevel {
 enum FoodAllowed {
   Permitted
   Prohibited
-  Water
+  Water Okay
 }
 
 model Stuff {
@@ -72,7 +72,7 @@ model Image {
   imageID          Int      @id @default(autoincrement())
   listingID        Int
   fileName         String
-  listing          Listing  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
+  stuff          Stuff  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
 }
 
 model Times {
@@ -80,5 +80,5 @@ model Times {
   listingID        Int
   startTime        DateTime @db.Time
   endTime          DateTime @db.Time
-  listing          Listing  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
+  stuff          Stuff  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
 }
