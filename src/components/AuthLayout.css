@@ -7,7 +7,8 @@
 
 .auth-sidebar {
   width: 300px;
-  background: #3f7a69;
+  background:#A7C9BF;
+  padding: 0.5rem 0;;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -29,7 +30,7 @@
 }
 
 .sidebar-hero-title {
-  color: #7fd9c5;
+  color: #1f4f43;
   font-size: 2.9rem;
   font-weight: 700;
   line-height: 0.97;
@@ -51,7 +52,7 @@
 }
 
 .sidebar-hero-subtitle {
-  color: rgba(255, 255, 255, 0.72);
+  color: #245a4c;
   font-size: 1.05rem;
   line-height: 1.28;
   margin: 0 0 1rem;
@@ -69,13 +70,14 @@
 .sidebar-pill {
   display: inline-flex;
   align-items: center;
-  border: 1px solid rgba(135, 219, 197, 0.52);
-  color: rgba(212, 243, 234, 0.92);
+  border: 1px solid rgba(31, 79, 67, 0.22);
+  color: #1f4f43;
   border-radius: 999px;
   padding: 0.3rem 0.9rem;
   font-size: 0.9rem;
   line-height: 1;
   font-weight: 400;
+  background: rgba(255, 255, 255, 0.35);
 }
 
 .auth-main {
