@@ -14,10 +14,8 @@ export const EditStuffSchema = Yup.object({
   condition: Yup.string().oneOf(['excellent', 'good', 'fair', 'poor']).required(),
   owner: Yup.string().required(),
 });
-<<<<<<< Updated upstream
-=======
 
-export const EditListingSchema = Yup.object({
+export const AddListingSchema = Yup.object({
   id: Yup.number().required(),
   buildingName: Yup.string().required(),
   roomNumber: Yup.string().required(),
@@ -64,4 +62,3 @@ export const SignInSchema = Yup.object({
   email: Yup.string().required('UH email is required').email('Email is invalid'),
   password: Yup.string().required('Password is required'),
 });
->>>>>>> Stashed changes
