@@ -89,8 +89,6 @@ export async function addStuff(stuff: { name: string; quantity: number; owner: s
 export async function addListing(listing: { 
   buildingName: string; 
   roomNumber: string; 
-  times: number[]; 
-  pictures: number[]; 
   occupancy: string; 
   foodAllowed: string; 
   noiseLevel: string; 
@@ -102,8 +100,6 @@ export async function addListing(listing: {
     data: {
       buildingName: listing.buildingName,
       roomNumber: listing.roomNumber,
-      times: listing.times, 
-      pictures: listing.pictures,
       occupancy: listing.occupancy,
       foodAllowed: listing.foodAllowed,
       noiseLevel: listing.noiseLevel,
@@ -121,8 +117,6 @@ export async function editListing(listing: Listing) {
     data: {
       buildingName: listing.buildingName,
       roomNumber: listing.roomNumber,
-      times: listing.times,
-      pictures: listing.pictures,
       occupancy: listing.occupancy,
       foodAllowed: listing.foodAllowed,
       noiseLevel: listing.noiseLevel,
