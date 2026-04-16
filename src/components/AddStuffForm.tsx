@@ -10,7 +10,7 @@ import { addStuff } from '@/lib/dbActions';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { AddStuffSchema } from '@/lib/validationSchemas';
 
-const onSubmit = async (data: { name: string; quantity: number; owner: string; condition: string }) => {
+const onSubmit = async (data: { listingID: number; buildingName: string; roomNumber: string; times: string; pictures: string; occupancy: string; foodAllowed: string; noiseLevel: string}) => {
   // console.log(`onSubmit data: ${JSON.stringify(data, null, 2)}`);
   await addStuff(data);
   swal('Success', 'Your item has been added', 'success', {
