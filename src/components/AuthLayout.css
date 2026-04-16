@@ -7,7 +7,8 @@
 
 .auth-sidebar {
   width: 300px;
-  background: #3f7a69;
+  background:  #6a807a;
+  padding: 0.5rem 0;;
   display: flex;
   align-items: center;
   justify-content: center;
