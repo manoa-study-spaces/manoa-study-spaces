@@ -39,6 +39,34 @@ model User {
   role     Role     @default(USER)
 }
 
+enum Standing {
+  Freshman
+  Sophmore
+  Junior
+  Senior
+  Graduate
+  Other
+}
+
+model ProfileImage {
+  imageID          Int      @id @default(autoincrement())
+  profileID        Int      
+  fileName         String
+  profile          Profile  @relation(fields: [profileID], references: [profileID])
+}
+
+model Profile {
+  id        Int  
+  profileID Int  @id @default(autoincrement())
+  fullName  String
+  major     String
+  classes   String
+  Interests String
+  picture   ProfileImage[] 
+  status    String
+  standing  Standing @default(Freshman)
+}
+
 enum Occupancy {
   Empty
   Moderate
