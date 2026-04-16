@@ -35,9 +35,36 @@ enum Amenity {
 model User {
   id       Int      @id @default(autoincrement())
   email    String   @unique
-  fullName String
   password String
   role     Role     @default(USER)
+}
+
+enum Standing {
+  Freshman
+  Sophmore
+  Junior
+  Senior
+  Graduate
+  Other
+}
+
+model ProfileImage {
+  imageID          Int      @id @default(autoincrement())
+  profileID        Int      
+  fileName         String
+  profile          Profile  @relation(fields: [profileID], references: [profileID])
+}
+
+model Profile {
+  id        Int  
+  profileID Int  @id @default(autoincrement())
+  fullName  String
+  major     String
+  classes   String
+  Interests String
+  picture   ProfileImage[] 
+  status    String
+  standing  Standing @default(Freshman)
 }
 
 enum Occupancy {
@@ -67,10 +94,6 @@ model Listing {
   occupancy        Occupancy    @default(Moderate)
   foodAllowed      FoodAllowed  @default(Prohibited)
   noiseLevel       NoiseLevel   @default(Moderate)
-  amenities        Amenity[]
-  spaceType        SpaceType    @default(Indoor)
-  capacity         Int 
-  image            String
 }
 
 model Image {
