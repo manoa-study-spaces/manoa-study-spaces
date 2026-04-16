@@ -57,7 +57,7 @@ enum FoodAllowed {
   Water
 }
 
-model Listing {
+model Stuff {
   listingID        Int          @id @default(autoincrement())
   buildingName     String 
   roomNumber       String
@@ -81,19 +81,4 @@ model Times {
   startTime        DateTime @db.Time
   endTime          DateTime @db.Time
   listing          Listing  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
-}
-
-enum Condition {
-  excellent
-  good
-  fair
-  poor
-}
-
-model Stuff {
-  id        Int       @id @default(autoincrement())
-  name      String
-  quantity  Int
-  condition Condition @default(good)
-  owner     String
 }
