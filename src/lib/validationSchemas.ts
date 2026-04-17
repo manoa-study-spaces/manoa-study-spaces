@@ -50,7 +50,7 @@ export const AddListingSchema = Yup.object({
         'How busy is the space?',
       )
         .required('How busy is the space?'),
-      otherwise: (schema) => schema.notRequired().transform(() => null),
+ 
     })
     ,
   foodAllowed: Yup.string()
@@ -61,7 +61,7 @@ export const AddListingSchema = Yup.object({
         'Is food allowed in the space?',
       )
         .required('Is food allowed in the space?'),
-      otherwise: (schema) => schema.notRequired().transform(() => null),
+ 
     })
     ,
   noiseLevel: Yup.string()
@@ -72,29 +72,29 @@ export const AddListingSchema = Yup.object({
         'How noisy is the space?',
       )
         .required('How noisy is the space?'),
-      otherwise: (schema) => schema.notRequired().transform(() => null),
+ 
     })
     ,
   amenities: Yup.string()
     .when('Amenity', {
-      is: (val: string) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
+      is: (val: any) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
       then: (schema) => schema.oneOf(
         Object.keys(Amenity) as (keyof typeof Amenity)[],
         'What amenities are available?',
       )
         .required('What amenities are available?'),
-      otherwise: (schema) => schema.notRequired().transform(() => null),
+ 
     })
     ,
   spaceType: Yup.string()
     .when('SpaceType', {
-      is: (val: string) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
+      is: (val: any) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
       then: (schema) => schema.oneOf(
         Object.keys(SpaceType) as (keyof typeof SpaceType)[],
         'What type of space is it?',
       )
         .required('What type of space is it?'),
-      otherwise: (schema) => schema.notRequired().transform(() => null),
+ 
     })
     ,
   capacity: Yup.number().positive().required(), 
@@ -134,7 +134,7 @@ export const EditListingSchema = Yup.object({
         'How busy is the space?',
       )
         .required('How busy is the space?'),
-      otherwise: (schema) => schema.notRequired().transform(() => null),
+ 
     })
     ,
   foodAllowed: Yup.string()
@@ -145,7 +145,7 @@ export const EditListingSchema = Yup.object({
         'Is food allowed in the space?',
       )
         .required('Is food allowed in the space?'),
-      otherwise: (schema) => schema.notRequired().transform(() => null),
+ 
     })
     ,
   noiseLevel: Yup.string()
@@ -156,7 +156,7 @@ export const EditListingSchema = Yup.object({
         'How noisy is the space?',
       )
         .required('How noisy is the space?'),
-      otherwise: (schema) => schema.notRequired().transform(() => null),
+ 
     })
     ,
   amenities: Yup.string()
@@ -167,7 +167,7 @@ export const EditListingSchema = Yup.object({
         'What amenities are available?',
       )
         .required('What amenities are available?'),
-      otherwise: (schema) => schema.notRequired().transform(() => null),
+ 
     })
     ,
   spaceType: Yup.string()
@@ -178,7 +178,7 @@ export const EditListingSchema = Yup.object({
         'What type of space is it?',
       )
         .required('What type of space is it?'),
-      otherwise: (schema) => schema.notRequired().transform(() => null),
+ 
     })
     ,
   capacity: Yup.number().positive().required(), 
