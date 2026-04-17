@@ -71,6 +71,9 @@ const NavBar: React.FC = () => {
           <Nav className="ms-auto">
             {currentUser && (
               <>
+                <Nav.Link id="add-stuff-nav" href="/add" active={pathName === '/add'}>
+                  Add a Listing
+                </Nav.Link>
                 <Nav.Link href="/today" active={pathName === '/today'}>
                   Today&apos;s Spaces
                 </Nav.Link>
