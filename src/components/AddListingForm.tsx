@@ -21,7 +21,7 @@ const onSubmit = async (data: {
   listingID: number;
   buildingName: string; 
   roomNumber: string; 
-  times?: string[]; 
+  times?: Times; 
   pictures?: Maybe<FileList | undefined>;
   occupancy: Occupancy; 
   foodAllowed: FoodAllowed; 
