@@ -7,12 +7,13 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import swal from 'sweetalert';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { addListing } from '@/lib/dbActions';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { AddListingSchema } from '@/lib/validationSchemas';
 import { Amenity, FoodAllowed, Image, NoiseLevel, Occupancy, SpaceType, Times } from '@prisma/client';
 import { useState } from 'react';
+
 import ListingGallery from '@/components/ListingGallery';
 
 
@@ -81,11 +82,12 @@ const onSubmit = async (data: {
   swal('Success', 'Your listing has been added', 'success', {
     timer: 2000,
   }).then(() => {
-    router.push(`/merch-detail/${newListing.listingID}`);
+    router.push(`/listing-detail/${newListing.listingID}`);
   });
 };
 
-const AddListingForm: React.FC = () => {
+const AddListingForm = ({ id } : { id : number }) => {
+  const router = useRouter();
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const { data: session, status } = useSession();
   // console.log('AddListingForm', status, session);
@@ -137,7 +139,7 @@ const AddListingForm: React.FC = () => {
           </Col>
           <Card>
             <Card.Body>
-              <Form onSubmit={handleSubmit(onSubmit)}>
+              <Form onSubmit={handleSubmit((data) => onSubmit(data, router))}>
                 <Row>
                   <Col>
                     <Form.Group>
@@ -270,6 +272,7 @@ const AddListingForm: React.FC = () => {
                   </Form.Text>
                 </Form.Group>
                 </Form.Group>
+                <input type="hidden" {...register('id')} value={id} />
                 <Form.Group className="form-group">
                   <Row className="pt-3">
                     <Col>

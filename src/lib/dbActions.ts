@@ -1,7 +1,6 @@
 'use server';
 
-import { Amenity, Condition, FoodAllowed, NoiseLevel, Occupancy } from '@prisma/client';
-import { Stuff } from '@prisma/client';
+import { Amenity, FoodAllowed, NoiseLevel, Occupancy, SpaceType } from '@prisma/client';
 import { Listing } from '@prisma/client'; 
 import { hash } from 'bcrypt';
 import { Prisma } from '@prisma/client';
@@ -94,7 +93,7 @@ export async function addListing(listing: {
   foodAllowed: FoodAllowed; 
   noiseLevel: NoiseLevel; 
   amenities: Amenity; 
-  spaceType: string; 
+  spaceType: SpaceType; 
   capacity: number 
 }) {
   const newListing = await prisma.listing.create({

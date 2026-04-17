@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { Amenity, FoodAllowed, Image, NoiseLevel, Occupancy, SpaceType, Times } from '@prisma/client';
 
 export const AddStuffSchema = Yup.object({
   name: Yup.string().required(),
@@ -16,30 +17,160 @@ export const EditStuffSchema = Yup.object({
 });
 
 export const AddListingSchema = Yup.object({
-  id: Yup.number().required(),
+  listingID: Yup.number().required(),
   buildingName: Yup.string().required(),
   roomNumber: Yup.string().required(),
-  times: Yup.string().required(),
-  pictures: Yup.string().required(),
-  occupancy: Yup.string().required(),
-  foodAllowed: Yup.string().required(),
-  noiseLevel: Yup.string().required(),
-  amenities: Yup.string().required(),
-  spaceType: Yup.string().required(),
+  times: new Yup.ObjectSchema<Times>().required().nullable(),
+  image: Yup.mixed<FileList>()
+    .test('minFiles', 'At least one photo is required', (value) => value && value.length >= 1)
+    .test('maxFiles', 'You can upload at most 9 photos', (value) => value && value.length <= 9)
+    .test('validFileTypes', 'Only JPG and PNG formats are allowed', (value) => {
+      if (!value) {
+        return false;
+      }
+      for (let i = 0; i < value.length; ++i) {
+        const file = value[i];
+        if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
+          return false;
+        }
+      }
+
+      return true;
+    }),
+  occupancy: Yup.string()
+    .when('Occupancy', {
+      is: (val: string) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
+      then: (schema) => schema.oneOf(
+        Object.keys(Occupancy) as (keyof typeof Occupancy)[],
+        'What is the unit for the length?',
+      )
+        .required('How busy is the space?'),
+      otherwise: (schema) => schema.notRequired().transform(() => null),
+    })
+    .nullable(),
+  foodAllowed: Yup.string()
+    .when('Length', {
+      is: (val: string) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
+      then: (schema) => schema.oneOf(
+        Object.keys(FoodAllowed) as (keyof typeof FoodAllowed)[],
+        'What is the unit for the length?',
+      )
+        .required('What is the unit for the length?'),
+      otherwise: (schema) => schema.notRequired().transform(() => null),
+    })
+    .nullable(),
+  noiseLevel: Yup.string()
+    .when('Length', {
+      is: (val: string) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
+      then: (schema) => schema.oneOf(
+        Object.keys(NoiseLevel) as (keyof typeof NoiseLevel)[],
+        'What is the unit for the length?',
+      )
+        .required('What is the unit for the length?'),
+      otherwise: (schema) => schema.notRequired().transform(() => null),
+    })
+    .nullable(),
+  amenities: Yup.string()
+    .when('Length', {
+      is: (val: string) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
+      then: (schema) => schema.oneOf(
+        Object.keys(Amenity) as (keyof typeof Amenity)[],
+        'What is the unit for the length?',
+      )
+        .required('What is the unit for the length?'),
+      otherwise: (schema) => schema.notRequired().transform(() => null),
+    })
+    .nullable(),
+  spaceType: Yup.string()
+    .when('Length', {
+      is: (val: string) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
+      then: (schema) => schema.oneOf(
+        Object.keys(SpaceType) as (keyof typeof SpaceType)[],
+        'What is the unit for the length?',
+      )
+        .required('What is the unit for the length?'),
+      otherwise: (schema) => schema.notRequired().transform(() => null),
+    })
+    .nullable(),
   capacity: Yup.number().positive().required(), 
 });
 
 export const EditListingSchema = Yup.object({
-  id: Yup.number().required(),
+  listingID: Yup.number().required(),
   buildingName: Yup.string().required(),
   roomNumber: Yup.string().required(),
-  times: Yup.string().required(),
-  pictures: Yup.string().required(),
-  occupancy: Yup.string().required(),
-  foodAllowed: Yup.string().required(),
-  noiseLevel: Yup.string().required(),
-  amenities: Yup.string().required(),
-  spaceType: Yup.string().required(),
+  times: new Yup.ObjectSchema<Times>().required().nullable(),
+  image: Yup.mixed<FileList>()
+    .test('minFiles', 'At least one photo is required', (value) => value && value.length >= 1)
+    .test('maxFiles', 'You can upload at most 9 photos', (value) => value && value.length <= 9)
+    .test('validFileTypes', 'Only JPG and PNG formats are allowed', (value) => {
+      if (!value) {
+        return false;
+      }
+      for (let i = 0; i < value.length; ++i) {
+        const file = value[i];
+        if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
+          return false;
+        }
+      }
+
+      return true;
+    }),
+  occupancy: Yup.string()
+    .when('Occupancy', {
+      is: (val: string) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
+      then: (schema) => schema.oneOf(
+        Object.keys(Occupancy) as (keyof typeof Occupancy)[],
+        'What is the unit for the length?',
+      )
+        .required('How busy is the space?'),
+      otherwise: (schema) => schema.notRequired().transform(() => null),
+    })
+    .nullable(),
+  foodAllowed: Yup.string()
+    .when('Length', {
+      is: (val: string) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
+      then: (schema) => schema.oneOf(
+        Object.keys(FoodAllowed) as (keyof typeof FoodAllowed)[],
+        'What is the unit for the length?',
+      )
+        .required('What is the unit for the length?'),
+      otherwise: (schema) => schema.notRequired().transform(() => null),
+    })
+    .nullable(),
+  noiseLevel: Yup.string()
+    .when('Length', {
+      is: (val: string) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
+      then: (schema) => schema.oneOf(
+        Object.keys(NoiseLevel) as (keyof typeof NoiseLevel)[],
+        'What is the unit for the length?',
+      )
+        .required('What is the unit for the length?'),
+      otherwise: (schema) => schema.notRequired().transform(() => null),
+    })
+    .nullable(),
+  amenities: Yup.string()
+    .when('Length', {
+      is: (val: string) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
+      then: (schema) => schema.oneOf(
+        Object.keys(Amenity) as (keyof typeof Amenity)[],
+        'What is the unit for the length?',
+      )
+        .required('What is the unit for the length?'),
+      otherwise: (schema) => schema.notRequired().transform(() => null),
+    })
+    .nullable(),
+  spaceType: Yup.string()
+    .when('Length', {
+      is: (val: string) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
+      then: (schema) => schema.oneOf(
+        Object.keys(SpaceType) as (keyof typeof SpaceType)[],
+        'What is the unit for the length?',
+      )
+        .required('What is the unit for the length?'),
+      otherwise: (schema) => schema.notRequired().transform(() => null),
+    })
+    .nullable(),
   capacity: Yup.number().positive().required(), 
 });
 
