@@ -1,6 +1,6 @@
 'use server';
 
-import { Condition } from '@prisma/client';
+import { Amenity, Condition, FoodAllowed, NoiseLevel, Occupancy } from '@prisma/client';
 import { Stuff } from '@prisma/client';
 import { Listing } from '@prisma/client'; 
 import { hash } from 'bcrypt';
@@ -90,14 +90,14 @@ export async function addListing(listing: {
   listingID: number;
   buildingName: string; 
   roomNumber: string; 
-  occupancy: string; 
-  foodAllowed: string; 
-  noiseLevel: string; 
-  amenities: string; 
+  occupancy: Occupancy; 
+  foodAllowed: FoodAllowed; 
+  noiseLevel: NoiseLevel; 
+  amenities: Amenity; 
   spaceType: string; 
   capacity: number 
 }) {
-  await prisma.listing.create({
+  const newListing = await prisma.listing.create({
     data: {
       listingID: listing.listingID,
       buildingName: listing.buildingName,
@@ -110,12 +110,12 @@ export async function addListing(listing: {
       capacity: listing.capacity
     },
   });
-  redirect('list'); 
+  return newListing;
 }
 
 export async function editListing(listing: Listing) {
-  await prisma.contact.update({
-    where: { id: listing.id }, 
+  await prisma.listing.update({
+    where: { listingID: listing.listingID }, 
     data: {
       listingID: listing.listingID,
       buildingName: listing.buildingName,

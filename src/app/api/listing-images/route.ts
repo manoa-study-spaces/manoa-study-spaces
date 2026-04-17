@@ -19,17 +19,17 @@ export async function POST(req: NextRequest) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    const created = await prisma.Image.create({
+    const created = await prisma.image.create({
       data: {
         listingID: listingID,
-        FileName: file.name,
+        fileName: file.name,
         MIMEType: file.type,
         Data: buffer,
       },
     });
     /* eslint-enable no-await-in-loop */
 
-    createdImages.push(created.ImageID);
+    createdImages.push(created.imageID);
   }
 
   return NextResponse.json({ ok: true, images: createdImages });

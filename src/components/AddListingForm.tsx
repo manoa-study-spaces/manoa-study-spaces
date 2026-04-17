@@ -11,18 +11,22 @@ import { redirect } from 'next/navigation';
 import { addListing } from '@/lib/dbActions';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { AddListingSchema } from '@/lib/validationSchemas';
+import { Amenity, FoodAllowed, Image, NoiseLevel, Occupancy, spaceType, Times } from '@prisma/client';
+import { useState } from 'react';
+import ListingGallery from '@/components/ListingGallery';
+
 
 const onSubmit = async (data: {  
   listingID: number;
   buildingName: string; 
   roomNumber: string; 
-  times?: Maybe<number[] | undefined>; 
+  times?: string[]; 
   pictures?: Maybe<FileList | undefined>;
-  occupancy: string; 
-  foodAllowed: string; 
-  noiseLevel: string; 
-  amenities: string; 
-  spaceType: string; 
+  occupancy: Occupancy; 
+  foodAllowed: FoodAllowed; 
+  noiseLevel: NoiseLevel; 
+  amenities: Amenity; 
+  spaceType: spaceType; 
   capacity: number;
 }, router: AppRouterInstance) => {
   const newListing = await addListing ({
@@ -82,9 +86,23 @@ const onSubmit = async (data: {
 };
 
 const AddListingForm: React.FC = () => {
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
   const { data: session, status } = useSession();
   // console.log('AddListingForm', status, session);
   const currentUser = session?.user?.email || '';
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+    if (!files || files.length === 0) {
+      setPreviewImages([]);
+      return;
+    }
+    const previews: string[] = [];
+    for (const file of files) {
+      const url = URL.createObjectURL(file); // temporary preview URL
+      previews.push(url);
+    }
+    setPreviewImages(previews);
+  };
   const {
     register,
     handleSubmit,
@@ -102,7 +120,17 @@ const AddListingForm: React.FC = () => {
 
   return (
     <Container className="py-3">
-      <Row className="justify-content-center">
+      <Row className="justify-content-center g-4">
+        {/* LEFT COLUMN - image preview */}
+        <Col xs={12} md={6} className="d-flex justify-content-center">
+          <ListingGallery photograph={previewImages.map((url, index) => ({
+            id: index,
+            mimeType: '',
+            base64: '',
+            url,
+          }))}
+          />
+        </Col>
         <Col xs={10}>
           <Col className="text-center">
             <h2>Add Listing</h2>
@@ -140,10 +168,10 @@ const AddListingForm: React.FC = () => {
                       <Form.Label>Time</Form.Label>
                       <input
                         type="text"
-                        {...register('time')}
-                        className={`form-control ${errors.time ? 'is-invalid' : ''}`}
+                        {...register('times')}
+                        className={`form-control ${errors.times ? 'is-invalid' : ''}`}
                       />
-                      <div className="invalid-feedback">{errors.time?.message}</div>
+                      <div className="invalid-feedback">{errors.times?.message}</div>
                     </Form.Group>
                   </Col>
                   <Col>
@@ -220,16 +248,28 @@ const AddListingForm: React.FC = () => {
                     </Form.Group>
                   </Col>
                 </Row>
-                  <Form.Label>Condition</Form.Label>
-                  <select {...register('condition')} className={`form-control ${errors.condition ? 'is-invalid' : ''}`}>
-                    <option value="excellent">Excellent</option>
-                    <option value="good">Good</option>
-                    <option value="fair">Fair</option>
-                    <option value="poor">Poor</option>
-                  </select>
-                  <div className="invalid-feedback">{errors.condition?.message}</div>
+                {/* Upload images */}
+                <Form.Group className="mb-4">
+                  <Form.Label>
+                    Upload Images
+                    <span className="text-danger">*</span>
+                  </Form.Label>
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/jpeg, image/png"
+                    {...register('pictures')}
+                    className={`form-control ${errors.pictures ? 'is-invalid' : ''}`}
+                    onChange={handleImageChange}
+                  />
+                  <div className="invalid-feedback">{errors.pictures?.message}</div>
+                  <Form.Text muted>
+                    Upload 1-9 photos. You can upload multiple photos at once. Square photos fits better.
+                    <br />
+                    Accepted formats: JPG (JPEG), PNG.
+                  </Form.Text>
                 </Form.Group>
-                <input type="hidden" {...register('owner')} value={currentUser} />
+                </Form.Group>
                 <Form.Group className="form-group">
                   <Row className="pt-3">
                     <Col>

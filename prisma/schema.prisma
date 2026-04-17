@@ -101,7 +101,7 @@ model Image {
   listingID        Int
   fileName         String
   MIMEType         String
-  datasource       Bytes
+  data             Bytes
   listing          Listing  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
 }
 
