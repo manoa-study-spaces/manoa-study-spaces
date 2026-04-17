@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
         listingID: listingID,
         fileName: file.name,
         MIMEType: file.type,
-        Data: buffer,
+        data: buffer,
       },
     });
     /* eslint-enable no-await-in-loop */
