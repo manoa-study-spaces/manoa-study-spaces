@@ -1,9 +1,8 @@
 import { loggedInProtectedPage } from '@/lib/page-protection';
 import AddListingForm from '@/components/AddListingForm';
-import AddStuffForm from '@/components/AddStuffForm';
-import NavBar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { auth } from '@/lib/auth';
+import { Container } from 'react-bootstrap';
+import { UniqueRandomNumber } from 'unique-random-number';
 
 const AddStuff = async () => {
   // Protect the page, only logged in users can access it.
@@ -14,11 +13,10 @@ const AddStuff = async () => {
     } | null,
   );
   return (
-    <main>
-      <AddListingForm />
-      <NavBar />
-      <AddStuffForm />
-      <Footer />
+    <main className="flex-grow-1 bg-wonkes-7">
+      <Container>
+        <AddListingForm id={UniqueRandomNumber(1, 200)} />
+      </Container>
     </main>
   );
 };

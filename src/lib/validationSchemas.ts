@@ -20,7 +20,12 @@ export const AddListingSchema = Yup.object({
   listingID: Yup.number().required(),
   buildingName: Yup.string().required(),
   roomNumber: Yup.string().required(),
-  times: new Yup.ObjectSchema<Times>().required().nullable(),
+  times: Yup.object({
+    timeID: Yup.number().required(),
+    listingID: Yup.number().required(),
+    startTime: Yup.string().datetime().required('Start time is required'),
+    endTime: Yup.string().datetime().required('End time is required'),
+  }).required().nullable(),
   image: Yup.mixed<FileList>()
     .test('minFiles', 'At least one photo is required', (value) => value && value.length >= 1)
     .test('maxFiles', 'You can upload at most 9 photos', (value) => value && value.length <= 9)
@@ -99,7 +104,12 @@ export const EditListingSchema = Yup.object({
   listingID: Yup.number().required(),
   buildingName: Yup.string().required(),
   roomNumber: Yup.string().required(),
-  times: new Yup.ObjectSchema<Times>().required().nullable(),
+  times: Yup.object({
+    timeID: Yup.number().required(),
+    listingID: Yup.number().required(),
+    startTime: Yup.string().datetime().required('Start time is required'),
+    endTime: Yup.string().datetime().required('End time is required'),
+  }).required().nullable(),
   image: Yup.mixed<FileList>()
     .test('minFiles', 'At least one photo is required', (value) => value && value.length >= 1)
     .test('maxFiles', 'You can upload at most 9 photos', (value) => value && value.length <= 9)

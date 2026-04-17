@@ -52,7 +52,7 @@ const onSubmit = async (data: {
       const uploadData = new FormData();
       uploadData.append('listingID', String(newListing.listingID));
       uploadData.append('pictures', image);
-      const result = await fetch('/api/upload/merch-images', {
+      const result = await fetch('/api/listing-images', {
         method: 'POST',
         body: uploadData,
       });
@@ -67,7 +67,7 @@ const onSubmit = async (data: {
       const uploadData = new FormData();
       uploadData.append('listingID', String(newListing.listingID));
       uploadData.append('times', time);
-      const result = await fetch('/api/upload/merch-images', {
+      const result = await fetch('/api/listing-images', {
         method: 'POST',
         body: uploadData,
       });
