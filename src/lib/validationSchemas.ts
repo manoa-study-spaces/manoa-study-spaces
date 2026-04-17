@@ -44,56 +44,56 @@ export const AddListingSchema = Yup.object({
     }),
   occupancy: Yup.string()
     .when('Occupancy', {
-      is: (val: string) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
+      is: (val: any) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
       then: (schema) => schema.oneOf(
         Object.keys(Occupancy) as (keyof typeof Occupancy)[],
-        'What is the unit for the length?',
+        'How busy is the space?',
       )
         .required('How busy is the space?'),
       otherwise: (schema) => schema.notRequired().transform(() => null),
     })
     .nullable(),
   foodAllowed: Yup.string()
-    .when('Length', {
-      is: (val: string) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
+    .when('FoodAllowed', {
+      is: (val: any) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
       then: (schema) => schema.oneOf(
         Object.keys(FoodAllowed) as (keyof typeof FoodAllowed)[],
-        'What is the unit for the length?',
+        'Is food allowed in the space?',
       )
-        .required('What is the unit for the length?'),
+        .required('Is food allowed in the space?'),
       otherwise: (schema) => schema.notRequired().transform(() => null),
     })
     .nullable(),
   noiseLevel: Yup.string()
-    .when('Length', {
-      is: (val: string) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
+    .when('NoiseLevel', {
+      is: (val: any) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
       then: (schema) => schema.oneOf(
         Object.keys(NoiseLevel) as (keyof typeof NoiseLevel)[],
-        'What is the unit for the length?',
+        'How noisy is the space?',
       )
-        .required('What is the unit for the length?'),
+        .required('How noisy is the space?'),
       otherwise: (schema) => schema.notRequired().transform(() => null),
     })
     .nullable(),
   amenities: Yup.string()
-    .when('Length', {
+    .when('Amenity', {
       is: (val: string) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
       then: (schema) => schema.oneOf(
         Object.keys(Amenity) as (keyof typeof Amenity)[],
-        'What is the unit for the length?',
+        'What amenities are available?',
       )
-        .required('What is the unit for the length?'),
+        .required('What amenities are available?'),
       otherwise: (schema) => schema.notRequired().transform(() => null),
     })
     .nullable(),
   spaceType: Yup.string()
-    .when('Length', {
+    .when('SpaceType', {
       is: (val: string) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
       then: (schema) => schema.oneOf(
         Object.keys(SpaceType) as (keyof typeof SpaceType)[],
-        'What is the unit for the length?',
+        'What type of space is it?',
       )
-        .required('What is the unit for the length?'),
+        .required('What type of space is it?'),
       otherwise: (schema) => schema.notRequired().transform(() => null),
     })
     .nullable(),
@@ -128,56 +128,56 @@ export const EditListingSchema = Yup.object({
     }),
   occupancy: Yup.string()
     .when('Occupancy', {
-      is: (val: string) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
+      is: (val: any) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
       then: (schema) => schema.oneOf(
         Object.keys(Occupancy) as (keyof typeof Occupancy)[],
-        'What is the unit for the length?',
+        'How busy is the space?',
       )
         .required('How busy is the space?'),
       otherwise: (schema) => schema.notRequired().transform(() => null),
     })
     .nullable(),
   foodAllowed: Yup.string()
-    .when('Length', {
-      is: (val: string) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
+    .when('FoodAllowed', {
+      is: (val: any) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
       then: (schema) => schema.oneOf(
         Object.keys(FoodAllowed) as (keyof typeof FoodAllowed)[],
-        'What is the unit for the length?',
+        'Is food allowed in the space?',
       )
-        .required('What is the unit for the length?'),
+        .required('Is food allowed in the space?'),
       otherwise: (schema) => schema.notRequired().transform(() => null),
     })
     .nullable(),
   noiseLevel: Yup.string()
-    .when('Length', {
-      is: (val: string) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
+    .when('NoiseLevel', {
+      is: (val: any) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
       then: (schema) => schema.oneOf(
         Object.keys(NoiseLevel) as (keyof typeof NoiseLevel)[],
-        'What is the unit for the length?',
+        'How noisy is the space?',
       )
-        .required('What is the unit for the length?'),
+        .required('How noisy is the space?'),
       otherwise: (schema) => schema.notRequired().transform(() => null),
     })
     .nullable(),
   amenities: Yup.string()
-    .when('Length', {
-      is: (val: string) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
+    .when('Amenity', {
+      is: (val: any) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
       then: (schema) => schema.oneOf(
         Object.keys(Amenity) as (keyof typeof Amenity)[],
-        'What is the unit for the length?',
+        'What amenities are available?',
       )
-        .required('What is the unit for the length?'),
+        .required('What amenities are available?'),
       otherwise: (schema) => schema.notRequired().transform(() => null),
     })
     .nullable(),
   spaceType: Yup.string()
-    .when('Length', {
-      is: (val: string) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
+    .when('SpaceType', {
+      is: (val: any) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
       then: (schema) => schema.oneOf(
         Object.keys(SpaceType) as (keyof typeof SpaceType)[],
-        'What is the unit for the length?',
+        'What type of space is it?',
       )
-        .required('What is the unit for the length?'),
+        .required('What type of space is it?'),
       otherwise: (schema) => schema.notRequired().transform(() => null),
     })
     .nullable(),
