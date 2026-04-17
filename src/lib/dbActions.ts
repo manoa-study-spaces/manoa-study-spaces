@@ -112,22 +112,30 @@ export async function addListing(listing: {
   return newListing;
 }
 
-export async function editListing(listing: Listing) {
-  await prisma.listing.update({
-    where: { listingID: listing.listingID }, 
+export async function editListing(listing: { 
+  listingID: number;
+  buildingName: string; 
+  roomNumber: string; 
+  occupancy: Occupancy; 
+  foodAllowed: FoodAllowed; 
+  noiseLevel: NoiseLevel; 
+  amenities: Amenity; 
+  spaceType: SpaceType; 
+  capacity: number 
+}) {
+  const newListing = await prisma.listing.update({
+    where: { listingID: listing.listingID },
     data: {
-      listingID: listing.listingID,
       buildingName: listing.buildingName,
       roomNumber: listing.roomNumber,
       occupancy: listing.occupancy,
       foodAllowed: listing.foodAllowed,
       noiseLevel: listing.noiseLevel,
-      amenities: listing.amenities,
       spaceType: listing.spaceType,
-      capacity: listing.capacity,
+      capacity: listing.capacity
     },
-  }); 
-  return listing;
+  });
+  return newListing;
 }
 
 /**
