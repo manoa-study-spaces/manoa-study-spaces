@@ -176,10 +176,10 @@ const AddListingForm = ({ id } : { id : number }) => {
                       <Form.Label>Pictures</Form.Label>
                       <input
                         type="text"
-                        {...register('pictures')}
-                        className={`form-control ${errors.pictures ? 'is-invalid' : ''}`}
+                        {...register('image')}
+                        className={`form-control ${errors.image ? 'is-invalid' : ''}`}
                       />
-                      <div className="invalid-feedback">{errors.pictures?.message}</div>
+                      <div className="invalid-feedback">{errors.image?.message}</div>
                     </Form.Group>
                   </Col>
                 </Row>
@@ -255,11 +255,11 @@ const AddListingForm = ({ id } : { id : number }) => {
                     type="file"
                     multiple
                     accept="image/jpeg, image/png"
-                    {...register('pictures')}
-                    className={`form-control ${errors.pictures ? 'is-invalid' : ''}`}
+                    {...register('image')}
+                    className={`form-control ${errors.image ? 'is-invalid' : ''}`}
                     onChange={handleImageChange}
                   />
-                  <div className="invalid-feedback">{errors.pictures?.message}</div>
+                  <div className="invalid-feedback">{errors.image?.message}</div>
                   <Form.Text muted>
                     Upload 1-9 photos. You can upload multiple photos at once. Square photos fits better.
                     <br />
@@ -267,7 +267,7 @@ const AddListingForm = ({ id } : { id : number }) => {
                   </Form.Text>
                 </Form.Group>
                 </Form.Group>
-                <input type="hidden" {...register('id')} value={id} />
+                <input type="hidden" {...register('listingID')} value={id} />
                 <Form.Group className="form-group">
                   <Row className="pt-3">
                     <Col>
