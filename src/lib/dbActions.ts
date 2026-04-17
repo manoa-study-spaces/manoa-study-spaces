@@ -127,7 +127,7 @@ export async function editListing(listing: Listing) {
       capacity: listing.capacity,
     },
   }); 
-  redirect('/list');
+  return listing;
 }
 
 /**

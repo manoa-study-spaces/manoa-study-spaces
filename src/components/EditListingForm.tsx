@@ -1,50 +1,146 @@
 'use client';
 
+import { Maybe } from 'yup';
+import { useSession } from 'next-auth/react'; // v5 compatible
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
-import swal from 'sweetalert';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Listing } from '@prisma/client';
-import { EditListingSchema } from '@/lib/validationSchemas';
+import swal from 'sweetalert';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { redirect, useRouter } from 'next/navigation';
 import { editListing } from '@/lib/dbActions';
+import LoadingSpinner from '@/components/LoadingSpinner';
+import {  EditListingSchema } from '@/lib/validationSchemas';
+import { Amenity, FoodAllowed, Image, NoiseLevel, Occupancy, SpaceType, Times } from '@prisma/client';
+import { useState } from 'react';
 
-const onSubmit = async (data: Listing) => {
-  // console.log(`onSubmit data: ${JSON.stringify(data, null, 2)}`);
-  await editListing (data);
-  swal('Success', 'Your listing has been updated', 'success', {
+import ListingGallery from '@/components/ListingGallery';
+
+
+const onSubmit = async (data: {  
+  listingID: number;
+  buildingName: string; 
+  roomNumber: string; 
+  times: Times; 
+  pictures?: Maybe<FileList | undefined>;
+  occupancy: Occupancy; 
+  foodAllowed: FoodAllowed; 
+  noiseLevel: NoiseLevel; 
+  amenities: Amenity; 
+  spaceType: SpaceType; 
+  capacity: number;
+}, router: AppRouterInstance) => {
+  const newListing = await  editListing ({
+    listingID: data.listingID,
+    buildingName: data.buildingName,
+    roomNumber: data.roomNumber,
+    occupancy: data.occupancy,
+    foodAllowed: data.foodAllowed,
+    noiseLevel: data.noiseLevel,
+    amenities: data.amenities,
+    spaceType: data.spaceType,
+    capacity: data.capacity,
+
+  });
+  const images = data.pictures;
+  const times = data.times;
+  if (images && images.length > 0) {
+    // Vercel rejects overly large payload/request,
+    // so upload images one by one instead of all together.
+    /* eslint-disable no-await-in-loop */
+    for (const image of images) {
+      const uploadData = new FormData();
+      uploadData.append('listingID', String(newListing.listingID));
+      uploadData.append('pictures', image);
+      const result = await fetch('/api/listing-images', {
+        method: 'POST',
+        body: uploadData,
+      });
+      if (!result.ok) {
+        throw new Error('Image upload failed');
+      }
+    }
+    /* eslint-enable no-await-in-loop */
+    const uploadData = new FormData();
+    uploadData.append('listingID', String(newListing.listingID));
+    uploadData.append('times', times ? JSON.stringify(times) : '');
+    const result = await fetch('/api/listing-images', {
+      method: 'POST',
+      body: uploadData,
+    });
+    if (!result.ok) {
+      throw new Error('Times upload failed');
+    }
+  }
+
+
+  swal('Success', 'Your listing has been added', 'success', {
     timer: 2000,
+  }).then(() => {
+    router.push(`/listing-detail/${newListing.listingID}`);
   });
 };
 
-const EditListingForm = ({ listing }: { listing: Listing }) => {
+const  EditListingForm = ({ id } : { id : number }) => {
+  const router = useRouter();
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
+  const { data: session, status } = useSession();
+  // console.log(' EditListingForm', status, session);
+  const currentUser = session?.user?.email || '';
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+    if (!files || files.length === 0) {
+      setPreviewImages([]);
+      return;
+    }
+    const previews: string[] = [];
+    for (const file of files) {
+      const url = URL.createObjectURL(file); // temporary preview URL
+      previews.push(url);
+    }
+    setPreviewImages(previews);
+  };
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<Listing>({
-    resolver: yupResolver(EditListingSchema),
+  } = useForm({
+    resolver: yupResolver( EditListingSchema),
   });
-  // console.log(listing);
+  if (status === 'loading') {
+    return <LoadingSpinner />;
+  }
+  if (status === 'unauthenticated') {
+    redirect('/auth/signin');
+  }
 
   return (
     <Container className="py-3">
-      <Row className="justify-content-center">
+      <Row className="justify-content-center g-4">
+        {/* LEFT COLUMN - image preview */}
+        <Col xs={12} md={6} className="d-flex justify-content-center">
+          <ListingGallery photograph={previewImages.map((url, index) => ({
+            id: index,
+            mimeType: '',
+            base64: '',
+            url,
+          }))}
+          />
+        </Col>
         <Col xs={10}>
           <Col className="text-center">
-            <h2>Edit Listing</h2>
+            <h2>Add Listing</h2>
           </Col>
           <Card>
             <Card.Body>
-              <Form onSubmit={handleSubmit(onSubmit)}>
-                <input type="hidden" {...register('id')} value={listing.id} />               
-                  <Row>
+              <Form onSubmit={handleSubmit((data) => onSubmit(data, router))}>
+                <Row>
                   <Col>
                     <Form.Group>
                       <Form.Label>Building Name</Form.Label>
                       <input
                         type="text"
-                        defaultValue={(listing.buildingName)}
                         {...register('buildingName')}
                         className={`form-control ${errors.buildingName ? 'is-invalid' : ''}`}
                       />
@@ -56,7 +152,6 @@ const EditListingForm = ({ listing }: { listing: Listing }) => {
                       <Form.Label>Room Number</Form.Label>
                       <input
                         type="text"
-                        defaultValue={(listing.roomNumber)}
                         {...register('roomNumber')}
                         className={`form-control ${errors.roomNumber ? 'is-invalid' : ''}`}
                       />
@@ -70,11 +165,10 @@ const EditListingForm = ({ listing }: { listing: Listing }) => {
                       <Form.Label>Time</Form.Label>
                       <input
                         type="text"
-                        defaultValue={(listing.times)}
-                        {...register('time')}
-                        className={`form-control ${errors.time ? 'is-invalid' : ''}`}
+                        {...register('times')}
+                        className={`form-control ${errors.times ? 'is-invalid' : ''}`}
                       />
-                      <div className="invalid-feedback">{errors.time?.message}</div>
+                      <div className="invalid-feedback">{errors.times?.message}</div>
                     </Form.Group>
                   </Col>
                   <Col>
@@ -82,11 +176,10 @@ const EditListingForm = ({ listing }: { listing: Listing }) => {
                       <Form.Label>Pictures</Form.Label>
                       <input
                         type="text"
-                        defaultValue={(listing.pictures)}
-                        {...register('pictures')}
-                        className={`form-control ${errors.pictures ? 'is-invalid' : ''}`}
+                        {...register('image')}
+                        className={`form-control ${errors.image ? 'is-invalid' : ''}`}
                       />
-                      <div className="invalid-feedback">{errors.pictures?.message}</div>
+                      <div className="invalid-feedback">{errors.image?.message}</div>
                     </Form.Group>
                   </Col>
                 </Row>
@@ -97,7 +190,6 @@ const EditListingForm = ({ listing }: { listing: Listing }) => {
                       <Form.Label>Occupancy</Form.Label>
                       <input
                         type="text"
-                        defaultValue={(listing.occupancy)}
                         {...register('occupancy')}
                         className={`form-control ${errors.occupancy ? 'is-invalid' : ''}`}
                       />
@@ -109,7 +201,6 @@ const EditListingForm = ({ listing }: { listing: Listing }) => {
                       <Form.Label>Food Allowed</Form.Label>
                       <input
                         type="text"
-                        defaultValue={(listing.foodAllowed)}
                         {...register('foodAllowed')}
                         className={`form-control ${errors.foodAllowed ? 'is-invalid' : ''}`}
                       />
@@ -123,7 +214,6 @@ const EditListingForm = ({ listing }: { listing: Listing }) => {
                       <Form.Label>Noise Level</Form.Label>
                       <input
                         type="text"
-                        defaultValue={(listing.noiseLevel)}
                         {...register('noiseLevel')}
                         className={`form-control ${errors.noiseLevel ? 'is-invalid' : ''}`}
                       />
@@ -135,7 +225,6 @@ const EditListingForm = ({ listing }: { listing: Listing }) => {
                       <Form.Label>Amenities</Form.Label>
                       <input
                         type="text"
-                        defaultValue={(listing.amenities)}
                         {...register('amenities')}
                         className={`form-control ${errors.amenities ? 'is-invalid' : ''}`}
                       />
@@ -149,7 +238,6 @@ const EditListingForm = ({ listing }: { listing: Listing }) => {
                       <Form.Label>Space Type</Form.Label>
                       <input
                         type="text"
-                        defaultValue={(listing.spaceType)}
                         {...register('spaceType')}
                         className={`form-control ${errors.spaceType ? 'is-invalid' : ''}`}
                       />
@@ -157,55 +245,29 @@ const EditListingForm = ({ listing }: { listing: Listing }) => {
                     </Form.Group>
                   </Col>
                 </Row>
-                  <Form.Label>Condition</Form.Label>
-                  <select {...register('condition')} className={`form-control ${errors.condition ? 'is-invalid' : ''}`}>
-                    <option value="excellent">Excellent</option>
-                    <option value="good">Good</option>
-                    <option value="fair">Fair</option>
-                    <option value="poor">Poor</option>
-                  </select>
-                  <div className="invalid-feedback">{errors.condition?.message}</div>
-                </Form.Group>
-                  
-                  
-                  
-                  
-                  <Form.Group>
-                  <Form.Label>Name</Form.Label>
+                {/* Upload images */}
+                <Form.Group className="mb-4">
+                  <Form.Label>
+                    Upload Images
+                    <span className="text-danger">*</span>
+                  </Form.Label>
                   <input
-                    type="text"
-                    {...register('name')}
-                    defaultValue={listing.name}
-                    required
-                    className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                    type="file"
+                    multiple
+                    accept="image/jpeg, image/png"
+                    {...register('image')}
+                    className={`form-control ${errors.image ? 'is-invalid' : ''}`}
+                    onChange={handleImageChange}
                   />
-                  <div className="invalid-feedback">{errors.name?.message}</div>
+                  <div className="invalid-feedback">{errors.image?.message}</div>
+                  <Form.Text muted>
+                    Upload 1-9 photos. You can upload multiple photos at once. Square photos fits better.
+                    <br />
+                    Accepted formats: JPG (JPEG), PNG.
+                  </Form.Text>
                 </Form.Group>
-                <Form.Group>
-                  <Form.Label>Quantity</Form.Label>
-                  <input
-                    type="number"
-                    {...register('quantity')}
-                    defaultValue={listing.quantity}
-                    className={`form-control ${errors.quantity ? 'is-invalid' : ''}`}
-                  />
-                  <div className="invalid-feedback">{errors.quantity?.message}</div>
                 </Form.Group>
-                <Form.Group>
-                  <Form.Label>Condition</Form.Label>
-                  <select
-                    {...register('condition')}
-                    className={`form-control ${errors.condition ? 'is-invalid' : ''}`}
-                    defaultValue={listing.condition}
-                  >
-                    <option value="excellent">Excellent</option>
-                    <option value="good">Good</option>
-                    <option value="fair">Fair</option>
-                    <option value="poor">Poor</option>
-                  </select>
-                  <div className="invalid-feedback">{errors.condition?.message}</div>
-                </Form.Group>
-                <input type="hidden" {...register('owner')} value={listing.owner} />
+                <input type="hidden" {...register('listingID')} value={id} />
                 <Form.Group className="form-group">
                   <Row className="pt-3">
                     <Col>
@@ -229,4 +291,4 @@ const EditListingForm = ({ listing }: { listing: Listing }) => {
   );
 };
 
-export default EditListingForm;
+export default  EditListingForm;
