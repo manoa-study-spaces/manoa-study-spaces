@@ -42,61 +42,11 @@ export const AddListingSchema = Yup.object({
 
       return true;
     }),
-  occupancy: Yup.string()
-    .when('Occupancy', {
-      is: (val: any) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
-      then: (schema) => schema.oneOf(
-        Object.keys(Occupancy) as (keyof typeof Occupancy)[],
-        'How busy is the space?',
-      )
-        .required('How busy is the space?'),
- 
-    })
-    ,
-  foodAllowed: Yup.string()
-    .when('FoodAllowed', {
-      is: (val: any) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
-      then: (schema) => schema.oneOf(
-        Object.keys(FoodAllowed) as (keyof typeof FoodAllowed)[],
-        'Is food allowed in the space?',
-      )
-        .required('Is food allowed in the space?'),
- 
-    })
-    ,
-  noiseLevel: Yup.string()
-    .when('NoiseLevel', {
-      is: (val: any) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
-      then: (schema) => schema.oneOf(
-        Object.keys(NoiseLevel) as (keyof typeof NoiseLevel)[],
-        'How noisy is the space?',
-      )
-        .required('How noisy is the space?'),
- 
-    })
-    ,
-  amenities: Yup.string()
-    .when('Amenity', {
-      is: (val: any) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
-      then: (schema) => schema.oneOf(
-        Object.keys(Amenity) as (keyof typeof Amenity)[],
-        'What amenities are available?',
-      )
-        .required('What amenities are available?'),
- 
-    })
-    ,
-  spaceType: Yup.string()
-    .when('SpaceType', {
-      is: (val: any) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
-      then: (schema) => schema.oneOf(
-        Object.keys(SpaceType) as (keyof typeof SpaceType)[],
-        'What type of space is it?',
-      )
-        .required('What type of space is it?'),
- 
-    })
-    ,
+  occupancy: Yup.string().oneOf(Object.values(Occupancy)).required('How busy is the space?'),
+  foodAllowed: Yup.string().oneOf(Object.values(FoodAllowed)).required('Is food allowed in the space?'),
+  noiseLevel:Yup.string().oneOf(Object.values(NoiseLevel)).required('How noisy is the space?'),
+  amenities: Yup.string().oneOf(Object.values(Amenity)).required('What amenities are available?'),
+  spaceType: Yup.string().oneOf(Object.values(SpaceType)).required('What type of space is it?'),
   capacity: Yup.number().positive().required(), 
 });
 
@@ -126,61 +76,11 @@ export const EditListingSchema = Yup.object({
 
       return true;
     }),
-  occupancy: Yup.string()
-    .when('Occupancy', {
-      is: (val: any) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
-      then: (schema) => schema.oneOf(
-        Object.keys(Occupancy) as (keyof typeof Occupancy)[],
-        'How busy is the space?',
-      )
-        .required('How busy is the space?'),
- 
-    })
-    ,
-  foodAllowed: Yup.string()
-    .when('FoodAllowed', {
-      is: (val: any) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
-      then: (schema) => schema.oneOf(
-        Object.keys(FoodAllowed) as (keyof typeof FoodAllowed)[],
-        'Is food allowed in the space?',
-      )
-        .required('Is food allowed in the space?'),
- 
-    })
-    ,
-  noiseLevel: Yup.string()
-    .when('NoiseLevel', {
-      is: (val: any) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
-      then: (schema) => schema.oneOf(
-        Object.keys(NoiseLevel) as (keyof typeof NoiseLevel)[],
-        'How noisy is the space?',
-      )
-        .required('How noisy is the space?'),
- 
-    })
-    ,
-  amenities: Yup.string()
-    .when('Amenity', {
-      is: (val: any) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
-      then: (schema) => schema.oneOf(
-        Object.keys(Amenity) as (keyof typeof Amenity)[],
-        'What amenities are available?',
-      )
-        .required('What amenities are available?'),
- 
-    })
-    ,
-  spaceType: Yup.string()
-    .when('SpaceType', {
-      is: (val: any) => val !== undefined && val !== null && val !== '' && !Number.isNaN(val),
-      then: (schema) => schema.oneOf(
-        Object.keys(SpaceType) as (keyof typeof SpaceType)[],
-        'What type of space is it?',
-      )
-        .required('What type of space is it?'),
- 
-    })
-    ,
+  occupancy: Yup.string().oneOf(Object.values(Occupancy)).required('How busy is the space?'),
+  foodAllowed: Yup.string().oneOf(Object.values(FoodAllowed)).required('Is food allowed in the space?'),
+  noiseLevel:Yup.string().oneOf(Object.values(NoiseLevel)).required('How noisy is the space?'),
+  amenities: Yup.string().oneOf(Object.values(Amenity)).required('What amenities are available?'),
+  spaceType: Yup.string().oneOf(Object.values(SpaceType)).required('What type of space is it?'),
   capacity: Yup.number().positive().required(), 
 });
 

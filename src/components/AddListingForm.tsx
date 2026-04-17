@@ -82,6 +82,7 @@ const onSubmit = async (data: {
 };
 
 const AddListingForm = ({ id } : { id : number }) => {
+  const router = useRouter();
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const { data: session, status } = useSession();
   // console.log('AddListingForm', status, session);
@@ -133,7 +134,7 @@ const AddListingForm = ({ id } : { id : number }) => {
           </Col>
           <Card>
             <Card.Body>
-              <Form onSubmit={handleSubmit(onSubmit)}>
+              <Form onSubmit={handleSubmit((data) => onSubmit(data, router))}>
                 <Row>
                   <Col>
                     <Form.Group>
