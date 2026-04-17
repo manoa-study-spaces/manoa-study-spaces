@@ -23,8 +23,8 @@ export const AddListingSchema = Yup.object({
   times: Yup.object({
     timeID: Yup.number().required(),
     listingID: Yup.number().required(),
-    startTime: Yup.string().datetime().required('Start time is required'),
-    endTime: Yup.string().datetime().required('End time is required'),
+    startTime: Yup.string().required('Start time is required'),
+    endTime: Yup.string().required('End time is required'),
   }).required(),
   image: Yup.mixed<FileList>()
     .test('minFiles', 'At least one photo is required', (value) => value && value.length >= 1)
