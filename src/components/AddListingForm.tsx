@@ -26,7 +26,7 @@ const onSubmit = async (data: {
   foodAllowed: FoodAllowed; 
   noiseLevel: NoiseLevel; 
   amenities: Amenity; 
-  spaceType: spaceType; 
+  spaceType: SpaceType; 
   capacity: number;
 }, router: AppRouterInstance) => {
   const newListing = await addListing ({
