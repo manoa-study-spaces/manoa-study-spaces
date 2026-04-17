@@ -82,7 +82,6 @@ const onSubmit = async (data: {
 };
 
 const AddListingForm = ({ id } : { id : number }) => {
-  const router = useRouter();
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const { data: session, status } = useSession();
   // console.log('AddListingForm', status, session);
