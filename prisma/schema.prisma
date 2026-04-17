@@ -108,8 +108,8 @@ model Image {
 model Times {
   timeID           Int      @id @default(autoincrement())
   listingID        Int
-  startTime        DateTime @db.Time
-  endTime          DateTime @db.Time
+  startTime        String   
+  endTime          String   
   listing          Listing  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
 }
 

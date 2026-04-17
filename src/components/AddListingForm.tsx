@@ -21,7 +21,7 @@ const onSubmit = async (data: {
   listingID: number;
   buildingName: string; 
   roomNumber: string; 
-  times?: Times; 
+  times: Times; 
   pictures?: Maybe<FileList | undefined>;
   occupancy: Occupancy; 
   foodAllowed: FoodAllowed; 
@@ -61,21 +61,16 @@ const onSubmit = async (data: {
       }
     }
     /* eslint-enable no-await-in-loop */
-  }
-  if (times && times.length > 0 && times.length < 7) {
-    for (const time of times) {
-      const uploadData = new FormData();
-      uploadData.append('listingID', String(newListing.listingID));
-      uploadData.append('times', time);
-      const result = await fetch('/api/listing-images', {
-        method: 'POST',
-        body: uploadData,
-      });
-      if (!result.ok) {
-        throw new Error('Times upload failed');
-      }
+    const uploadData = new FormData();
+    uploadData.append('listingID', String(newListing.listingID));
+    uploadData.append('times', times ? JSON.stringify(times) : '');
+    const result = await fetch('/api/listing-images', {
+      method: 'POST',
+      body: uploadData,
+    });
+    if (!result.ok) {
+      throw new Error('Times upload failed');
     }
-    
   }
 
 
