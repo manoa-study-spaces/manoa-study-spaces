@@ -11,7 +11,7 @@ import { redirect } from 'next/navigation';
 import { addListing } from '@/lib/dbActions';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { AddListingSchema } from '@/lib/validationSchemas';
-import { Amenity, FoodAllowed, Image, NoiseLevel, Occupancy, spaceType, Times } from '@prisma/client';
+import { Amenity, FoodAllowed, Image, NoiseLevel, Occupancy, SpaceType, Times } from '@prisma/client';
 import { useState } from 'react';
 import ListingGallery from '@/components/ListingGallery';
 
