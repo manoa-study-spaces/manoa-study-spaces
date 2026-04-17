@@ -134,7 +134,7 @@ const AddListingForm = ({ id } : { id : number }) => {
           </Col>
           <Card>
             <Card.Body>
-              <Form onSubmit={handleSubmit((data) => onSubmit(data, router))}>
+              <Form onSubmit={handleSubmit(onSubmit)}>
                 <Row>
                   <Col>
                     <Form.Group>
