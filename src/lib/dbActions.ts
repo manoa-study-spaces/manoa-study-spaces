@@ -54,29 +54,41 @@ function isDuplicateEmailError(error: unknown): boolean {
 }
 
 /**
- * Adds a new stuff to the database.
- * @param stuff, an object with the following properties: name, quantity, owner, condition.
+ * Adds a new space to the database.
+ * @param stuff, an object with the following properties: building name, room number,
+ * occupancy, food allowed, noise level, and image.
  */
-export async function addStuff(stuff: { name: string; quantity: number; owner: string; condition: string }) {
-  // console.log(`addStuff data: ${JSON.stringify(stuff, null, 2)}`);
-  let condition: StuffCondition = 'good';
-  if (stuff.condition === 'poor') {
-    condition = 'poor';
-  } else if (stuff.condition === 'excellent') {
-    condition = 'excellent';
-  } else {
-    condition = 'fair';
-  }
-  await prisma.stuff.create({
+export async function addListing(data: {
+  buildingName: string;
+  roomNumber: string;
+  occupancy: 'Empty' | 'Moderate' | 'Crowded';
+  foodAllowed: 'Permitted' | 'Prohibited' | 'Water';
+  noiseLevel: 'Quiet' | 'Moderate' | 'Loud';
+  image?: string;
+}) {
+  await prisma.listing.create({
     data: {
-      name: stuff.name,
-      quantity: stuff.quantity,
-      owner: stuff.owner,
-      condition,
+      buildingName: data.buildingName,
+      roomNumber: data.roomNumber,
+      occupancy: data.occupancy,
+      foodAllowed: data.foodAllowed,
+      noiseLevel: data.noiseLevel,
+
+      // Handle image relation properly
+      pictures: data.image
+        ? {
+            create: [
+              {
+                fileName: data.image,
+              },
+            ],
+          }
+        : undefined,
     },
   });
-  // After adding, redirect to the list page
-  redirect('/list');
+
+  // Redirect after creation
+  redirect('/');
 }
 
 /**

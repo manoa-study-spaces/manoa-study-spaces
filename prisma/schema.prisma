@@ -94,20 +94,23 @@ model Listing {
   occupancy        Occupancy    @default(Moderate)
   foodAllowed      FoodAllowed  @default(Prohibited)
   noiseLevel       NoiseLevel   @default(Moderate)
+  createdAt        DateTime @default(now())
 }
 
 model Image {
   imageID          Int      @id @default(autoincrement())
   listingID        Int
   fileName         String
+  MIMEType         String
+  data             Bytes
   listing          Listing  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
 }
 
 model Times {
   timeID           Int      @id @default(autoincrement())
   listingID        Int
-  startTime        DateTime @db.Time
-  endTime          DateTime @db.Time
+  startTime        String   
+  endTime          String   
   listing          Listing  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
 }
 

@@ -1,11 +1,23 @@
 import * as Yup from 'yup';
+import { InferType } from 'yup';
 
-export const AddStuffSchema = Yup.object({
-  name: Yup.string().required(),
-  quantity: Yup.number().positive().required(),
-  condition: Yup.string().oneOf(['excellent', 'good', 'fair', 'poor']).required(),
-  owner: Yup.string().required(),
+export const AddSpaceSchema = Yup.object({
+  buildingName: Yup.string().required('Building name is required'),
+  roomNumber: Yup.string().required('Room number is required'),
+  occupancy: Yup.string().oneOf(['Empty', 'Moderate', 'Crowded']).required(),
+  foodAllowed: Yup.string().oneOf(['Permitted', 'Prohibited', 'Water']).required(),
+  noiseLevel: Yup.string().oneOf(['Quiet', 'Moderate', 'Loud']).required(),
+  image: Yup.string().nullable().notRequired(),
 });
+
+export type AddSpaceFormValues = {
+  buildingName: string;
+  roomNumber: string;
+  occupancy: 'Empty' | 'Moderate' | 'Crowded';
+  foodAllowed: 'Permitted' | 'Prohibited' | 'Water';
+  noiseLevel: 'Quiet' | 'Moderate' | 'Loud';
+  image?: string | null;
+};
 
 export const EditStuffSchema = Yup.object({
   id: Yup.number().required(),
