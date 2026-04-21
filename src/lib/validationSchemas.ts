@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import { InferType } from 'yup';
 
 export const AddSpaceSchema = Yup.object({
   buildingName: Yup.string().required('Building name is required'),
@@ -7,7 +6,7 @@ export const AddSpaceSchema = Yup.object({
   occupancy: Yup.string().oneOf(['Empty', 'Moderate', 'Crowded']).required(),
   foodAllowed: Yup.string().oneOf(['Permitted', 'Prohibited', 'Water']).required(),
   noiseLevel: Yup.string().oneOf(['Quiet', 'Moderate', 'Loud']).required(),
-  image: Yup.string().nullable().notRequired(),
+  image: Yup.string().optional(),
 });
 
 export type AddSpaceFormValues = {
@@ -16,7 +15,7 @@ export type AddSpaceFormValues = {
   occupancy: 'Empty' | 'Moderate' | 'Crowded';
   foodAllowed: 'Permitted' | 'Prohibited' | 'Water';
   noiseLevel: 'Quiet' | 'Moderate' | 'Loud';
-  image?: string | null;
+  image?: string;
 };
 
 export const EditStuffSchema = Yup.object({

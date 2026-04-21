@@ -23,7 +23,7 @@ const AddSpaceForm: React.FC = () => {
   } = useForm<AddSpaceFormValues>({
     resolver: yupResolver(AddSpaceSchema),
     defaultValues: {
-      image: null,
+      image: '',
     },
   });
 
