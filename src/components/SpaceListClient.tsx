@@ -6,6 +6,7 @@ import SpaceCard from '@/components/SpaceCard';
 import { InputGroup, Button } from 'react-bootstrap';
 import { LiaTimesSolid } from "react-icons/lia";
 import { CiSearch } from "react-icons/ci";
+import { useRouter } from 'next/navigation';
 
 /**
  * Type definition for single Listing object coming from Prisma.
@@ -33,6 +34,7 @@ const SpaceListClient = ({ listings }: SpaceCardProps) => {
    * setSearch = function to update the search state variable when the user types in the search bar.
    */
   const [search, setSearch] = useState('');
+  const router = useRouter(); 
 
   const filteredListings = listings.filter((listing) =>
     listing.buildingName.toLowerCase().includes(search.toLowerCase())
@@ -68,9 +70,14 @@ const SpaceListClient = ({ listings }: SpaceCardProps) => {
           </InputGroup>
 
           {/* Add Space Button */}
-          <Button variant="success" className="add-space-btn ms-3">
+          <Button
+            variant="success"
+            className="add-space-btn ms-3"
+            onClick={() => router.push('/add')} 
+          >
             + Add Space
           </Button>
+
         </Col>
       </Row>
 

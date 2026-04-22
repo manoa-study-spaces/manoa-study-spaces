@@ -1,7 +1,5 @@
 import { loggedInProtectedPage } from '@/lib/page-protection';
 import AddSpaceForm from '@/components/AddSpaceForm';
-import NavBar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { auth } from '@/lib/auth';
 
 const AddStuff = async () => {
@@ -14,9 +12,7 @@ const AddStuff = async () => {
   );
   return (
     <main>
-      <NavBar />
       <AddSpaceForm />
-      <Footer />
     </main>
   );
 };

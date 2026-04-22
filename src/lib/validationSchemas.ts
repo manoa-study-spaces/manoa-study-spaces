@@ -3,20 +3,13 @@ import * as Yup from 'yup';
 export const AddSpaceSchema = Yup.object({
   buildingName: Yup.string().required('Building name is required'),
   roomNumber: Yup.string().required('Room number is required'),
-  occupancy: Yup.string().oneOf(['Empty', 'Moderate', 'Crowded']).required(),
-  foodAllowed: Yup.string().oneOf(['Permitted', 'Prohibited', 'Water']).required(),
-  noiseLevel: Yup.string().oneOf(['Quiet', 'Moderate', 'Loud']).required(),
-  image: Yup.string().optional(),
+  occupancy: Yup.string().oneOf(['Empty', 'Moderate', 'Crowded']).required('Occupancy is required'),
+  foodAllowed: Yup.string().oneOf(['Permitted', 'Prohibited', 'Water']).required('Food selection is required'),
+  noiseLevel: Yup.string().oneOf(['Quiet', 'Moderate', 'Loud']).required('Noise level is required'),
+  spaceType: Yup.string().oneOf(['Indoor', 'Outdoor']).required(),
+  capacity: Yup.number().min(1).required(),
+  image: Yup.string().notRequired(),
 });
-
-export type AddSpaceFormValues = {
-  buildingName: string;
-  roomNumber: string;
-  occupancy: 'Empty' | 'Moderate' | 'Crowded';
-  foodAllowed: 'Permitted' | 'Prohibited' | 'Water';
-  noiseLevel: 'Quiet' | 'Moderate' | 'Loud';
-  image?: string;
-};
 
 export const EditStuffSchema = Yup.object({
   id: Yup.number().required(),

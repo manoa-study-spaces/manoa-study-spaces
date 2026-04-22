@@ -64,6 +64,8 @@ export async function addListing(data: {
   occupancy: 'Empty' | 'Moderate' | 'Crowded';
   foodAllowed: 'Permitted' | 'Prohibited' | 'Water';
   noiseLevel: 'Quiet' | 'Moderate' | 'Loud';
+  spaceType: 'Indoor' | 'Outdoor';
+  capacity: number;
   image?: string;
 }) {
   await prisma.listing.create({
@@ -73,8 +75,9 @@ export async function addListing(data: {
       occupancy: data.occupancy,
       foodAllowed: data.foodAllowed,
       noiseLevel: data.noiseLevel,
+      spaceType: data.spaceType,
+      capacity: data.capacity,
 
-      // Handle image relation properly
       pictures: data.image
         ? {
             create: [
@@ -87,7 +90,6 @@ export async function addListing(data: {
     },
   });
 
-  // Redirect after creation
   redirect('/');
 }
 
