@@ -171,17 +171,6 @@ const  EditListingForm = ({ id } : { id : number }) => {
                       <div className="invalid-feedback">{errors.times?.message}</div>
                     </Form.Group>
                   </Col>
-                  <Col>
-                    <Form.Group>
-                      <Form.Label>Pictures</Form.Label>
-                      <input
-                        type="text"
-                        {...register('image')}
-                        className={`form-control ${errors.image ? 'is-invalid' : ''}`}
-                      />
-                      <div className="invalid-feedback">{errors.image?.message}</div>
-                    </Form.Group>
-                  </Col>
                 </Row>
                 <Form.Group>
                 <Row>
