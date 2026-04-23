@@ -165,7 +165,7 @@ const AddListingForm = ({ id } : { id : number }) => {
                       <Form.Label>Start Time</Form.Label>
                       <input type="hidden" {...register('times.listingID')} value={id} />
                       <input
-                        type="text"
+                        type="time"
                         {...register('times.startTime')}
                         className={`form-control ${errors.times ? 'is-invalid' : ''}`}
                       />
@@ -175,7 +175,7 @@ const AddListingForm = ({ id } : { id : number }) => {
                       <Form.Label>End Time</Form.Label>
                       <input type="hidden" {...register('times.timeID')} value={id} />
                       <input
-                        type="text"
+                        type="time"
                         {...register('times.endTime')}
                         className={`form-control ${errors.times ? 'is-invalid' : ''}`}
                       />
