@@ -10,26 +10,6 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import { AddSpaceSchema } from '@/lib/validationSchemas';
 import { addListing } from '@/lib/dbActions';
 
-const onSubmit = async (data: {
-  buildingName: string;
-  roomNumber: string;
-  occupancy: 'Empty' | 'Moderate' | 'Crowded';
-  foodAllowed: 'Permitted' | 'Prohibited' | 'Water';
-  noiseLevel: 'Quiet' | 'Moderate' | 'Loud';
-  spaceType: 'Indoor' | 'Outdoor';
-  capacity: number;
-  image?: string | null;
-}) => {
-  await addListing({
-    ...data,
-    image: data.image ?? undefined, 
-  });
-
-  swal('Success', 'Space added successfully', 'success', {
-    timer: 2000,
-  });
-};
-
 const AddSpaceForm: React.FC = () => {
   const { status } = useSession();
 
@@ -41,6 +21,32 @@ const AddSpaceForm: React.FC = () => {
   } = useForm({
     resolver: yupResolver(AddSpaceSchema),
   });
+
+  const onSubmitHandler = async (data: {
+    buildingName: string;
+    roomNumber: string;
+    occupancy: 'Empty' | 'Moderate' | 'Crowded';
+    foodAllowed: 'Permitted' | 'Prohibited' | 'Water';
+    noiseLevel: 'Quiet' | 'Moderate' | 'Loud';
+    spaceType: 'Indoor' | 'Outdoor';
+    capacity: number;
+    image?: string | null;
+  }) => {
+    try {
+      await addListing({
+        ...data,
+        image: data.image ?? undefined, 
+      });
+
+      swal('Success', 'Space added successfully', 'success', {
+        timer: 2000,
+      });
+      reset();
+    } catch (error) {
+      console.error('Error adding space:', error);
+      swal('Error', 'Failed to add space. Please try again.', 'error');
+    }
+  };
 
   if (status === 'loading') {
     return <LoadingSpinner />;
@@ -56,7 +62,7 @@ const AddSpaceForm: React.FC = () => {
         <Col md={12} lg={10}>
           <Card className="add-space-card">
             <Card.Body>
-              <Form onSubmit={handleSubmit(onSubmit)}>
+              <Form onSubmit={handleSubmit(onSubmitHandler)}>
                 {/* Building Name */}
                 <Form.Group className="mb-3">
                   <Form.Label>Building Name</Form.Label>
@@ -112,6 +118,15 @@ const AddSpaceForm: React.FC = () => {
                       <Form.Select {...register('spaceType')}>
                         <option value="Indoor">Indoor</option>
                         <option value="Outdoor">Outdoor</option>
+                      </Form.Select>
+                    </Form.Group>
+
+                    <Form.Group className="mt-3">
+                      <Form.Label>Food Allowed</Form.Label>
+                      <Form.Select {...register('foodAllowed')}>
+                        <option value="Permitted">Permitted</option>
+                        <option value="Prohibited">Prohibited</option>
+                        <option value="Water">Water</option>
                       </Form.Select>
                     </Form.Group>
 
