@@ -26,7 +26,7 @@ const onSubmit = async (data: {
   occupancy: Occupancy; 
   foodAllowed: FoodAllowed; 
   noiseLevel: NoiseLevel; 
-  amenities: Amenity; 
+  amenity: Amenity; 
   spaceType: SpaceType; 
   capacity: number;
 }, router: AppRouterInstance) => {
@@ -37,7 +37,7 @@ const onSubmit = async (data: {
     occupancy: data.occupancy,
     foodAllowed: data.foodAllowed,
     noiseLevel: data.noiseLevel,
-    amenities: data.amenities,
+    amenity: data.amenity,
     spaceType: data.spaceType,
     capacity: data.capacity,
 
@@ -225,10 +225,10 @@ const AddListingForm = ({ id } : { id : number }) => {
                       <Form.Label>Amenities</Form.Label>
                       <input
                         type="text"
-                        {...register('amenities')}
-                        className={`form-control ${errors.amenities ? 'is-invalid' : ''}`}
+                        {...register('amenity')}
+                        className={`form-control ${errors.amenity ? 'is-invalid' : ''}`}
                       />
-                      <div className="invalid-feedback">{errors.amenities?.message}</div>
+                      <div className="invalid-feedback">{errors.amenity?.message}</div>
                     </Form.Group>
                   </Col>
                 </Row>

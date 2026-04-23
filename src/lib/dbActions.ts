@@ -92,7 +92,7 @@ export async function addListing(listing: {
   occupancy: Occupancy; 
   foodAllowed: FoodAllowed; 
   noiseLevel: NoiseLevel; 
-  amenities: Amenity; 
+  amenity: Amenity; 
   spaceType: SpaceType; 
   capacity: number 
 }) {
@@ -104,7 +104,7 @@ export async function addListing(listing: {
       occupancy: listing.occupancy,
       foodAllowed: listing.foodAllowed,
       noiseLevel: listing.noiseLevel,
-      amenities: listing.amenities,
+      amenity: listing.amenity,
       spaceType: listing.spaceType,
       capacity: listing.capacity
     },
@@ -119,7 +119,7 @@ export async function editListing(listing: {
   occupancy: Occupancy; 
   foodAllowed: FoodAllowed; 
   noiseLevel: NoiseLevel; 
-  amenities: Amenity; 
+  amenity: Amenity; 
   spaceType: SpaceType; 
   capacity: number 
 }) {
@@ -130,7 +130,7 @@ export async function editListing(listing: {
       occupancy: listing.occupancy,
       foodAllowed: listing.foodAllowed,
       noiseLevel: listing.noiseLevel,
-      amenities: listing.amenities,
+      amenity: listing.amenity,
       spaceType: listing.spaceType,
       capacity: listing.capacity
     },

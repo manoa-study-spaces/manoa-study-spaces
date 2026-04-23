@@ -45,7 +45,7 @@ export const AddListingSchema = Yup.object({
   occupancy: Yup.string().oneOf(Object.values(Occupancy)).required('How busy is the space?'),
   foodAllowed: Yup.string().oneOf(Object.values(FoodAllowed)).required('Is food allowed in the space?'),
   noiseLevel:Yup.string().oneOf(Object.values(NoiseLevel)).required('How noisy is the space?'),
-  amenities: Yup.string().oneOf(Object.values(Amenity)).required('What amenities are available?'),
+  amenity: Yup.string().oneOf(Object.values(Amenity)).required('What amenities are available?'),
   spaceType: Yup.string().oneOf(Object.values(SpaceType)).required('What type of space is it?'),
   capacity: Yup.number().positive().required(), 
 });
@@ -79,7 +79,7 @@ export const EditListingSchema = Yup.object({
   occupancy: Yup.string().oneOf(Object.values(Occupancy)).required('How busy is the space?'),
   foodAllowed: Yup.string().oneOf(Object.values(FoodAllowed)).required('Is food allowed in the space?'),
   noiseLevel:Yup.string().oneOf(Object.values(NoiseLevel)).required('How noisy is the space?'),
-  amenities: Yup.string().oneOf(Object.values(Amenity)).required('What amenities are available?'),
+  amenity: Yup.string().oneOf(Object.values(Amenity)).required('What amenities are available?'),
   spaceType: Yup.string().oneOf(Object.values(SpaceType)).required('What type of space is it?'),
   capacity: Yup.number().positive().required(), 
 });
