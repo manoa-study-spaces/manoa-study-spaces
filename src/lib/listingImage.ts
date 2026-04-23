@@ -43,6 +43,7 @@ export async function getlistingImagesBylistingID(
     }
 
     return result;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {
     return addDummy ? [DEFAULT_IMAGE] : [];
   }

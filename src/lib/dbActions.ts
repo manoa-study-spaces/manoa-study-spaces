@@ -1,7 +1,6 @@
 'use server';
 
 import { Amenity, FoodAllowed, NoiseLevel, Occupancy, SpaceType } from '@prisma/client';
-import { Listing } from '@prisma/client'; 
 import { hash } from 'bcrypt';
 import { Prisma } from '@prisma/client';
 import { redirect } from 'next/navigation';
