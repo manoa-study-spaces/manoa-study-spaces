@@ -41,7 +41,7 @@ const AddSpaceForm: React.FC = () => {
   } = useForm({
     resolver: yupResolver(AddSpaceSchema),
   });
-
+  
   if (status === 'loading') {
     return <LoadingSpinner />;
   }
@@ -56,7 +56,17 @@ const AddSpaceForm: React.FC = () => {
         <Col md={12} lg={10}>
           <Card className="add-space-card">
             <Card.Body>
-              <Form onSubmit={handleSubmit(onSubmit)}>
+              <Form
+                onSubmit={handleSubmit(
+                  (data) => {
+                    console.log("✅ Valid Submit", data);
+                    onSubmit(data);
+                  },
+                  (errors) => {
+                    console.log("❌ Invaild Submit:", errors);
+                  }
+                )}
+                >
                 {/* Building Name */}
                 <Form.Group className="mb-3">
                   <Form.Label>Building Name</Form.Label>
@@ -92,6 +102,16 @@ const AddSpaceForm: React.FC = () => {
                         <option value="Empty">Empty</option>
                         <option value="Moderate">Moderate</option>
                         <option value="Crowded">Crowded</option>
+                      </Form.Select>
+                    </Form.Group>
+
+                    <Form.Group className="mt-3">
+                      <Form.Label>Food Allowed</Form.Label>
+                      <Form.Select {...register('foodAllowed')} isInvalid={!!errors.foodAllowed}>
+                        <option value="">Select one</option>
+                        <option value="Permitted">Permitted</option>
+                        <option value="Prohibited">Prohibited</option>
+                        <option value="Water">Water</option>
                       </Form.Select>
                     </Form.Group>
 

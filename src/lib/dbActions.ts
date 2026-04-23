@@ -90,7 +90,7 @@ export async function addListing(data: {
     },
   });
 
-  redirect('/');
+  redirect('/list');
 }
 
 /**
