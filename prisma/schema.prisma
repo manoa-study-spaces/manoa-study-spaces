@@ -96,6 +96,7 @@ model Listing {
   spaceType        SpaceType    @default(Indoor)
   noiseLevel       NoiseLevel   @default(Moderate)
   amenity          Amenity      @default(WiFi)
+  capacity         Int
 }
 
 model Image {
