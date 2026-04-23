@@ -16,7 +16,7 @@ const ListPage = async () => {
   );
 
   // const listings = await prisma.listing.findMany();
-  // For now, we will use hardcoded listings until we have the add space form
+  // Test Listing
   const listings = [
   {
     listingID: 1,
