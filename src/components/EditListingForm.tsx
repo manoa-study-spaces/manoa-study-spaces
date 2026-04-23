@@ -162,24 +162,24 @@ const  EditListingForm = ({ id } : { id : number }) => {
                 <Row>
                   <Col>
                     <Form.Group>
-                      <Form.Label>Time</Form.Label>
+                      <Form.Label>Start Time</Form.Label>
+                      <input type="hidden" {...register('times.listingID')} value={id} />
                       <input
-                        type="text"
-                        {...register('times')}
+                        type="time"
+                        {...register('times.startTime')}
                         className={`form-control ${errors.times ? 'is-invalid' : ''}`}
                       />
                       <div className="invalid-feedback">{errors.times?.message}</div>
                     </Form.Group>
-                  </Col>
-                  <Col>
                     <Form.Group>
-                      <Form.Label>Pictures</Form.Label>
+                      <Form.Label>End Time</Form.Label>
+                      <input type="hidden" {...register('times.timeID')} value={id} />
                       <input
-                        type="text"
-                        {...register('image')}
-                        className={`form-control ${errors.image ? 'is-invalid' : ''}`}
+                        type="time"
+                        {...register('times.endTime')}
+                        className={`form-control ${errors.times ? 'is-invalid' : ''}`}
                       />
-                      <div className="invalid-feedback">{errors.image?.message}</div>
+                      <div className="invalid-feedback">{errors.times?.message}</div>
                     </Form.Group>
                   </Col>
                 </Row>
@@ -194,6 +194,17 @@ const  EditListingForm = ({ id } : { id : number }) => {
                         className={`form-control ${errors.occupancy ? 'is-invalid' : ''}`}
                       />
                       <div className="invalid-feedback">{errors.occupancy?.message}</div>
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>Capacity</Form.Label>
+                      <input
+                        type="text"
+                        {...register('capacity')}
+                        className={`form-control ${errors.capacity ? 'is-invalid' : ''}`}
+                      />
+                      <div className="invalid-feedback">{errors.capacity?.message}</div>
                     </Form.Group>
                   </Col>
                   <Col>
@@ -222,7 +233,7 @@ const  EditListingForm = ({ id } : { id : number }) => {
                   </Col>
                   <Col>
                     <Form.Group>
-                      <Form.Label>amenity</Form.Label>
+                      <Form.Label>Amenities</Form.Label>
                       <input
                         type="text"
                         {...register('amenity')}
