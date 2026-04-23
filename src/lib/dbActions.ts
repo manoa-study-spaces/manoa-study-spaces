@@ -59,16 +59,16 @@ function isDuplicateEmailError(error: unknown): boolean {
  * occupancy, food allowed, noise level, and image.
  */
 export async function addListing(data: {
-  buildingName: string;
-  roomNumber: string;
-  occupancy: 'Empty' | 'Moderate' | 'Crowded';
-  foodAllowed: 'Permitted' | 'Prohibited' | 'Water';
-  noiseLevel: 'Quiet' | 'Moderate' | 'Loud';
-  spaceType: 'Indoor' | 'Outdoor';
-  capacity: number;
-  image?: string;
+  buildingName: string,
+  roomNumber: string,
+  occupancy: 'Empty' | 'Moderate' | 'Crowded',
+  foodAllowed: 'Permitted' | 'Prohibited' | 'Water',
+  noiseLevel: 'Quiet' | 'Moderate' | 'Loud',
+  spaceType: 'Indoor' | 'Outdoor',
+  capacity: number,
+  image?: string,
 }) {
-  await prisma.listing.create({
+  const newListing = await prisma.listing.create({
     data: {
       buildingName: data.buildingName,
       roomNumber: data.roomNumber,

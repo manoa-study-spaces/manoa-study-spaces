@@ -63,7 +63,7 @@ const AddSpaceForm: React.FC = () => {
                     onSubmit(data);
                   },
                   (errors) => {
-                    console.log("❌ Invaild Submit:", errors);
+                    console.log("❌ Invalid Submit:", errors);
                   }
                 )}
                 >
