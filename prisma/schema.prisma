@@ -94,6 +94,7 @@ model Listing {
   occupancy        Occupancy    @default(Moderate)
   foodAllowed      FoodAllowed  @default(Prohibited)
   noiseLevel       NoiseLevel   @default(Moderate)
+  amenity          Amenity      @default(WiFi)
 }
 
 model Image {
