@@ -267,7 +267,7 @@ const SignUp = () => {
         </div>
 
         <div className="auth-form-group">
-          <label className="auth-form-label">Status — select any that apply</label>
+          <label className="auth-form-label">Status — select all that apply</label>
           <div className="status-options">
             {[
               'Open to studying with a group',

@@ -408,31 +408,36 @@
     flex-direction: column;
     min-height: auto;
   }
-
-  /* On small screens, avoid a full-height green sidebar. Use a compact green band instead. */
+  /* On small screens, show a full-width green top band (not just a card around the title) */
   .auth-sidebar {
     width: 100%;
-    padding: 0.75rem 1rem;
-    background: transparent; /* remove large green background on mobile */
+    padding: 1rem 1rem 1rem 1rem; /* extra top padding so band breathes */
+    background: #A7C9BF; /* full-width green band across the top */
     min-height: auto; /* allow normal document flow */
   }
 
-  /* compact green band/card at the top of the sidebar area */
+  /* Make the top area part of the band (no separate card) */
   .sidebar-top {
-    background: #A7C9BF;
-    padding: 1rem;
-    border-radius: 8px;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
     width: 100%;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Ensure the hero title is readable on the green band */
+  .sidebar-hero-title {
+    color: #245a4c; /* white title to contrast with green */
+    margin: 0;
   }
 
   .auth-sidebar-content {
     max-width: 420px;
-    gap: 1rem;
+    padding-top: 0; /* remove extra top padding since the band is now full-width */
   }
 
   .sidebar-hero-title {
-    font-size: 2rem;
+    font-size: 3rem;
     line-height: 1;
   }
 
@@ -448,7 +453,7 @@
 
   .auth-form-area {
     max-width: 100%;
-    padding: 1.5rem 1rem;
+    padding: 1rem 1rem;
   }
 
   /* reduce top padding on small screens so content doesn't appear too low */
