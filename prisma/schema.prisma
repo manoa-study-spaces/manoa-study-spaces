@@ -96,6 +96,7 @@ model Listing {
   foodAllowed      FoodAllowed  @default(Prohibited)
   spaceType        SpaceType    @default(Indoor)
   noiseLevel       NoiseLevel   @default(Moderate)
+  spaceType        SpaceType    @default(Indoor)
   capacity         Int          @default(1)
   createdAt        DateTime     @default(now())
   amenities        ListingAmenity[]
