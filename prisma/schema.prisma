@@ -94,7 +94,6 @@ model Listing {
   pictures         Image[]
   occupancy        Occupancy    @default(Moderate)
   foodAllowed      FoodAllowed  @default(Prohibited)
-  spaceType        SpaceType    @default(Indoor)
   noiseLevel       NoiseLevel   @default(Moderate)
   spaceType        SpaceType    @default(Indoor)
   capacity         Int          @default(1)
@@ -122,8 +121,6 @@ model Image {
   imageID          Int      @id @default(autoincrement())
   listingID        Int
   fileName         String
-  MIMEType         String
-  data             Bytes
   listing          Listing  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
 }
 
