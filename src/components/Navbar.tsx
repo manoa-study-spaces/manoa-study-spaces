@@ -19,6 +19,7 @@ const NavBar: React.FC = () => {
     '/groups': "Study Groups",
     '/admin': "Admin Panel",
     '/profile': "Profile",
+    '/add': "Add Spaces",
   };
   const title = titles[pathName] || "Manoa Study Spaces";
   
@@ -71,9 +72,6 @@ const NavBar: React.FC = () => {
           <Nav className="ms-auto">
             {currentUser && (
               <>
-                <Nav.Link id="add-stuff-nav" href="/add" active={pathName === '/add'}>
-                  Add a Listing
-                </Nav.Link>
                 <Nav.Link href="/today" active={pathName === '/today'}>
                   Today&apos;s Spaces
                 </Nav.Link>

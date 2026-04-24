@@ -30,6 +30,7 @@ enum Amenity {
   Whiteboards
   ReservableRooms
   Accessible
+  WaterRefill
 }
 
 model User {
@@ -93,18 +94,33 @@ model Listing {
   pictures         Image[]
   occupancy        Occupancy    @default(Moderate)
   foodAllowed      FoodAllowed  @default(Prohibited)
-  spaceType        SpaceType    @default(Indoor)
   noiseLevel       NoiseLevel   @default(Moderate)
-  amenity          Amenity      @default(WiFi)
-  capacity         Int
+  spaceType        SpaceType    @default(Indoor)
+  capacity         Int          @default(1)
+  createdAt        DateTime     @default(now())
+  amenities        ListingAmenity[]
+}
+
+model AmenityEntity {
+  id        Int      @id @default(autoincrement())
+  name      Amenity  @unique
+  listings  ListingAmenity[]
+}
+
+model ListingAmenity {
+  listingID Int
+  amenityID Int
+
+  listing   Listing        @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
+  amenity   AmenityEntity  @relation(fields: [amenityID], references: [id], onDelete: Cascade)
+
+  @@id([listingID, amenityID])
 }
 
 model Image {
   imageID          Int      @id @default(autoincrement())
   listingID        Int
   fileName         String
-  MIMEType         String
-  data             Bytes
   listing          Listing  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
 }
 

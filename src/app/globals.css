@@ -98,50 +98,6 @@ body {
   text-decoration: underline;
 }
 
-/* ---------------- Landing Page ---------------- */
-.hero-carousel .carousel-item {
-  height: 75vh;
-}
-
-.hero-carousel img {
-  height: 100%;
-  object-fit: cover;
-}
-
-.hero-carousel .carousel-caption {
-  top: 50%;
-  transform: translateY(-50%);
-  bottom: auto;
-}
-
-.hero-carousel .carousel-caption h1 {
-  font-size: 3rem;
-  font-weight: 650;
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  transform: scaleX(0.9);
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
-}
-
-.hero-carousel .carousel-caption p {
-  font-size: 1.25rem;
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
-}
-
-.hero-carousel .carousel-item::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(102, 102, 102, 0.2);
-}
-
-.hero-carousel .carousel-caption {
-  z-index: 2;
-}
-
 /* ---------------- Today's Spaces ---------------- */
 .today-spaces h1 {
   font-size: 1.5rem;
@@ -199,3 +155,54 @@ body {
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   margin-bottom: 10px;
 }
+
+/* ---------------- Add Space Page ---------------- */
+.add-space-card {
+  border-radius: 8px;
+  padding: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.add-space-card .card-body {
+  padding: 25px;
+}
+
+/* Labels */
+.add-space-card .form-label {
+  font-weight: 500;
+  color: #3e7969;
+  font-size: 0.95rem;
+}
+
+/* Inputs */
+.add-space-card .form-control,
+.add-space-card .form-select {
+  border-radius: 8px;
+  font-size: 0.95rem;
+  padding: 6px 10px;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color:#555555;
+}
+
+.add-space-card .form-control:focus,
+.add-space-card .form-select:focus {
+  border-color: #3f7a69;
+  box-shadow: 0 0 0 0.1rem rgba(63, 122, 105, 0.25);
+}
+
+/* Buttons */
+.add-space-card .btn-success {
+  background-color: #3f7a69;
+  border-radius: 8px;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.add-space-card .btn-success:hover {
+  background-color: #346658;
+}
+
+.add-space-card .btn-secondary {
+  border-radius: 8px;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
