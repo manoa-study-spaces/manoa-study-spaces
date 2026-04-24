@@ -28,6 +28,27 @@ export const SignUpSchema = Yup.object({
   confirmPassword: Yup.string()
     .required('Confirm Password is required')
     .oneOf([Yup.ref('password'), ''], 'Confirm Password does not match'),
+  username: Yup.string()
+    .required('Username is required')
+    .matches(/^[a-zA-Z0-9_]{3,30}$/, 'Username must be 3-30 characters and contain only letters, numbers, and underscores'),
+  major: Yup.string().optional().max(100, 'Major must be 100 characters or less'),
+  standing: Yup.string()
+    .oneOf(['Freshman', 'Sophmore', 'Junior', 'Senior', 'Graduate', 'Other'])
+    .optional(),
+  interests: Yup.string().optional().max(500, 'Interests must be 500 characters or less'),
+  classes: Yup.string().optional().max(500, 'Classes must be 500 characters or less'),
+  pictureUrl: Yup.string().optional().url('Picture must be a valid URL'),
+  status: Yup.array()
+    .of(
+      Yup.string().oneOf([
+        'Open to studying with a group',
+        'Open to meeting new people',
+        'Prefer studying alone',
+        'Looking for study space recommendations',
+        'Currently studying for a specific test, lesson, or class',
+      ]),
+    )
+    .optional(),
 });
 
 export const SignInSchema = Yup.object({

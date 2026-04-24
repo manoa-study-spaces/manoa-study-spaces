@@ -8,12 +8,12 @@
 .auth-sidebar {
   width: 300px;
   background:#A7C9BF;
-  padding: 0.5rem 0;;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding: 1.75rem 1.75rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
   flex-shrink: 0;
+  min-height: 100vh; /* make sidebar stretch the full viewport height */
 }
 
 .auth-sidebar-content {
@@ -21,12 +21,13 @@
   max-width: 250px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 1.5rem;
+  padding-top: 6.5rem; /* push content further down */
 }
 
 .sidebar-top {
-  width: 100%;
+    padding-top: 1.75rem;
 }
 
 .sidebar-hero-title {
@@ -78,6 +79,49 @@
   line-height: 1;
   font-weight: 400;
   background: rgba(255, 255, 255, 0.35);
+}
+
+/* Status option bubbles used in signup */
+.status-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.status-option {
+  display: inline-flex;
+  align-items: center;
+}
+
+.status-option input[type='checkbox'] {
+  display: none; /* hide default checkbox */
+}
+
+.status-pill {
+  display: inline-block;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(31,79,67,0.12);
+  color: #1f4f43;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 0.95rem;
+}
+
+/* hover */
+.status-option:hover .status-pill {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.06);
+  background: #e6f6ee;
+  border-color: rgba(31,79,67,0.18);
+}
+
+/* checked */
+.status-option input[type='checkbox']:checked + .status-pill {
+  background: #3f7a69;
+  color: white;
+  border-color: #2f5f52;
 }
 
 .auth-main {
@@ -365,9 +409,21 @@
     min-height: auto;
   }
 
+  /* On small screens, avoid a full-height green sidebar. Use a compact green band instead. */
   .auth-sidebar {
     width: 100%;
-    padding: 1.25rem 1rem;
+    padding: 0.75rem 1rem;
+    background: transparent; /* remove large green background on mobile */
+    min-height: auto; /* allow normal document flow */
+  }
+
+  /* compact green band/card at the top of the sidebar area */
+  .sidebar-top {
+    background: #A7C9BF;
+    padding: 1rem;
+    border-radius: 8px;
+    width: 100%;
+    margin-bottom: 1rem;
   }
 
   .auth-sidebar-content {
@@ -393,6 +449,11 @@
   .auth-form-area {
     max-width: 100%;
     padding: 1.5rem 1rem;
+  }
+
+  /* reduce top padding on small screens so content doesn't appear too low */
+  .auth-sidebar-content {
+    padding-top: 1.25rem;
   }
 
   .auth-tab {
