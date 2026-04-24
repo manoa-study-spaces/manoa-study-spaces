@@ -1,5 +1,6 @@
 'use server';
 
+import { Amenity, FoodAllowed, NoiseLevel, Occupancy, SpaceType } from '@prisma/client';
 import { hash } from 'bcrypt';
 import { Prisma } from '@prisma/client';
 import { redirect } from 'next/navigation';
@@ -91,6 +92,33 @@ export async function addListing(data: {
   });
 
   redirect('/list');
+}
+
+export async function editListing(listing: { 
+  listingID: number;
+  buildingName: string; 
+  roomNumber: string; 
+  occupancy: Occupancy; 
+  foodAllowed: FoodAllowed; 
+  noiseLevel: NoiseLevel; 
+  amenity: Amenity; 
+  spaceType: SpaceType; 
+  capacity: number 
+}) {
+  const editedListing = await prisma.listing.update({
+    data: {
+      buildingName: listing.buildingName,
+      roomNumber: listing.roomNumber,
+      occupancy: listing.occupancy,
+      foodAllowed: listing.foodAllowed,
+      noiseLevel: listing.noiseLevel,
+      amenity: listing.amenity,
+      spaceType: listing.spaceType,
+      capacity: listing.capacity
+    },
+    where: { listingID: listing.listingID }
+  });
+  return editedListing;
 }
 
 /**
