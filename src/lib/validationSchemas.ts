@@ -41,7 +41,20 @@ export const SignUpSchema = Yup.object({
     .optional(),
   interests: Yup.string().optional().max(500, 'Interests must be 500 characters or less'),
   classes: Yup.string().optional().max(500, 'Classes must be 500 characters or less'),
-  pictureUrl: Yup.string().optional().url('Picture must be a valid URL'),
+  pictureUrl: Yup.string()
+    .optional()
+    .test('is-url-or-datauri', 'Picture must be a valid URL or image upload', (value) => {
+      if (!value) return true;
+      const isDataUri = /^data:image\/.+;base64,/.test(value);
+      if (isDataUri) return true;
+      try {
+        // validate as URL
+        new URL(value);
+        return true;
+      } catch {
+        return false;
+      }
+    }),
   status: Yup.array()
     .of(
       Yup.string().oneOf([

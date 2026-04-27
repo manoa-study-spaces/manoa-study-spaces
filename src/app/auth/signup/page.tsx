@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import AuthLayout from '@/components/AuthLayout';
 import { SignUpSchema } from '@/lib/validationSchemas';
@@ -18,7 +18,7 @@ type SignUpForm = {
   standing?: 'Freshman' | 'Sophmore' | 'Junior' | 'Senior' | 'Graduate' | 'Other';
   interests?: string;
   classes?: string;
-  pictureUrl?: string;
+  pictureUrl?: string | null;
   status?: string[];
 };
 
@@ -32,18 +32,35 @@ const SignUp = () => {
   const {
     register,
     handleSubmit,
-    reset,
+    setValue,
     formState: { errors },
-  } = useForm<any>({
-    resolver: yupResolver(SignUpSchema),
+  } = useForm<SignUpForm>({
+    resolver: yupResolver(SignUpSchema) as unknown as Resolver<SignUpForm>,
   });
+
+  const [pictureData, setPictureData] = useState<string | null>(null);
+
+  const handlePictureChange = (file?: File) => {
+    if (!file) {
+      setPictureData(null);
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string | null;
+      setPictureData(result);
+      // also store in form value so validation/posting can reference it
+      setValue('pictureUrl', result ?? null);
+    };
+    reader.readAsDataURL(file);
+  };
 
   const onSubmit = async (data: SignUpForm) => {
     setErrorMessage('');
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/auth/signup', {
+          const response = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -57,7 +74,7 @@ const SignUp = () => {
             standing: data.standing || null,
             interests: data.interests || null,
             classes: data.classes || null,
-      pictureUrl: data.pictureUrl || null,
+                pictureUrl: pictureData ?? data.pictureUrl ?? null,
             status: data.status && data.status.length ? data.status : null,
           }),
       });
@@ -90,7 +107,7 @@ const SignUp = () => {
           // Use a key tied to the user's email so profile page can pick it up later
           window.localStorage.setItem(`profile:${data.email}`, JSON.stringify(profile));
         }
-      } catch (e) {
+      } catch {
         // ignore localStorage errors
       }
 
@@ -258,11 +275,19 @@ const SignUp = () => {
         <div className="auth-form-group">
           <label className="auth-form-label">Profile Picture (optional)</label>
           <input
-            type="url"
-            {...register('pictureUrl')}
+            type="file"
+            accept="image/*"
+            capture="environment"
             className={`auth-form-input ${errors.pictureUrl ? 'is-invalid' : ''}`}
-            placeholder="Optional image URL for your profile"
+            onChange={(e) => handlePictureChange(e.target.files ? e.target.files[0] : undefined)}
           />
+          {pictureData && (
+            <div style={{ marginTop: 8 }}>
+              {/* next/image doesn't support data URIs for previews; this is intentionally a raw <img> */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={pictureData} alt="preview" style={{ maxWidth: 200, borderRadius: 6 }} />
+            </div>
+          )}
           {errors.pictureUrl && <div className="auth-error">{String(errors.pictureUrl?.message)}</div>}
         </div>
 
@@ -286,7 +311,7 @@ const SignUp = () => {
               </label>
             ))}
           </div>
-          {errors.status && <div className="auth-error">{String((errors.status as any)?.message)}</div>}
+          {errors.status && <div className="auth-error">{String(errors.status?.message)}</div>}
         </div>
 
         
