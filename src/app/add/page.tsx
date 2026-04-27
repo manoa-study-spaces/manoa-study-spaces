@@ -1,8 +1,7 @@
 import { loggedInProtectedPage } from '@/lib/page-protection';
-import AddListingForm from '@/components/AddListingForm';
+import AddSpaceForm from '@/components/AddSpaceForm';
 import { auth } from '@/lib/auth';
 import { Container } from 'react-bootstrap';
-import { randomInt } from 'crypto';
 
 const AddStuff = async () => {
   // Protect the page, only logged in users can access it.
@@ -15,7 +14,7 @@ const AddStuff = async () => {
   return (
     <main className="flex-grow-1 bg-wonkes-7">
       <Container>
-        <AddListingForm id={randomInt(1, 200)} />
+        <AddSpaceForm  />
       </Container>
     </main>
   );
