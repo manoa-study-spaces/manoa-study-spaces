@@ -93,7 +93,10 @@ model Listing {
   pictures         Image[]
   occupancy        Occupancy    @default(Moderate)
   foodAllowed      FoodAllowed  @default(Prohibited)
+  spaceType        SpaceType    @default(Indoor)
   noiseLevel       NoiseLevel   @default(Moderate)
+  amenity          Amenity      @default(WiFi)
+  capacity         Int
 }
 
 model Image {
