@@ -68,7 +68,7 @@ export async function addListing(data: {
   capacity: number,
   image?: string,
 }) {
-  const newListing = await prisma.listing.create({
+  await prisma.listing.create({
     data: {
       buildingName: data.buildingName,
       roomNumber: data.roomNumber,
@@ -87,7 +87,7 @@ export async function addListing(data: {
             ],
           }
         : undefined,
-    },
+    } as Prisma.ListingCreateInput,
   });
 
   redirect('/list');
