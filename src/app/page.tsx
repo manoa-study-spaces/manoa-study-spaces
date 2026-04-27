@@ -21,7 +21,7 @@ const Home = () => (
           </Carousel.Caption>
         </Carousel.Item>
 
-        {/* Slide 2 */}
+        {/* Slide 2 */} 
         <Carousel.Item>
           <Image
             className="d-block w-100"
