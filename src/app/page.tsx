@@ -1,6 +1,8 @@
-import { Col, Container, Row } from 'react-bootstrap';
+'use client';
 
-/** The Home page. */
+import { Container, Carousel, Image } from 'react-bootstrap';
+
+/** The Home page */
 const Home = () => (
   <main>
     <Container fluid className="p-0">
@@ -32,11 +34,19 @@ const Home = () => (
           </Carousel.Caption>
         </Carousel.Item>
 
-          <p style={{ color: '#3e7969' }}>This website is designed exclusively for UH Manoa students to safely explore and utilize study spaces. 
-            Sign up today to browse the latest listings and top recommendations from fellow students.
-            Discover various locations around UH Manoa and all their ammenities to fit your needs!</p>
-        </Col>
-      </Row>
+        {/* Slide 3 */}
+        <Carousel.Item>
+          <Image
+            className="d-block w-100"
+            src="/hamilton-library.jpg"
+            alt="Hamilton Library"
+          />
+          <Carousel.Caption>
+            <h1>Discover Top Recommendations</h1>
+            <p>See what other UH Mānoa students love most. Discover various location&apos;s ammenities to fit your needs </p>
+          </Carousel.Caption>
+        </Carousel.Item>
+      </Carousel>
     </Container>
   </main>
 );

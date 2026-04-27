@@ -1,5 +1,6 @@
 'use server';
 
+import { Amenity, FoodAllowed, NoiseLevel, Occupancy, SpaceType } from '@prisma/client';
 import { hash } from 'bcrypt';
 import { Prisma } from '@prisma/client';
 import { redirect } from 'next/navigation';
@@ -54,43 +55,87 @@ function isDuplicateEmailError(error: unknown): boolean {
 }
 
 /**
- * Adds a new space to the database.
- * @param stuff, an object with the following properties: building name, room number,
- * occupancy, food allowed, noise level, and image.
+ * Adds a new stuff to the database.
+ * @param stuff, an object with the following properties: name, quantity, owner, condition.
  */
-export async function addListing(data: {
-  buildingName: string,
-  roomNumber: string,
-  occupancy: 'Empty' | 'Moderate' | 'Crowded',
-  foodAllowed: 'Permitted' | 'Prohibited' | 'Water',
-  noiseLevel: 'Quiet' | 'Moderate' | 'Loud',
-  spaceType: 'Indoor' | 'Outdoor',
-  capacity: number,
-  image?: string,
-}) {
-  await prisma.listing.create({
+export async function addStuff(stuff: { name: string; quantity: number; owner: string; condition: string }) {
+  // console.log(`addStuff data: ${JSON.stringify(stuff, null, 2)}`);
+  let condition: StuffCondition = 'good';
+  if (stuff.condition === 'poor') {
+    condition = 'poor';
+  } else if (stuff.condition === 'excellent') {
+    condition = 'excellent';
+  } else {
+    condition = 'fair';
+  }
+  await prisma.stuff.create({
     data: {
-      buildingName: data.buildingName,
-      roomNumber: data.roomNumber,
-      occupancy: data.occupancy,
-      foodAllowed: data.foodAllowed,
-      noiseLevel: data.noiseLevel,
-      spaceType: data.spaceType,
-      capacity: data.capacity,
-
-      pictures: data.image
-        ? {
-            create: [
-              {
-                fileName: data.image,
-              },
-            ],
-          }
-        : undefined,
-    } as Prisma.ListingCreateInput,
+      name: stuff.name,
+      quantity: stuff.quantity,
+      owner: stuff.owner,
+      condition,
+    },
   });
-
+  // After adding, redirect to the list page
   redirect('/list');
+}
+
+/**
+ * 
+ * @param listing 
+ */
+export async function addListing(listing: { 
+  listingID: number;
+  buildingName: string; 
+  roomNumber: string; 
+  occupancy: Occupancy; 
+  foodAllowed: FoodAllowed; 
+  noiseLevel: NoiseLevel; 
+  amenity: Amenity; 
+  spaceType: SpaceType; 
+  capacity: number 
+}) {
+  const newListing = await prisma.listing.create({
+    data: {
+      listingID: listing.listingID,
+      buildingName: listing.buildingName,
+      roomNumber: listing.roomNumber,
+      occupancy: listing.occupancy,
+      foodAllowed: listing.foodAllowed,
+      noiseLevel: listing.noiseLevel,
+      amenity: listing.amenity,
+      spaceType: listing.spaceType,
+      capacity: listing.capacity
+    },
+  });
+  return newListing;
+}
+
+export async function editListing(listing: { 
+  listingID: number;
+  buildingName: string; 
+  roomNumber: string; 
+  occupancy: Occupancy; 
+  foodAllowed: FoodAllowed; 
+  noiseLevel: NoiseLevel; 
+  amenity: Amenity; 
+  spaceType: SpaceType; 
+  capacity: number 
+}) {
+  const editedListing = await prisma.listing.update({
+    data: {
+      buildingName: listing.buildingName,
+      roomNumber: listing.roomNumber,
+      occupancy: listing.occupancy,
+      foodAllowed: listing.foodAllowed,
+      noiseLevel: listing.noiseLevel,
+      amenity: listing.amenity,
+      spaceType: listing.spaceType,
+      capacity: listing.capacity
+    },
+    where: { listingID: listing.listingID }
+  });
+  return editedListing;
 }
 
 /**

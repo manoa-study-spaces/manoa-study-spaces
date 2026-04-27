@@ -8,37 +8,28 @@ body {
 }
 .wrapper {
   box-sizing: border-box;
-  min-height: 100vh;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
-}
-
-.app-content {
-  flex: 1 1 auto;
-  display: block;
 }
 
 /* ---------------- Top Navbar ---------------- */
 .top-navbar {
   background-color: #a3edd7;
-  padding: 0.85rem 0; /* slightly taller header like the mock */
-  box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+  padding: 0.5rem 0;
 }
 
 /* Logo spacing */
 .top-navbar .navbar-brand {
   margin-left: 0.5rem;
 }
-/* logo bubble styling removed to restore original look */
 
 /* Right text */
 .top-navbar .navbar-top-text {
   margin-right: 1.25rem;
   font-weight: 300;
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  display: flex;
-  align-items: center; /* vertically center text */
 }
 
 /* Hover effect on logo */
@@ -49,20 +40,17 @@ body {
 
 /* ---------------- Bottom Navbar ---------------- */
 .bottom-navbar {
-  background-color: #eaf8f1; /* lighter band */
-  padding: 0.4rem 0; /* slightly taller for the thin band look */
-  border-bottom: 1px solid rgba(0,0,0,0.06);
+  background-color: #d8f7ed;
+  padding: 0.25rem 0;
 }
 
 /* Left text */
 .bottom-navbar .navbar-bottom-text {
   margin-left: 0.8rem;
   font-weight: 400;
-  font-size: 1.05rem;
+  font-size: 1.25rem;
   color: #3e7969;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  display: flex;
-  align-items: center;
 }
 
 /* Hamburger menu */
@@ -91,8 +79,6 @@ body {
 .footer {
   background-color: #3f7a69;
   padding: 0.5rem 0;
-  /* ensure footer sticks to bottom when content is short */
-  margin-top: auto;
 }
 
 .footer .footer-text {
@@ -110,6 +96,50 @@ body {
 .footer-text a:hover {
   color: #afe8cc;
   text-decoration: underline;
+}
+
+/* ---------------- Landing Page ---------------- */
+.hero-carousel .carousel-item {
+  height: 75vh;
+}
+
+.hero-carousel img {
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-carousel .carousel-caption {
+  top: 50%;
+  transform: translateY(-50%);
+  bottom: auto;
+}
+
+.hero-carousel .carousel-caption h1 {
+  font-size: 3rem;
+  font-weight: 650;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  transform: scaleX(0.9);
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+.hero-carousel .carousel-caption p {
+  font-size: 1.25rem;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+.hero-carousel .carousel-item::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(102, 102, 102, 0.2);
+}
+
+.hero-carousel .carousel-caption {
+  z-index: 2;
 }
 
 /* ---------------- Today's Spaces ---------------- */
@@ -150,11 +180,6 @@ body {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.space-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-}
-
 .space-card .card-title {
   font-size: 1.25rem;
   font-weight: 500;
@@ -173,197 +198,4 @@ body {
   color: #333333;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   margin-bottom: 10px;
-}
-
-/* ---------------- Add Space Page ---------------- */
-.add-space-card {
-  border-radius: 8px;
-  padding: 5px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.add-space-card .card-body {
-  padding: 25px;
-}
-
-/* Labels */
-.add-space-card .form-label {
-  font-weight: 500;
-  color: #3e7969;
-  font-size: 0.95rem;
-}
-
-/* Inputs */
-.add-space-card .form-control,
-.add-space-card .form-select {
-  border-radius: 8px;
-  font-size: 0.95rem;
-  padding: 6px 10px;
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  color:#555555;
-}
-
-.add-space-card .form-control:focus,
-.add-space-card .form-select:focus {
-  border-color: #3f7a69;
-  box-shadow: 0 0 0 0.1rem rgba(63, 122, 105, 0.25);
-}
-
-/* Buttons */
-.add-space-card .btn-success {
-  background-color: #3f7a69;
-  border-radius: 8px;
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-
-.add-space-card .btn-success:hover {
-  background-color: #346658;
-}
-
-.add-space-card .btn-secondary {
-  border-radius: 8px;
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-
-/* ---------------- Study Groups Page ---------------- */
-/* Tab Buttons */
-.group-tab-btn {
-  border-radius: 999px !important;
-  font-size: 0.9rem;
-  padding: 6px 14px;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  transition: all 0.2s ease-in-out;
-  border-width: 1.5px !important;
-}
-
-.group-tab-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
-}
-
-.group-tab-btn.btn-dark {
-  background-color: #3f7a69 !important;
-  border-color: #3f7a69 !important;
-}
-
-.group-tab-btn.btn-outline-dark {
-  border-color: #3f7a69 !important;
-  color: #3f7a69 !important;
-}
-
-.group-tab-btn.btn-outline-dark:hover {
-  background-color: #3f7a69 !important;
-  color: white !important;
-}
-
-/* Search Bar */
-.group-search {
-  border-radius: 8px;
-  padding: 6px;
-  font-size: 15px;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-
-/* Create Group Button */
-.create-group-btn {
-  background-color: #3f7a69;
-  border-radius: 8px;
-  padding: 5px 13px;
-  flex-shrink: 0;
-  font-size: 15px;
-  margin-left: 10px;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-
-.create-group-btn:hover {
-  background-color: #2f5e50 !important;
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
-}
-
-/* Toggle */
-.group-toggle {
-  font-size: 1x.9rem;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  color: #3e7969;
-}
-
-.group-toggle .form-check-input:checked {
-  background-color: #3f7a69 !important;
-  border-color: #3f7a69 !important;
-}
-
-/* ---------------- Study Group Card ---------------- */
-
-.study-group-card {
-  border-radius: 9px;
-  padding: 6px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.study-group-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-}
-
-/* Title */
-.study-group-card .card-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #3e7969;
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-
-/* Course label */
-.study-group-card .text-muted {
-  font-size: 0.9rem;
-  color: #585858;
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-
-}
-
-/* Description */
-.study-group-card .card-description {
-  font-size: 0.9rem;
-  color: #6e6e6e;
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  margin-bottom: 10px;
-
-}
-
-/* Info rows (icons + text) */
-.study-group-card .info-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.9rem;
-  font-family:  'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  color: #333;
-  margin-bottom: 8px;
-}
-
-/* Icon styling */
-.study-group-card svg {
-  color: #3f7a69;
-  font-size: 1rem;
-}
-
-/* Button */
-.study-group-card .btn-success {
-  background-color: #3f7a69;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-
-.study-group-card .btn-success:hover {
-  background-color: #2f5e50;
-}
-
-.study-group-card .btn-secondary {
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }

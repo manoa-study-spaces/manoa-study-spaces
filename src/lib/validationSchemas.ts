@@ -1,14 +1,11 @@
 import * as Yup from 'yup';
+import { Amenity, FoodAllowed, NoiseLevel, Occupancy, SpaceType } from '@prisma/client';
 
-export const AddSpaceSchema = Yup.object({
-  buildingName: Yup.string().required('Building name is required'),
-  roomNumber: Yup.string().required('Room number is required'),
-  occupancy: Yup.string().oneOf(['Empty', 'Moderate', 'Crowded']).required('Occupancy is required'),
-  foodAllowed: Yup.string().oneOf(['Permitted', 'Prohibited', 'Water']).required('Food selection is required'),
-  noiseLevel: Yup.string().oneOf(['Quiet', 'Moderate', 'Loud']).required('Noise level is required'),
-  spaceType: Yup.string().oneOf(['Indoor', 'Outdoor']).required(),
-  capacity: Yup.number().min(1).required(),
-  image: Yup.string().notRequired(),
+export const AddStuffSchema = Yup.object({
+  name: Yup.string().required(),
+  quantity: Yup.number().positive().required(),
+  condition: Yup.string().oneOf(['excellent', 'good', 'fair', 'poor']).required(),
+  owner: Yup.string().required(),
 });
 
 export const EditStuffSchema = Yup.object({
@@ -17,6 +14,74 @@ export const EditStuffSchema = Yup.object({
   quantity: Yup.number().positive().required(),
   condition: Yup.string().oneOf(['excellent', 'good', 'fair', 'poor']).required(),
   owner: Yup.string().required(),
+});
+
+export const AddListingSchema = Yup.object({
+  listingID: Yup.number().required(),
+  buildingName: Yup.string().required(),
+  roomNumber: Yup.string().required(),
+  times: Yup.object({
+    timeID: Yup.number().required(),
+    listingID: Yup.number().required(),
+    startTime: Yup.string().required('Start time is required'),
+    endTime: Yup.string().required('End time is required'),
+  }).required(),
+  image: Yup.mixed<FileList>()
+    .test('minFiles', 'At least one photo is required', (value) => value && value.length >= 1)
+    .test('maxFiles', 'You can upload at most 9 photos', (value) => value && value.length <= 9)
+    .test('validFileTypes', 'Only JPG and PNG formats are allowed', (value) => {
+      if (!value) {
+        return false;
+      }
+      for (let i = 0; i < value.length; ++i) {
+        const file = value[i];
+        if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
+          return false;
+        }
+      }
+
+      return true;
+    }),
+  occupancy: Yup.string().oneOf(Object.values(Occupancy)).required('How busy is the space?'),
+  foodAllowed: Yup.string().oneOf(Object.values(FoodAllowed)).required('Is food allowed in the space?'),
+  noiseLevel:Yup.string().oneOf(Object.values(NoiseLevel)).required('How noisy is the space?'),
+  amenity: Yup.string().oneOf(Object.values(Amenity)).required('What amenities are available?'),
+  spaceType: Yup.string().oneOf(Object.values(SpaceType)).required('What type of space is it?'),
+  capacity: Yup.number().positive().required(), 
+});
+
+export const EditListingSchema = Yup.object({
+  listingID: Yup.number().required(),
+  buildingName: Yup.string().required(),
+  roomNumber: Yup.string().required(),
+  times: Yup.object({
+    timeID: Yup.number().required(),
+    listingID: Yup.number().required(),
+    startTime: Yup.string().required('Start time is required'),
+    endTime: Yup.string().required('End time is required'),
+  }).required(),
+  image: Yup.mixed<FileList>()
+    .test('minFiles', 'At least one photo is required', (value) => value && value.length >= 1)
+    .test('maxFiles', 'You can upload at most 9 photos', (value) => value && value.length <= 9)
+    .test('validFileTypes', 'Only JPG and PNG formats are allowed', (value) => {
+      if (!value) {
+        return false;
+      }
+      for (let i = 0; i < value.length; ++i) {
+        const file = value[i];
+        if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
+          return false;
+        }
+      }
+
+      return true;
+    }),
+  occupancy: Yup.string().oneOf(Object.values(Occupancy)).required('How busy is the space?'),
+  foodAllowed: Yup.string().oneOf(Object.values(FoodAllowed)).required('Is food allowed in the space?'),
+  noiseLevel:Yup.string().oneOf(Object.values(NoiseLevel)).required('How noisy is the space?'),
+  amenity: Yup.string().oneOf(Object.values(Amenity)).required('What amenities are available?'),
+  spaceType: Yup.string().oneOf(Object.values(SpaceType)).required('What type of space is it?'),
+  capacity: Yup.number().positive().required(), 
 });
 
 export const SignUpSchema = Yup.object({
@@ -32,46 +97,6 @@ export const SignUpSchema = Yup.object({
   confirmPassword: Yup.string()
     .required('Confirm Password is required')
     .oneOf([Yup.ref('password'), ''], 'Confirm Password does not match'),
-  username: Yup.string()
-    .required('Username is required')
-    .matches(/^[a-zA-Z0-9_]{3,30}$/, 'Username must be 3-30 characters and contain only letters, numbers, and underscores'),
-  major: Yup.string().optional().max(100, 'Major must be 100 characters or less'),
-  standing: Yup.string()
-    .oneOf(['Freshman', 'Sophmore', 'Junior', 'Senior', 'Graduate', 'Other'], 'Please select one of the following')
-    .optional(),
-  interests: Yup.string().optional().max(500, 'Interests must be 500 characters or less'),
-  classes: Yup.string().optional().max(500, 'Classes must be 500 characters or less'),
-  pictureUrl: Yup.string()
-    .optional()
-    .test('is-url-or-datauri', 'Picture must be a valid URL or image upload', (value) => {
-      if (!value) return true;
-      const isDataUri = /^data:image\/.+;base64,/.test(value);
-      if (isDataUri) return true;
-      try {
-        // validate as URL
-        new URL(value);
-        return true;
-      } catch {
-        return false;
-      }
-    }),
-  status: Yup.array()
-    .of(
-      Yup.string().oneOf([
-        'Open to studying with a group',
-        'Open to meeting new people',
-        'Prefer studying alone',
-        'Looking for study space recommendations',
-        'Currently studying for a specific test, lesson, or class',
-      ]),
-    )
-    .transform((value, originalValue) => {
-      // some form serializers send unchecked multi-select fields as `false` instead of an empty array
-      // transform `false` into an empty array so Yup treats it as an empty selection instead of throwing an array type error
-      if (originalValue === false) return [];
-      return value;
-    })
-    .optional(),
 });
 
 export const SignInSchema = Yup.object({

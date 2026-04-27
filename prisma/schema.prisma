@@ -30,7 +30,6 @@ enum Amenity {
   Whiteboards
   ReservableRooms
   Accessible
-  WaterRefill
 }
 
 model User {
@@ -38,8 +37,6 @@ model User {
   email    String   @unique
   password String
   role     Role     @default(USER)
-  organizedGroups StudyGroup[]
-  groupMemberships GroupMember[]
 }
 
 enum Standing {
@@ -96,58 +93,18 @@ model Listing {
   pictures         Image[]
   occupancy        Occupancy    @default(Moderate)
   foodAllowed      FoodAllowed  @default(Prohibited)
-  noiseLevel       NoiseLevel   @default(Moderate)
   spaceType        SpaceType    @default(Indoor)
-  capacity         Int          @default(1)
-  createdAt        DateTime     @default(now())
-  amenities        ListingAmenity[]
-}
-
-model StudyGroup {
-  groupID     Int      @id @default(autoincrement())
-  title       String
-  course      String
-  description String?
-  location    String
-  startTime   DateTime
-  endTime     DateTime
-  capacity    Int      @default(6)
-  createdAt   DateTime @default(now())
-  organizerId Int
-  organizer   User     @relation(fields: [organizerId], references: [id])
-  members     GroupMember[]
-}
-
-model GroupMember {
-  id        Int      @id @default(autoincrement())
-  groupId   Int
-  userId    Int
-  joinedAt  DateTime @default(now())
-  group     StudyGroup @relation(fields: [groupId], references: [groupID], onDelete: Cascade)
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  @@unique([groupId, userId])
-}
-
-model AmenityEntity {
-  id        Int      @id @default(autoincrement())
-  name      Amenity  @unique
-  listings  ListingAmenity[]
-}
-
-model ListingAmenity {
-  listingID Int
-  amenityID Int
-
-  listing   Listing        @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
-  amenity   AmenityEntity  @relation(fields: [amenityID], references: [id], onDelete: Cascade)
-
-  @@id([listingID, amenityID])
+  noiseLevel       NoiseLevel   @default(Moderate)
+  amenity          Amenity      @default(WiFi)
+  capacity         Int
 }
 
 model Image {
   imageID          Int      @id @default(autoincrement())
   listingID        Int
   fileName         String
+  MIMEType         String
+  data             Bytes
   listing          Listing  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
 }
 
