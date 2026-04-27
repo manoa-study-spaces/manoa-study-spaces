@@ -88,7 +88,7 @@ export async function addListing(data: {
             ],
           }
         : undefined,
-    },
+    } as Prisma.ListingCreateInput,
   });
 
   redirect('/list');

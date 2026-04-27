@@ -38,6 +38,8 @@ model User {
   email    String   @unique
   password String
   role     Role     @default(USER)
+  organizedGroups StudyGroup[]
+  groupMemberships GroupMember[]
 }
 
 enum Standing {
@@ -99,6 +101,31 @@ model Listing {
   capacity         Int          @default(1)
   createdAt        DateTime     @default(now())
   amenities        ListingAmenity[]
+}
+
+model StudyGroup {
+  groupID     Int      @id @default(autoincrement())
+  title       String
+  course      String
+  description String?
+  location    String
+  startTime   DateTime
+  endTime     DateTime
+  capacity    Int      @default(6)
+  createdAt   DateTime @default(now())
+  organizerId Int
+  organizer   User     @relation(fields: [organizerId], references: [id])
+  members     GroupMember[]
+}
+
+model GroupMember {
+  id        Int      @id @default(autoincrement())
+  groupId   Int
+  userId    Int
+  joinedAt  DateTime @default(now())
+  group     StudyGroup @relation(fields: [groupId], references: [groupID], onDelete: Cascade)
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([groupId, userId])
 }
 
 model AmenityEntity {
