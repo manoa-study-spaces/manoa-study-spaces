@@ -33,7 +33,7 @@ export const SignUpSchema = Yup.object({
     .matches(/^[a-zA-Z0-9_]{3,30}$/, 'Username must be 3-30 characters and contain only letters, numbers, and underscores'),
   major: Yup.string().optional().max(100, 'Major must be 100 characters or less'),
   standing: Yup.string()
-    .oneOf(['Freshman', 'Sophmore', 'Junior', 'Senior', 'Graduate', 'Other'])
+    .oneOf(['Freshman', 'Sophmore', 'Junior', 'Senior', 'Graduate', 'Other'], 'Please select one of the following')
     .optional(),
   interests: Yup.string().optional().max(500, 'Interests must be 500 characters or less'),
   classes: Yup.string().optional().max(500, 'Classes must be 500 characters or less'),
@@ -48,6 +48,12 @@ export const SignUpSchema = Yup.object({
         'Currently studying for a specific test, lesson, or class',
       ]),
     )
+    .transform((value, originalValue) => {
+      // some form serializers send unchecked multi-select fields as `false` instead of an empty array
+      // transform `false` into an empty array so Yup treats it as an empty selection instead of throwing an array type error
+      if (originalValue === false) return [];
+      return value;
+    })
     .optional(),
 });
 
