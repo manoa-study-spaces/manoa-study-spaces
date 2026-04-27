@@ -19,6 +19,7 @@ const NavBar: React.FC = () => {
     '/groups': "Study Groups",
     '/admin': "Admin Panel",
     '/profile': "Profile",
+    '/add': "Add Spaces",
   };
   const title = titles[pathName] || "Manoa Study Spaces";
   

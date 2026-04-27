@@ -1,10 +1,14 @@
 import * as Yup from 'yup';
 
-export const AddStuffSchema = Yup.object({
-  name: Yup.string().required(),
-  quantity: Yup.number().positive().required(),
-  condition: Yup.string().oneOf(['excellent', 'good', 'fair', 'poor']).required(),
-  owner: Yup.string().required(),
+export const AddSpaceSchema = Yup.object({
+  buildingName: Yup.string().required('Building name is required'),
+  roomNumber: Yup.string().required('Room number is required'),
+  occupancy: Yup.string().oneOf(['Empty', 'Moderate', 'Crowded']).required('Occupancy is required'),
+  foodAllowed: Yup.string().oneOf(['Permitted', 'Prohibited', 'Water']).required('Food selection is required'),
+  noiseLevel: Yup.string().oneOf(['Quiet', 'Moderate', 'Loud']).required('Noise level is required'),
+  spaceType: Yup.string().oneOf(['Indoor', 'Outdoor']).required(),
+  capacity: Yup.number().min(1).required(),
+  image: Yup.string().notRequired(),
 });
 
 export const EditStuffSchema = Yup.object({
