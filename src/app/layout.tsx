@@ -32,11 +32,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={classString}>
-        <Providers>
+       <Providers>
           <NavBar />
-          <main className="app-content">
-            {children}
-          </main>
+          {children}
           <Footer />
         </Providers>
       </body>

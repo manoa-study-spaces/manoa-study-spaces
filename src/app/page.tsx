@@ -1,19 +1,52 @@
-import { Col, Container, Row } from 'react-bootstrap';
+'use client';
 
-/** The Home page. */
+import { Container, Carousel, Image } from 'react-bootstrap';
+
+/** The Home page */
 const Home = () => (
   <main>
-    <Container id="home-page" fluid className="py-3">
-      <Row className="align-middle text-center">
-        <Col xs={8} className="d-flex flex-column justify-content-center">
-          <h1 style={{ color: '#3e7969' }}>Welcome to Manoa Study Spaces!</h1>
-          <h2 style={{ color: '#A7C9BF' }}>~ your new home for studying with (or without) friends~</h2>
+    <Container fluid className="p-0">
+      <Carousel className="hero-carousel" indicators controls interval={7000}>
 
-          <p style={{ color: '#3e7969' }}>This website is designed exclusively for UH Manoa students to safely explore and utilize study spaces. 
-            Sign up today to browse the latest listings and top recommendations from fellow students.
-            Discover various locations around UH Manoa and all their ammenities to fit your needs!</p>
-        </Col>
-      </Row>
+        {/* Slide 1 */}
+        <Carousel.Item>
+          <Image
+            className="d-block w-100"
+            src="/manoa-lowercampus-hero.jpg"
+            alt="UH Mānoa Lower Campus"
+          />
+          <Carousel.Caption>
+            <h1>Welcome to Manoa Study Spaces</h1>
+            <p>Discover quiet zones, group spaces, and student favorites across campus.</p>
+          </Carousel.Caption>
+        </Carousel.Item>
+
+        {/* Slide 2 */}
+        <Carousel.Item>
+          <Image
+            className="d-block w-100"
+            src="/paradise-palms.jpg"
+            alt="Paradise Palms"
+          />
+          <Carousel.Caption>
+            <h1>Share Your Study Space</h1>
+            <p>Know a great spot on campus? Help other UH Mānoa students discover it by sharing your favorite study spaces.</p>
+          </Carousel.Caption>
+        </Carousel.Item>
+
+        {/* Slide 3 */}
+        <Carousel.Item>
+          <Image
+            className="d-block w-100"
+            src="/hamilton-library.jpg"
+            alt="Hamilton Library"
+          />
+          <Carousel.Caption>
+            <h1>Discover Top Recommendations</h1>
+            <p>See what other UH Mānoa students love most. Discover various location&apos;s ammenities to fit your needs </p>
+          </Carousel.Caption>
+        </Carousel.Item>
+      </Carousel>
     </Container>
   </main>
 );
