@@ -68,6 +68,7 @@ export async function addListing(data: {
   capacity: number,
   image?: string,
 }) {
+  // eslint-disable-next-line
   const newListing = await prisma.listing.create({
     data: {
       buildingName: data.buildingName,
