@@ -57,7 +57,10 @@ const NavBar: React.FC = () => {
           <div className="ms-auto d-flex align-items-center gap-1">
             {/* Profile Icon */}
             <Nav>
-              <Nav.Link href="/auth/signin" active={pathName === '/auth/signin'}>
+              <Nav.Link
+                href={session ? '/profile' : '/auth/signin'}
+                active={pathName === '/profile' || pathName === '/auth/signin'}
+              >
                 <PersonFill size={22} color="#3e7969" />
               </Nav.Link>
             </Nav>

@@ -8,28 +8,37 @@ body {
 }
 .wrapper {
   box-sizing: border-box;
-  min-height: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+.app-content {
+  flex: 1 1 auto;
+  display: block;
 }
 
 /* ---------------- Top Navbar ---------------- */
 .top-navbar {
   background-color: #a3edd7;
-  padding: 0.5rem 0;
+  padding: 0.85rem 0; /* slightly taller header like the mock */
+  box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
 }
 
 /* Logo spacing */
 .top-navbar .navbar-brand {
   margin-left: 0.5rem;
 }
+/* logo bubble styling removed to restore original look */
 
 /* Right text */
 .top-navbar .navbar-top-text {
   margin-right: 1.25rem;
   font-weight: 300;
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  display: flex;
+  align-items: center; /* vertically center text */
 }
 
 /* Hover effect on logo */
@@ -40,17 +49,20 @@ body {
 
 /* ---------------- Bottom Navbar ---------------- */
 .bottom-navbar {
-  background-color: #d8f7ed;
-  padding: 0.25rem 0;
+  background-color: #eaf8f1; /* lighter band */
+  padding: 0.4rem 0; /* slightly taller for the thin band look */
+  border-bottom: 1px solid rgba(0,0,0,0.06);
 }
 
 /* Left text */
 .bottom-navbar .navbar-bottom-text {
   margin-left: 0.8rem;
   font-weight: 400;
-  font-size: 1.25rem;
+  font-size: 1.05rem;
   color: #3e7969;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  display: flex;
+  align-items: center;
 }
 
 /* Hamburger menu */
@@ -79,6 +91,8 @@ body {
 .footer {
   background-color: #3f7a69;
   padding: 0.5rem 0;
+  /* ensure footer sticks to bottom when content is short */
+  margin-top: auto;
 }
 
 .footer .footer-text {
