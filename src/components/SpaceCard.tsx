@@ -2,7 +2,10 @@
 
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
+//import { Link } from 'react-bootstrap-icons';
+import Link from "next/link";
+ 
 
 type SpaceCardProps = {
   listing: {
@@ -52,6 +55,13 @@ const SpaceCard = ({ listing }: SpaceCardProps) => {
         </Row>
 
       </Card.Body>
+      <Card.Footer>
+        <Link href={`/edit/${listing.listingID}`}>
+        <Button size="sm" style={{ backgroundColor: '#3f7a69', borderColor: '#3f7a69' }}>
+         Edit 
+        </Button>
+        </Link>
+      </Card.Footer>
     </Card>
   );
 };
