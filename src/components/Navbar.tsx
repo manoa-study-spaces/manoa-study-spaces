@@ -19,7 +19,6 @@ const NavBar: React.FC = () => {
     '/groups': "Study Groups",
     '/admin': "Admin Panel",
     '/profile': "Profile",
-    '/add': "Add Spaces",
   };
   const title = titles[pathName] || "Manoa Study Spaces";
   
@@ -57,10 +56,7 @@ const NavBar: React.FC = () => {
           <div className="ms-auto d-flex align-items-center gap-1">
             {/* Profile Icon */}
             <Nav>
-              <Nav.Link
-                href={session ? '/profile' : '/auth/signin'}
-                active={pathName === '/profile' || pathName === '/auth/signin'}
-              >
+              <Nav.Link href="/auth/signin" active={pathName === '/auth/signin'}>
                 <PersonFill size={22} color="#3e7969" />
               </Nav.Link>
             </Nav>
@@ -75,6 +71,9 @@ const NavBar: React.FC = () => {
           <Nav className="ms-auto">
             {currentUser && (
               <>
+                <Nav.Link id="add-stuff-nav" href="/add" active={pathName === '/add'}>
+                  Add a Listing
+                </Nav.Link>
                 <Nav.Link href="/today" active={pathName === '/today'}>
                   Today&apos;s Spaces
                 </Nav.Link>

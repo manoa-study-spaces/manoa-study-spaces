@@ -14,11 +14,7 @@ type SpaceCardProps = {
     foodAllowed: string;
     spaceType: string;
     capacity: number;
-    createdAt: string | Date;
-    pictures: {
-      imageID: number;
-      fileName: string;
-    }[];
+    image: string;
   };
 };
 
@@ -32,11 +28,8 @@ const SpaceCard = ({ listing }: SpaceCardProps) => {
           <Col xs={8} md={8}>
             <Card.Title>{listing.buildingName}</Card.Title>
 
-            <Card.Subtitle className="mb-2 pb-2 border-bottom d-flex justify-content-between">
-              <span>Room {listing.roomNumber}</span>
-              <span className="text-muted">
-                {new Date(listing.createdAt).toLocaleDateString()}
-              </span>
+            <Card.Subtitle className="mb-2 pb-2 border-bottom">
+              Room {listing.roomNumber}
             </Card.Subtitle>
 
             <p><strong>Occupancy:</strong> {listing.occupancy}</p>
@@ -49,7 +42,7 @@ const SpaceCard = ({ listing }: SpaceCardProps) => {
           {/* Image */}
           <Col xs={4} md={4} className="d-flex justify-content-end align-items-start">
             <Image
-              src={listing.pictures?.[0]?.fileName || '/placeholder.jpg'}
+              src={listing.image}
               alt={listing.buildingName}
               width={200}
               height={200}
@@ -57,6 +50,7 @@ const SpaceCard = ({ listing }: SpaceCardProps) => {
             />
           </Col>
         </Row>
+
       </Card.Body>
     </Card>
   );
