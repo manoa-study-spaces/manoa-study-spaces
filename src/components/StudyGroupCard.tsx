@@ -21,6 +21,8 @@ type Props = {
   group: StudyGroup;
 };
 
+const TIMEZONE = 'Pacific/Honolulu';
+
 const StudyGroupCard = ({ group }: Props) => {
   const isFull = group.members >= group.capacity;
 
@@ -49,23 +51,35 @@ const StudyGroupCard = ({ group }: Props) => {
         {/* Time */}
         <div className="info-row">
         <FaCalendar />
+
         <span>
-            {new Date(group.startTime).toLocaleString([], {
-            month: 'numeric', day: 'numeric', year: 'numeric',
+            {new Date(group.startTime).toLocaleDateString('en-US', {
+              timeZone: TIMEZONE,
+              month: 'numeric',
+              day: 'numeric',
+              year: 'numeric',
             })}
         </span>
+
         {' • '}
+
         <span>
-            {new Date(group.startTime).toLocaleTimeString([], {
-            hour: '2-digit', minute: '2-digit',
+            {new Date(group.startTime).toLocaleTimeString('en-US', {
+              timeZone: TIMEZONE,
+              hour: '2-digit',
+              minute: '2-digit',
             })}
+
             {' – '}
-            {new Date(group.endTime).toLocaleTimeString([], {
-            hour: '2-digit', minute: '2-digit',
+
+            {new Date(group.endTime).toLocaleTimeString('en-US', {
+              timeZone: TIMEZONE,
+              hour: '2-digit',
+              minute: '2-digit',
             })}
         </span>
         </div>
-        
+
         {/* Location */}
         <div className="info-row">
           <FaLocationDot />
@@ -78,7 +92,7 @@ const StudyGroupCard = ({ group }: Props) => {
           {group.members} / {group.capacity}
         </div>
 
-        {/* Action Button */}
+        {/*  Button */}
         <Button
           variant={isFull ? 'secondary' : 'success'}
           disabled={isFull}

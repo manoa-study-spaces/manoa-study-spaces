@@ -44,41 +44,74 @@ const GroupsPage = async () => {
 // This mock data simulates study groups shown in the Study Groups page.
 
 const studyGroups = [
+  // ✅ TODAY (now set to 2026-04-28 Hawaii-local test day)
   {
     groupID: 1,
     title: 'ICS 314 Final Project Work Session',
     course: 'ICS 314',
-    description: 'Collaborating on final project and helping resolve issues regarding databases.',
+    description: 'Collaborating on final project and fixing database issues.',
     location: 'Hamilton Library - 3rd Floor',
-    startTime: '2026-04-25T15:00:00.000Z',
-    endTime: '2026-04-25T17:00:00.000Z',
+    startTime: '2026-04-28T19:00:00.000Z', 
+    endTime: '2026-04-28T21:00:00.000Z',
     capacity: 6,
     members: 3,
-    createdAt: '2026-04-25T10:00:00.000Z',
+    createdAt: '2026-04-28T10:00:00.000Z',
   },
+
+  // ❌ FULL GROUP (should hide when "open spots only" is on)
   {
     groupID: 2,
     title: 'ICS 212 Homework Help',
     course: 'ICS 212',
-    description: 'Working through linked lists and pointers together.',
+    description: 'Linked lists, pointers, and exam prep.',
     location: 'POST Building - Room 302',
-    startTime: '2026-04-25T18:00:00.000Z',
-    endTime: '2026-04-25T20:00:00.000Z',
+    startTime: '2026-04-28T22:00:00.000Z',
+    endTime: '2026-04-29T00:00:00.000Z',
     capacity: 5,
-    members: 5,
-    createdAt: '2026-04-25T09:30:00.000Z',
+    members: 5, // FULL
+    createdAt: '2026-04-28T09:30:00.000Z',
   },
+
+  // 📅 TOMORROW (for week filter testing)
   {
     groupID: 3,
     title: 'ICS 311 Final Review Session',
     course: 'ICS 311',
-    description: 'Will go over Dynamic Programming exercises and Single-Source Shortest Path (SSSP) problems.',
+    description: 'Dynamic Programming + SSSP review.',
     location: 'Sustainability Courtyard',
-    startTime: '2026-04-26T14:00:00.000Z',
-    endTime: '2026-04-26T16:00:00.000Z',
+    startTime: '2026-04-29T20:00:00.000Z',
+    endTime: '2026-04-29T22:00:00.000Z',
     capacity: 8,
     members: 2,
-    createdAt: '2026-04-25T08:15:00.000Z',
+    createdAt: '2026-04-28T08:15:00.000Z',
+  },
+
+  // 📅 OUTSIDE WEEK RANGE (should disappear in "This Week")
+  {
+    groupID: 4,
+    title: 'ICS 111 Early Prep Session',
+    course: 'ICS 111',
+    description: 'Intro programming fundamentals.',
+    location: 'Webster Hall - Room 101',
+    startTime: '2026-05-11T20:00:00.000Z',
+    endTime: '2026-05-11T22:00:00.000Z',
+    capacity: 10,
+    members: 1,
+    createdAt: '2026-04-28T08:00:00.000Z',
+  },
+
+  // 🔍 SEARCH TEST (keyword edge case)
+  {
+    groupID: 5,
+    title: 'React Study Jam',
+    course: 'Web Development',
+    description: 'React hooks, state, and components practice.',
+    location: 'Saunders Hall',
+    startTime: '2026-04-28T23:00:00.000Z',
+    endTime: '2026-04-29T01:00:00.000Z',
+    capacity: 4,
+    members: 2,
+    createdAt: '2026-04-28T07:00:00.000Z',
   },
 ];
 
