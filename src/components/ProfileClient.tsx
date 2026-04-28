@@ -169,7 +169,7 @@ export default function ProfileClient({ profile, email }: { profile: ProfileShap
 									</div>
 
 									<div className="study-group-card profile-box" style={{ marginTop: 16 }}>
-										<h3>Favorited Spaces</h3>
+										<h3>Saved Spaces</h3>
 										<p className="muted">(no spaces favorited yet)</p>
 									</div>
 								</div>
