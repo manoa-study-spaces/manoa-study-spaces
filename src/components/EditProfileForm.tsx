@@ -1,7 +1,7 @@
 "use client";
 
 import './profile.css';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 type ProfileShape = {
@@ -19,68 +19,75 @@ type ProfileShape = {
 export default function EditProfileForm({ profile, email }: { profile?: ProfileShape | null; email?: string }) {
   const router = useRouter();
 
-  // Lazy initializer: merge DB profile with localStorage fallback when available.
-  const [form, setForm] = useState(() => {
-    const base = {
-      fullName: profile?.fullName || '',
-      username: profile?.username || '',
-      major: profile?.major || '',
-      standing: profile?.standing || '',
-      interests: profile?.interests || '',
-      classes: profile?.classes || '',
-      status: Array.isArray(profile?.status) ? profile!.status : (profile?.status ? [profile.status as string] : []),
-    } as {
-      fullName: string;
-      username: string;
-      major: string;
-      standing: string;
-      interests: string;
-      classes: string;
-      status: string[];
-    };
+  // Initialize from the server-provided profile only — merging localStorage must
+  // happen after hydration to avoid SSR/CSR markup mismatch.
+  const [form, setForm] = useState(() => ({
+    fullName: profile?.fullName || '',
+    username: profile?.username || '',
+    major: profile?.major || '',
+    standing: profile?.standing || '',
+    interests: profile?.interests || '',
+    classes: profile?.classes || '',
+    status: Array.isArray(profile?.status) ? profile!.status : (profile?.status ? [profile.status as string] : []),
+  } as {
+    fullName: string;
+    username: string;
+    major: string;
+    standing: string;
+    interests: string;
+    classes: string;
+    status: string[];
+  }));
 
-    try {
-      if (typeof window !== 'undefined' && email) {
-        const raw = window.localStorage.getItem(`profile:${email}`);
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          base.fullName = base.fullName || parsed.fullName || '';
-          base.username = base.username || parsed.username || '';
-          base.major = base.major || parsed.major || '';
-          base.standing = base.standing || parsed.standing || '';
-          base.interests = base.interests || parsed.interests || '';
-          base.classes = base.classes || parsed.classes || '';
-          base.status = (Array.isArray(base.status) && base.status.length) ? base.status : (Array.isArray(parsed.status) ? parsed.status : (parsed.status ? [parsed.status] : []));
-        }
-      }
-    } catch {
-      // ignore
-    }
-
-    return base;
-  });
-
-  const [imageData, setImageData] = useState<string | null>(() => {
-    const fromProfile = profile?.picture?.[0]?.fileName || profile?.pictureUrl || null;
-    if (typeof window !== 'undefined' && email) {
-      try {
-        const raw = window.localStorage.getItem(`profile:${email}`);
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          return fromProfile || parsed.pictureUrl || null;
-        }
-      } catch {
-        // ignore
-      }
-    }
-    return fromProfile;
-  });
+  const [imageData, setImageData] = useState<string | null>(() => profile?.picture?.[0]?.fileName || profile?.pictureUrl || null);
   const [removeImage, setRemoveImage] = useState(false);
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
-  // localStorage merging handled in the lazy initializer above; no runtime effects needed.
+  // Merge any localStorage fallback after hydration so server/client markup stays consistent.
+  type FormState = {
+    fullName: string;
+    username: string;
+    major: string;
+    standing: string;
+    interests: string;
+    classes: string;
+    status: string[];
+  };
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !email) return;
+    try {
+      const raw = window.localStorage.getItem(`profile:${email}`);
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+
+      // Compute next state and only set if it differs. We intentionally set state
+      // here after hydration — disable the lint rule for this one place.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setForm((prev) => {
+        const next: FormState = {
+          fullName: prev.fullName || parsed.fullName || '',
+          username: prev.username || parsed.username || '',
+          major: prev.major || parsed.major || '',
+          standing: prev.standing || parsed.standing || '',
+          interests: prev.interests || parsed.interests || '',
+          classes: prev.classes || parsed.classes || '',
+          status: (Array.isArray(prev.status) && prev.status.length) ? prev.status : (Array.isArray(parsed.status) ? parsed.status : (parsed.status ? [parsed.status] : [])),
+        };
+        if (JSON.stringify(prev) === JSON.stringify(next)) return prev;
+        return next;
+      });
+
+      // Don't repopulate the preview image if the user explicitly chose to remove it.
+      if (!removeImage && !imageData && parsed.pictureUrl) {
+        setImageData(parsed.pictureUrl);
+      }
+    } catch {
+      // ignore parse errors
+    }
+  }, [email, imageData, removeImage]);
 
   const handleFile = async (file?: File) => {
     if (!file) return setImageData(null);
@@ -215,7 +222,7 @@ export default function EditProfileForm({ profile, email }: { profile?: ProfileS
             </div>
             <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 8 }}>
               <input ref={fileRef} type="file" accept="image/*" onChange={(e) => handleFile(e.target.files?.[0])} />
-              <button type="button" className="btn btn-outline-dark" onClick={() => { setImageData(null); setRemoveImage(true); if (fileRef.current) fileRef.current.value = ''; }}>Remove image</button>
+              <button type="button" className="btn btn-outline-dark" onClick={() => { setImageData(null); setRemoveImage(true); if (fileRef.current) fileRef.current.value = ''; }}>Remove Image</button>
             </div>
           </div>
 
