@@ -2,6 +2,7 @@ import { Prisma } from '@prisma/client';
 import { hash } from 'bcrypt';
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { createProfileForUser } from '@/lib/dbActions';
 
 type SignUpRequestBody = {
   //fullName?: string;
@@ -119,7 +120,45 @@ export async function POST(request: Request) {
 
     for (const attempt of attempts) {
       try {
-        await attempt();
+        // create the user
+        const result = await attempt();
+
+        // If attempt used prisma.user.create it will return the created row.
+        // For raw SQL attempts, fetch the created user by email so we can get its id.
+        let userId: number | null = null;
+        if (result && typeof result === 'object' && 'id' in (result as any)) {
+          userId = (result as any).id as number;
+        } else {
+          const u = await prisma.user.findUnique({ where: { email } });
+          userId = u ? u.id : null;
+        }
+
+        // If we have a user id, create a matching profile row so both tables contain the entry
+        if (userId) {
+          // picture filename is not available here; we only have pictureUrl from the body
+          // For now create profile with provided fullName if present (body may not have all fields).
+          // Note: body may include more fields; attempt to use them if provided.
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const bodyAny = body as any;
+          const profileRes = await createProfileForUser({
+            userId,
+            fullName: typeof bodyAny.fullName === 'string' ? bodyAny.fullName : '',
+            major: typeof bodyAny.major === 'string' ? bodyAny.major : undefined,
+            classes: typeof bodyAny.classes === 'string' ? bodyAny.classes : undefined,
+            interests: typeof bodyAny.interests === 'string' ? bodyAny.interests : undefined,
+            status: typeof bodyAny.status === 'string' ? bodyAny.status : undefined,
+            standing: typeof bodyAny.standing === 'string' ? (bodyAny.standing as any) : undefined,
+            // If the client sent a pictureUrl (data URI or URL), save it as the fileName so
+            // a ProfileImage row is created. This keeps the data available in the DB until
+            // we add proper storage handling.
+            pictureFileName: typeof bodyAny.pictureUrl === 'string' ? bodyAny.pictureUrl : undefined,
+          });
+
+          if (!profileRes.ok && profileRes.code === 'UNKNOWN_ERROR') {
+            return NextResponse.json({ message: `Account created but profile creation failed: ${profileRes.detail}` }, { status: 500 });
+          }
+        }
+
         return NextResponse.json({ ok: true }, { status: 201 });
       } catch (error) {
         if (isDuplicateError(error)) {

@@ -35,7 +35,9 @@ export const SignUpSchema = Yup.object({
   username: Yup.string()
     .required('Username is required')
     .matches(/^[a-zA-Z0-9_]{3,30}$/, 'Username must be 3-30 characters and contain only letters, numbers, and underscores'),
-  major: Yup.string().optional().max(100, 'Major must be 100 characters or less'),
+  major: Yup.string()
+    .required("Major is required. Use 'Exploratory' if major is not declared")
+    .max(100, 'Major must be 100 characters or less'),
   standing: Yup.string()
     .oneOf(['Freshman', 'Sophmore', 'Junior', 'Senior', 'Graduate', 'Other'], 'Please select one of the following')
     .optional(),

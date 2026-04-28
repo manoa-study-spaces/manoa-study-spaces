@@ -164,6 +164,77 @@
   padding: 2.5rem;
   flex: 1;
   max-width: 500px;
+
+/* Profile card styles */
+.profile-page {
+  padding: 2rem;
+}
+.profile-card {
+  max-width: 880px;
+  margin: 0 auto;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  padding: 1.25rem;
+  background: #fff;
+}
+.profile-header {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.profile-image {
+  width: 96px;
+  height: 96px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f3f3f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.profile-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.profile-no-image {
+  color: #777;
+}
+.profile-meta {
+  flex: 1;
+}
+.profile-name {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #1f4f43;
+}
+.profile-username {
+  color: #3e7969;
+  margin-top: 6px;
+}
+.profile-email {
+  color: #333;
+  margin-top: 4px;
+}
+.profile-major {
+  margin-top: 12px;
+  color: #444;
+}
+.profile-actions {
+  margin-left: 12px;
+}
+.profile-about {
+  margin-top: 1rem;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 12px;
+}
+.profile-about-row {
+  margin-top: 8px;
+}
+.profile-status-list {
+  margin-top: 6px;
+  padding-left: 18px;
+}
   margin: 0 auto;
   width: 100%;
 }
@@ -238,8 +309,8 @@
 }
 
 .auth-error {
-  font-size: 12px;
-  color: #d32f2f;
+  font-size: 11px; /* slightly smaller */
+  color: #d32f2f; /* red */
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   margin-top: 4px;
 }

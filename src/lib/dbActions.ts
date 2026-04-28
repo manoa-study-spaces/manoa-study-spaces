@@ -223,3 +223,60 @@ export async function changePassword(credentials: { email: string; password: str
     },
   });
 }
+
+/**
+ * Creates a Profile row and optional ProfileImage for an existing user.
+ * This function deliberately sets the Profile primary key `profileID` to the
+ * existing user's id so the two ids match (no schema changes required).
+ *
+ * Notes:
+ * - `profileID` in the Prisma schema is an autoincrementing primary key, but
+ *   Postgres allows explicitly inserting a value for it. We catch duplicate
+ *   key errors and return a friendly result.
+ */
+export async function createProfileForUser(opts: {
+  userId: number;
+  fullName?: string;
+  major?: string;
+  classes?: string;
+  interests?: string;
+  status?: string;
+  standing?: 'Freshman' | 'Sophmore' | 'Junior' | 'Senior' | 'Graduate' | 'Other';
+  pictureFileName?: string;
+}) {
+  try {
+    await prisma.profile.create({
+      data: {
+        // Provide the legacy `id` column (required by the current schema) and
+        // set it equal to the user id so the two ids match.
+        id: opts.userId,
+        // Set the profile primary key equal to the user id so they match
+        profileID: opts.userId,
+        fullName: opts.fullName ?? '',
+        major: opts.major ?? '',
+        classes: opts.classes ?? '',
+        Interests: opts.interests ?? '',
+        status: opts.status ?? '',
+        standing: opts.standing ?? 'Freshman',
+        picture: opts.pictureFileName
+          ? {
+              create: [
+                {
+                  fileName: opts.pictureFileName,
+                },
+              ],
+            }
+          : undefined,
+      },
+    });
+
+    return { ok: true } as const;
+  } catch (error) {
+    // If the profile already exists (duplicate primary key), return a clear code
+    if (isDuplicateEmailError(error) || (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002')) {
+      return { ok: false, code: 'PROFILE_EXISTS', detail: getErrorDetail(error) } as const;
+    }
+
+    return { ok: false, code: 'UNKNOWN_ERROR', detail: getErrorDetail(error) } as const;
+  }
+}
