@@ -21,7 +21,7 @@ type Listing = {
   spaceType: string;
   capacity: number;
   createdAt: string | Date;
-  image: {
+  pictures: {
     imageID: number;
     fileName: string;
   }[];

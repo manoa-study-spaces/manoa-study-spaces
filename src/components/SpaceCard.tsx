@@ -15,7 +15,7 @@ type SpaceCardProps = {
     spaceType: string;
     capacity: number;
     createdAt: string | Date;
-    image: {
+    pictures: {
       imageID: number;
       fileName: string;
     }[];
@@ -49,7 +49,7 @@ const SpaceCard = ({ listing }: SpaceCardProps) => {
           {/* Image */}
           <Col xs={4} md={4} className="d-flex justify-content-end align-items-start">
             <Image
-              src={listing.image?.[0]?.fileName || '/placeholder.jpg'}
+              src={listing.pictures?.[0]?.fileName || '/placeholder.jpg'}
               alt={listing.buildingName}
               width={200}
               height={200}
