@@ -3,18 +3,24 @@ import { prisma } from '@/lib/prisma';
 import { Container, Row, Col } from 'react-bootstrap';
 
 export default async function TodayPage() {
-  const today = new Date();
+  const now = new Date();
+  const hawaiiNow = new Date(
+    now.toLocaleString('en-US', { timeZone: 'Pacific/Honolulu' })
+  );
 
-  const formattedDate = today.toLocaleDateString('en-US', {
+  const formattedDate = hawaiiNow.toLocaleDateString('en-US', {
+    timeZone: 'Pacific/Honolulu',
     weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   });
 
-  const startOfToday = new Date();
+  // Start of today in Hawaii
+  const startOfToday = new Date(hawaiiNow);
   startOfToday.setHours(0, 0, 0, 0);
 
+  // Start of tomorrow in Hawaii
   const startOfTomorrow = new Date(startOfToday);
   startOfTomorrow.setDate(startOfTomorrow.getDate() + 1);
 
