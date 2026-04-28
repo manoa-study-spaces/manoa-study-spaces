@@ -17,11 +17,23 @@ const ListPage = async () => {
     } | null,
   );
 
-  const listings = await prisma.listing.findMany({
-  include: {
+  const rawListings = await prisma.listing.findMany({
+    include: {
       pictures: true,
     },
   });
+
+  const listings = rawListings.map((listing) => ({
+    listingID: listing.listingID,
+    buildingName: listing.buildingName,
+    roomNumber: listing.roomNumber,
+    occupancy: listing.occupancy,
+    noiseLevel: listing.noiseLevel,
+    foodAllowed: listing.foodAllowed,
+    spaceType: listing.spaceType,
+    capacity: listing.capacity,
+    image: listing.pictures[0]?.fileName ?? '',
+  }));
   // Test Listing
 //   const listings = [
 //   {

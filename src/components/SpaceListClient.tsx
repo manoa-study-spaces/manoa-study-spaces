@@ -20,7 +20,11 @@ type Listing = {
   foodAllowed: string;
   spaceType: string;
   capacity: number;
-  image: string;
+  createdAt: string | Date;
+  image: {
+    imageID: number;
+    fileName: string;
+  }[];
 };
 
 // listings: array of Listing objects fetched from the database 
