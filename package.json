@@ -15,7 +15,6 @@
     "@hookform/resolvers": "^5.2.2",
     "@prisma/adapter-pg": "^7.4.2",
     "@prisma/client": "^7.7.0",
-    "@ts-pro/unique-random-number": "^1.0.4",
     "bcrypt": "^6.0.0",
     "bootstrap": "^5.3.8",
     "next": "16.1.6",

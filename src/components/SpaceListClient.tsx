@@ -6,6 +6,7 @@ import SpaceCard from '@/components/SpaceCard';
 import { InputGroup, Button } from 'react-bootstrap';
 import { LiaTimesSolid } from "react-icons/lia";
 import { CiSearch } from "react-icons/ci";
+import { usePathname } from 'next/navigation';
 
 /**
  * Type definition for single Listing object coming from Prisma.
@@ -19,7 +20,11 @@ type Listing = {
   foodAllowed: string;
   spaceType: string;
   capacity: number;
-  image: string;
+  createdAt: string | Date;
+  pictures: {
+    imageID: number;
+    fileName: string;
+  }[];
 };
 
 // listings: array of Listing objects fetched from the database 
@@ -37,6 +42,7 @@ const SpaceListClient = ({ listings }: SpaceCardProps) => {
   const filteredListings = listings.filter((listing) =>
     listing.buildingName.toLowerCase().includes(search.toLowerCase())
   );
+  const pathName = usePathname();
 
   return (
     <Container fluid>
@@ -68,7 +74,7 @@ const SpaceListClient = ({ listings }: SpaceCardProps) => {
           </InputGroup>
 
           {/* Add Space Button */}
-          <Button variant="success" className="add-space-btn ms-3">
+          <Button variant="success" className="add-space-btn ms-3" href="/add" active={pathName === '/add'}>
             + Add Space
           </Button>
         </Col>
