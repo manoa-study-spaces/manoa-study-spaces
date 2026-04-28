@@ -13,28 +13,28 @@ type ProfileShape = {
 	classes?: string;
 	status?: string;
 	picture?: Array<{ fileName: string }>;
+	pictureUrl?: string;
 };
 
 export default function ProfileClient({ profile, email }: { profile: ProfileShape | null; email?: string }) {
-	const [clientProfile, setClientProfile] = useState<ProfileShape | null>(profile);
+		// Start with the server-provided profile so server and client initial DOM match.
+		const [clientProfile, setClientProfile] = useState<ProfileShape | null>(profile);
 
+		// Merge localStorage fallback on the client after hydration. This avoids
+		// reading `window` during server render and prevents hydration mismatch.
 		useEffect(() => {
-			if (typeof window !== 'undefined' && email) {
-				try {
-					const raw = window.localStorage.getItem(`profile:${email}`);
-					if (raw) {
-						const parsed = JSON.parse(raw);
-						// Merge DB profile (if any) with localStorage fallback
-						setClientProfile((prev) => ({ ...(profile ?? {}), ...(parsed ?? {}) }));
-						return;
-					}
-				} catch {
-					// ignore
-				}
+			if (typeof window === 'undefined' || !email) return;
+			try {
+				const raw = window.localStorage.getItem(`profile:${email}`);
+				if (!raw) return;
+				const parsed = JSON.parse(raw) as Record<string, unknown>;
+
+				// eslint-disable-next-line react-hooks/set-state-in-effect
+				setClientProfile((prev) => ({ ...(prev ?? {}), ...(parsed ?? {}) } as ProfileShape));
+			} catch {
+				// ignore parse errors
 			}
-			// If no localStorage fallback, use DB profile
-			setClientProfile(profile);
-		}, [profile, email]);
+		}, [email]);
 
 	if (!clientProfile) {
 		return (
@@ -47,7 +47,7 @@ export default function ProfileClient({ profile, email }: { profile: ProfileShap
 
 		const imageSrc = (clientProfile && clientProfile.picture && clientProfile.picture.length)
 			? clientProfile.picture[0].fileName
-			: (clientProfile as any).pictureUrl || '';
+			: clientProfile.pictureUrl || '';
 
 		// Normalize status into an array for display
 		const statusArray: string[] = (() => {

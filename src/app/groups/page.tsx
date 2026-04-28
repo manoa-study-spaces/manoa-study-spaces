@@ -18,6 +18,7 @@ const GroupsPage = async () => {
     } | null,
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const groups = await prisma.listing.findMany({
     include: {
       pictures: true,

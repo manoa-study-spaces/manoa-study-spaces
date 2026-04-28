@@ -1,13 +1,19 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, Standing } from '@prisma/client';
 import { hash } from 'bcrypt';
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { createProfileForUser } from '@/lib/dbActions';
 
 type SignUpRequestBody = {
-  //fullName?: string;
+  fullName?: string;
   email?: string;
   password?: string;
+  major?: string;
+  classes?: string;
+  interests?: string;
+  status?: string | string[];
+  standing?: string;
+  pictureUrl?: string;
 };
 
 function getErrorDetail(error: unknown): string {
@@ -118,7 +124,7 @@ export async function POST(request: Request) {
 
     let lastError: unknown;
 
-    for (const attempt of attempts) {
+      for (const attempt of attempts) {
       try {
         // create the user
         const result = await attempt();
@@ -126,8 +132,8 @@ export async function POST(request: Request) {
         // If attempt used prisma.user.create it will return the created row.
         // For raw SQL attempts, fetch the created user by email so we can get its id.
         let userId: number | null = null;
-        if (result && typeof result === 'object' && 'id' in (result as any)) {
-          userId = (result as any).id as number;
+        if (result && typeof result === 'object' && 'id' in result) {
+          userId = (result as { id: number }).id;
         } else {
           const u = await prisma.user.findUnique({ where: { email } });
           userId = u ? u.id : null;
@@ -138,20 +144,26 @@ export async function POST(request: Request) {
           // picture filename is not available here; we only have pictureUrl from the body
           // For now create profile with provided fullName if present (body may not have all fields).
           // Note: body may include more fields; attempt to use them if provided.
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const bodyAny = body as any;
+          // parse optional profile-related fields safely from the request body
+          const maybeFullName = typeof body.fullName === 'string' ? body.fullName : '';
+          const maybeMajor = typeof body.major === 'string' ? body.major : undefined;
+          const maybeClasses = typeof body.classes === 'string' ? body.classes : undefined;
+          const maybeInterests = typeof body.interests === 'string' ? body.interests : undefined;
+          const maybeStatus = typeof body.status === 'string' ? body.status : undefined;
+          const maybeStanding = typeof body.standing === 'string' ? body.standing : undefined;
+          const maybePicture = typeof body.pictureUrl === 'string' ? body.pictureUrl : undefined;
+
+          const standingEnum = (maybeStanding && Object.values(Standing).includes(maybeStanding as Standing)) ? (maybeStanding as Standing) : undefined;
+
           const profileRes = await createProfileForUser({
             userId,
-            fullName: typeof bodyAny.fullName === 'string' ? bodyAny.fullName : '',
-            major: typeof bodyAny.major === 'string' ? bodyAny.major : undefined,
-            classes: typeof bodyAny.classes === 'string' ? bodyAny.classes : undefined,
-            interests: typeof bodyAny.interests === 'string' ? bodyAny.interests : undefined,
-            status: typeof bodyAny.status === 'string' ? bodyAny.status : undefined,
-            standing: typeof bodyAny.standing === 'string' ? (bodyAny.standing as any) : undefined,
-            // If the client sent a pictureUrl (data URI or URL), save it as the fileName so
-            // a ProfileImage row is created. This keeps the data available in the DB until
-            // we add proper storage handling.
-            pictureFileName: typeof bodyAny.pictureUrl === 'string' ? bodyAny.pictureUrl : undefined,
+            fullName: maybeFullName,
+            major: maybeMajor,
+            classes: maybeClasses,
+            interests: maybeInterests,
+            status: maybeStatus,
+            standing: standingEnum,
+            pictureFileName: maybePicture,
           });
 
           if (!profileRes.ok && profileRes.code === 'UNKNOWN_ERROR') {

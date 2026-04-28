@@ -1,57 +1,86 @@
 "use client";
 
 import './profile.css';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function EditProfileForm({ profile, email }: { profile: any; email?: string }) {
+type ProfileShape = {
+  fullName?: string;
+  username?: string;
+  major?: string;
+  standing?: string | null;
+  interests?: string;
+  classes?: string;
+  status?: string | string[];
+  picture?: Array<{ fileName: string }>;
+  pictureUrl?: string;
+};
+
+export default function EditProfileForm({ profile, email }: { profile?: ProfileShape | null; email?: string }) {
   const router = useRouter();
-  const [form, setForm] = useState({
-    fullName: profile?.fullName || '',
-    username: profile?.username || '',
-    major: profile?.major || '',
-    standing: profile?.standing || '',
-    interests: profile?.interests || '',
-    classes: profile?.classes || '',
-    status: Array.isArray(profile?.status) ? profile.status : (profile?.status ? [profile.status] : []),
+
+  // Lazy initializer: merge DB profile with localStorage fallback when available.
+  const [form, setForm] = useState(() => {
+    const base = {
+      fullName: profile?.fullName || '',
+      username: profile?.username || '',
+      major: profile?.major || '',
+      standing: profile?.standing || '',
+      interests: profile?.interests || '',
+      classes: profile?.classes || '',
+      status: Array.isArray(profile?.status) ? profile!.status : (profile?.status ? [profile.status as string] : []),
+    } as {
+      fullName: string;
+      username: string;
+      major: string;
+      standing: string;
+      interests: string;
+      classes: string;
+      status: string[];
+    };
+
+    try {
+      if (typeof window !== 'undefined' && email) {
+        const raw = window.localStorage.getItem(`profile:${email}`);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          base.fullName = base.fullName || parsed.fullName || '';
+          base.username = base.username || parsed.username || '';
+          base.major = base.major || parsed.major || '';
+          base.standing = base.standing || parsed.standing || '';
+          base.interests = base.interests || parsed.interests || '';
+          base.classes = base.classes || parsed.classes || '';
+          base.status = (Array.isArray(base.status) && base.status.length) ? base.status : (Array.isArray(parsed.status) ? parsed.status : (parsed.status ? [parsed.status] : []));
+        }
+      }
+    } catch {
+      // ignore
+    }
+
+    return base;
   });
-  const [imageData, setImageData] = useState<string | null>(profile?.picture?.[0]?.fileName || (profile as any)?.pictureUrl || null);
+
+  const [imageData, setImageData] = useState<string | null>(() => {
+    const fromProfile = profile?.picture?.[0]?.fileName || profile?.pictureUrl || null;
+    if (typeof window !== 'undefined' && email) {
+      try {
+        const raw = window.localStorage.getItem(`profile:${email}`);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          return fromProfile || parsed.pictureUrl || null;
+        }
+      } catch {
+        // ignore
+      }
+    }
+    return fromProfile;
+  });
   const [removeImage, setRemoveImage] = useState(false);
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
-  useEffect(() => {
-    setForm((f) => ({ ...f }));
-  }, []);
-
-  // Merge localStorage fallback (saved at signup) so fields like username/email and pictureUrl
-  // are prefilled when DB doesn't contain them yet.
-  useEffect(() => {
-    if (typeof window === 'undefined' || !email) return;
-    try {
-      const raw = window.localStorage.getItem(`profile:${email}`);
-      if (!raw) return;
-      const parsed = JSON.parse(raw);
-
-      setForm((prev) => ({
-        fullName: prev.fullName || parsed.fullName || '',
-        username: prev.username || parsed.username || '',
-        major: prev.major || parsed.major || '',
-        standing: prev.standing || parsed.standing || '',
-        interests: prev.interests || parsed.interests || '',
-        classes: prev.classes || parsed.classes || '',
-        status: (Array.isArray(prev.status) && prev.status.length) ? prev.status : (Array.isArray(parsed.status) ? parsed.status : (parsed.status ? [parsed.status] : [])),
-      }));
-
-      // If we don't have an imageData yet, use the saved pictureUrl from localStorage
-      if (!imageData && parsed.pictureUrl) {
-        setImageData(parsed.pictureUrl);
-      }
-    } catch {
-      // ignore parse errors
-    }
-  }, [email]);
+  // localStorage merging handled in the lazy initializer above; no runtime effects needed.
 
   const handleFile = async (file?: File) => {
     if (!file) return setImageData(null);
@@ -201,7 +230,7 @@ export default function EditProfileForm({ profile, email }: { profile: any; emai
             <input value={form.major} onChange={(e) => setForm({ ...form, major: e.target.value })} />
 
             <label>Standing</label>
-            <select value={form.standing} onChange={(e) => setForm({ ...form, standing: e.target.value })} className="auth-form-input">
+            <select value={String(form.standing ?? '')} onChange={(e) => setForm({ ...form, standing: e.target.value })} className="auth-form-input">
               <option value="">Select standing</option>
               <option value="Freshman">Freshman</option>
               <option value="Sophmore">Sophmore</option>

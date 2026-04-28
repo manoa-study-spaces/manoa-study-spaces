@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { Prisma } from '@prisma/client';
+import { Standing } from '@prisma/client';
 import fs from 'fs';
 import path from 'path';
 
@@ -50,7 +50,7 @@ export async function POST(req: Request) {
       const dest = path.join(process.cwd(), 'public', 'uploads');
       const saved = await saveDataUri(body.pictureUrl, dest);
       pictureFileName = saved ?? undefined;
-    } catch (e) {
+    } catch {
       // ignore save errors for now
     }
   } else if (body.pictureUrl) {
@@ -59,19 +59,19 @@ export async function POST(req: Request) {
   }
 
   // If removeImage flag is set, delete existing profileImage rows and any uploaded files
-  if ((body as any).removeImage) {
+  if (Boolean(body.removeImage)) {
     try {
       const existing = await prisma.profileImage.findMany({ where: { profileID: user.id } });
       for (const img of existing) {
         if (img.fileName && img.fileName.startsWith('/uploads/')) {
           const filePath = path.join(process.cwd(), 'public', img.fileName.replace(/^\//, ''));
-          try { await fs.promises.unlink(filePath); } catch (e) { /* ignore missing file */ }
+          try { await fs.promises.unlink(filePath); } catch { /* ignore missing file */ }
         }
       }
       await prisma.profileImage.deleteMany({ where: { profileID: user.id } });
       // ensure we don't create a new image below
       pictureFileName = undefined;
-    } catch (e) {
+    } catch {
       // ignore errors
     }
   }
@@ -86,16 +86,23 @@ export async function POST(req: Request) {
         major: body.major ?? '',
         classes: body.classes ?? '',
         Interests: body.interests ?? '',
-        status: Array.isArray(body.status) ? body.status.join(', ') : (body.status as string) ?? '',
-        standing: (body.standing as any) ?? 'Freshman',
+        status: Array.isArray(body.status) ? body.status.join(', ') : (typeof body.status === 'string' ? body.status : '') ?? '',
+        standing: ((): Standing => {
+          const s = typeof body.standing === 'string' ? body.standing : 'Freshman';
+          if (Object.values(Standing).includes(s as Standing)) return s as Standing;
+          return Standing.Freshman;
+        })(),
       },
       update: {
         fullName: body.fullName ?? undefined,
         major: body.major ?? undefined,
         classes: body.classes ?? undefined,
         Interests: body.interests ?? undefined,
-        status: Array.isArray(body.status) ? body.status.join(', ') : (body.status as string) ?? undefined,
-        standing: (body.standing as any) ?? undefined,
+        status: Array.isArray(body.status) ? body.status.join(', ') : (typeof body.status === 'string' ? body.status : undefined) ?? undefined,
+        standing: ((): Standing | undefined => {
+          if (typeof body.standing !== 'string') return undefined;
+          return Object.values(Standing).includes(body.standing as Standing) ? (body.standing as Standing) : undefined;
+        })(),
       },
     });
 
