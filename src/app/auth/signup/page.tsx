@@ -14,7 +14,7 @@ type SignUpForm = {
   email: string;
   password: string;
   confirmPassword: string;
-  major?: string;
+  major: string;
   standing?: 'Freshman' | 'Sophmore' | 'Junior' | 'Senior' | 'Graduate' | 'Other';
   interests?: string;
   classes?: string;
@@ -60,23 +60,23 @@ const SignUp = () => {
     setIsLoading(true);
 
     try {
-          const response = await fetch('/api/auth/signup', {
+      const response = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            fullName: data.fullName,
-      username: data.username,
-            email: data.email,
-            password: data.password,
-            major: data.major || null,
-            standing: data.standing || null,
-            interests: data.interests || null,
-            classes: data.classes || null,
-                pictureUrl: pictureData ?? data.pictureUrl ?? null,
-            status: data.status && data.status.length ? data.status : null,
-          }),
+          fullName: data.fullName,
+          username: data.username,
+          email: data.email,
+          password: data.password,
+          major: data.major || null,
+          standing: data.standing || null,
+          interests: data.interests || null,
+          classes: data.classes || null,
+          pictureUrl: pictureData ?? data.pictureUrl ?? null,
+          status: data.status && data.status.length ? data.status : null,
+        }),
       });
 
       const result = (await response.json()) as { message?: string };
@@ -158,6 +158,7 @@ const SignUp = () => {
             type="text"
             {...register('fullName')}
             className={`auth-form-input ${errors.fullName ? 'is-invalid' : ''}`}
+            aria-invalid={!!errors.fullName}
             placeholder="Enter your name"
           />
           {errors.fullName && <div className="auth-error">{String(errors.fullName?.message)}</div>}
@@ -169,6 +170,7 @@ const SignUp = () => {
             type="text"
             {...register('username')}
             className={`auth-form-input ${errors.username ? 'is-invalid' : ''}`}
+            aria-invalid={!!errors.username}
             placeholder="Enter a username"
           />
           {errors.username && <div className="auth-error">{String(errors.username?.message)}</div>}
@@ -180,6 +182,7 @@ const SignUp = () => {
             type="email"
             {...register('email')}
             className={`auth-form-input ${errors.email ? 'is-invalid' : ''}`}
+            aria-invalid={!!errors.email}
             placeholder="student@hawaii.edu"
           />
           {errors.email && <div className="auth-error">{String(errors.email?.message)}</div>}
@@ -192,6 +195,7 @@ const SignUp = () => {
               type={showPassword ? 'text' : 'password'}
               {...register('password')}
               className={`auth-form-input ${errors.password ? 'is-invalid' : ''}`}
+              aria-invalid={!!errors.password}
               placeholder="Create a password"
             />
             <button
@@ -212,6 +216,7 @@ const SignUp = () => {
               type={showConfirmPassword ? 'text' : 'password'}
               {...register('confirmPassword')}
               className={`auth-form-input ${errors.confirmPassword ? 'is-invalid' : ''}`}
+              aria-invalid={!!errors.confirmPassword}
               placeholder="Confirm your password"
             />
             <button
@@ -232,8 +237,11 @@ const SignUp = () => {
             {...register('major')}
             className={`auth-form-input ${errors.major ? 'is-invalid' : ''}`}
             placeholder="e.g., BS Computer Science"
+            aria-invalid={!!errors.major}
           />
-          {errors.major && <div className="auth-error">{String(errors.major?.message)}</div>}
+          {errors.major && (
+            <div className="auth-error" role="alert">{String(errors.major?.message)}</div>
+          )}
         </div>
 
         <div className="auth-form-group">
