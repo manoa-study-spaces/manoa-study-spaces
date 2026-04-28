@@ -127,6 +127,34 @@ export async function deleteStuff(id: number) {
 }
 
 /**
+ * Retrieves all listings created today. Filters listings based on the current date 
+ * (from midnight to 11:59 PM) and includes associated images for display in the UI. 
+ * @param The date used to filter listings (typically today's date).
+ * @returns An array of Listing objects created today, each including its pictures.
+ */
+export async function getTodayListings() {
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);     // 12:00:00.000 AM (start of today)
+  const endOfDay = new Date();
+  endOfDay.setHours(23, 59, 59, 999);  // 11:59:59.999 PM (end of today)
+
+  return prisma.listing.findMany({
+    where: {
+      createdAt: {
+        gte: startOfDay,  // greater than or equal to start of today
+        lte: endOfDay,    // less than or equal to before end of today
+      },
+    },
+    include: {
+      pictures: true,
+    },
+    orderBy: {
+      createdAt: 'desc',  // Show newest listings first (descending order)
+    },
+  });
+}
+
+/**
  * Creates a new user in the database.
  * @param credentials, an object with the following properties: fullName, email, password.
  */
