@@ -28,7 +28,7 @@ const NavBar: React.FC = () => {
     {/* ---------------- Top Navbar ---------------- */}
       <Navbar className="top-navbar" expand="lg">
         <Container fluid className="d-flex justify-content-between align-items-center">
-          {/* Left Logo */}
+          {/* Left Logo + Page Title Text*/}
           <Navbar.Brand href="/">
             <Image
               src="/StudySpacesLogo.png"
@@ -38,10 +38,13 @@ const NavBar: React.FC = () => {
             />
           </Navbar.Brand>
 
-          {/* Right Text */}
           <div className="navbar-top-text">
             {title}
           </div>
+
+          {/* Right Side */}
+
+          
         </Container>
       </Navbar>
 

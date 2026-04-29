@@ -20,7 +20,7 @@ body {
 
 /* ---------------- Top Navbar ---------------- */
 .top-navbar {
-  background-color: #a3edd7;
+  background-color: #55d19d;
   padding: 0.85rem 0; /* slightly taller header like the mock */
   box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
 }
@@ -31,14 +31,15 @@ body {
 }
 /* logo bubble styling removed to restore original look */
 
-/* Right text */
+/* Right text --> left text after logo*/
 .top-navbar .navbar-top-text {
-  margin-right: 1.25rem;
+  margin-left: 1.25rem;
   font-weight: 300;
   font-size: 1.15rem;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   display: flex;
   align-items: center; /* vertically center text */
+    color: #c2eee0;
 }
 
 /* Hover effect on logo */
@@ -47,7 +48,7 @@ body {
   transition: 0.2s;
 }
 
-/* ---------------- Bottom Navbar ---------------- */
+/* ---------------- Bottom Navbar ---------------- we won't be needing that */
 .bottom-navbar {
   background-color: #eaf8f1; /* lighter band */
   padding: 0.4rem 0; /* slightly taller for the thin band look */
@@ -87,7 +88,7 @@ body {
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-/* ---------------- Footer ---------------- */
+/* ---------------- Footer ---------------- NO CHANGE*/
 .footer {
   background-color: #3f7a69;
   padding: 0.5rem 0;
