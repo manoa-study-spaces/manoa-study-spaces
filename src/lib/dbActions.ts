@@ -95,6 +95,35 @@ export async function addListing(data: {
 }
 
 /**
+ * Creates a new study group in the database.
+ */
+export async function createStudyGroup(data: {
+  title: string;
+  course: string;
+  description?: string;
+  location: string;
+  startTime: string | Date;
+  endTime: string | Date;
+  capacity: number;
+  organizerId: number;
+}) {
+  await prisma.studyGroup.create({
+    data: {
+      title: data.title,
+      course: data.course,
+      description: data.description,
+      location: data.location,
+      startTime: new Date(data.startTime),
+      endTime: new Date(data.endTime),
+      capacity: data.capacity,
+      organizerId: data.organizerId,
+    },
+  });
+
+  redirect('/studygroups');
+}
+
+/**
  * Edits an existing stuff in the database.
  * @param stuff, an object with the following properties: id, name, quantity, owner, condition.
  */

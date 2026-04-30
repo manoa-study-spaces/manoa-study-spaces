@@ -5,6 +5,7 @@ import { Container, Row, Col, Form, InputGroup, Button } from 'react-bootstrap';
 import { CiSearch } from 'react-icons/ci';
 import { LiaTimesSolid } from 'react-icons/lia';
 import StudyGroupCard from '@/components/StudyGroupCard';
+import { useRouter } from 'next/navigation';
 
 type StudyGroup = {
   groupID: number;
@@ -34,6 +35,8 @@ const toHawaiiDate = (date: Date | string) =>
   );
 
 const StudyGroupClient = ({ groups }: StudyGroupClientProps) => {
+  const router = useRouter();
+
   const [search, setSearch] = useState('');
   const [tab, setTab] = useState<TabType>('all');
   const [openOnly, setOpenOnly] = useState(false);
@@ -51,7 +54,6 @@ const StudyGroupClient = ({ groups }: StudyGroupClientProps) => {
 
         return matchesSearch && (!openOnly || hasSpots);
       })
-
       .filter((group) => {
         const start = toHawaiiDate(group.startTime);
 
@@ -74,10 +76,6 @@ const StudyGroupClient = ({ groups }: StudyGroupClientProps) => {
 
           return start >= startOfToday && start < weekLater;
         }
-        
-        if (tab === 'mine') {
-          return true;
-        }
 
         return true;
       });
@@ -89,7 +87,6 @@ const StudyGroupClient = ({ groups }: StudyGroupClientProps) => {
       {/* Tabs */}
       <div className="mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
 
-        {/* Left side: Tabs */}
         <div className="d-flex align-items-center gap-2 flex-wrap">
 
           <Button
@@ -132,7 +129,7 @@ const StudyGroupClient = ({ groups }: StudyGroupClientProps) => {
 
         {/* Search Bar */}
         <div style={{ flex: '0 1 49%', minWidth: 0 }}>
-          <InputGroup style={{ width: '100%' }}>
+          <InputGroup>
 
             <InputGroup.Text>
               <CiSearch />
@@ -143,7 +140,7 @@ const StudyGroupClient = ({ groups }: StudyGroupClientProps) => {
               type="text"
               placeholder="Search by group name or course..."
               value={search}
-              onChange={(event) => setSearch(event.target.value)}
+              onChange={(e) => setSearch(e.target.value)}
             />
 
             {search && (
@@ -155,8 +152,11 @@ const StudyGroupClient = ({ groups }: StudyGroupClientProps) => {
           </InputGroup>
         </div>
 
-        {/* Create Group Button */}
-        <Button className="create-group-btn flex-shrink-0">
+        {/* Create Group Button (FIXED → navigation instead of modal) */}
+        <Button
+          className="create-group-btn flex-shrink-0"
+          onClick={() => router.push('/addstudygroup')}
+        >
           + Create Group
         </Button>
 
