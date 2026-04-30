@@ -1,28 +1,23 @@
 import SpaceCard from '@/components/SpaceCard';
 import { prisma } from '@/lib/prisma';
 import { Container, Row, Col } from 'react-bootstrap';
+import { DateTime } from 'luxon';
 
 export default async function TodayPage() {
-  const now = new Date();
-  const hawaiiNow = new Date(
-    now.toLocaleString('en-US', { timeZone: 'Pacific/Honolulu' })
-  );
+  // Current time in Hawaii (safe, no string parsing)
+  const hawaiiNow = DateTime.now().setZone('Pacific/Honolulu');
 
-  const formattedDate = hawaiiNow.toLocaleDateString('en-US', {
-    timeZone: 'Pacific/Honolulu',
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+  // Format date for display
+  const formattedDate = hawaiiNow.toFormat('EEEE, MMMM d, yyyy');
 
   // Start of today in Hawaii
-  const startOfToday = new Date(hawaiiNow);
-  startOfToday.setHours(0, 0, 0, 0);
+  const startOfToday = hawaiiNow.startOf('day').toJSDate();
 
   // Start of tomorrow in Hawaii
-  const startOfTomorrow = new Date(startOfToday);
-  startOfTomorrow.setDate(startOfTomorrow.getDate() + 1);
+  const startOfTomorrow = hawaiiNow
+    .plus({ days: 1 })
+    .startOf('day')
+    .toJSDate();
 
   const listings = await prisma.listing.findMany({
     where: {
