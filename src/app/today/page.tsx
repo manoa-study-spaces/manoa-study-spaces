@@ -19,6 +19,12 @@ export default async function TodayPage() {
     .startOf('day')
     .toJSDate();
 
+  // Time Test
+  console.log("Now (server UTC):", new Date().toISOString());
+  console.log("startOfToday:", startOfToday.toISOString());
+  console.log("startOfTomorrow:", startOfTomorrow.toISOString());
+  console.log("formattedDate:", formattedDate);
+
   const listings = await prisma.listing.findMany({
     where: {
       createdAt: {
