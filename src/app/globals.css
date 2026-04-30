@@ -326,7 +326,7 @@ body {
 
 /* Toggle */
 .group-toggle {
-  font-size: 1x.9rem;
+  font-size: 1.0rem;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   color: #3e7969;
 }
@@ -409,4 +409,53 @@ body {
   border-radius: 8px;
   font-size: 0.9rem;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+/* ---------------- Add Study Group Form ---------------- */
+
+.add-study-group-card {
+  border-radius: 8px;
+  padding: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.add-study-group-card .card-body {
+  padding: 25px;
+}
+
+/* Labels */
+.add-study-group-card .form-label {
+  font-weight: 500;
+  color: #3f7a69;
+  font-size: 0.95rem;
+}
+
+/* Inputs */
+.add-study-group-card .form-control,
+.add-study-group-card .form-select {
+  border-radius: 8px;
+  font-size: 0.95rem;
+  padding: 6px 10px;
+  color: #555;
+}
+
+/* Buttons */
+.add-study-group-card .btn-success {
+  background-color: #3f7a69;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.add-study-group-card .btn-success:hover {
+  background-color: #2f5e50;
+}
+
+/* Secondary buttons */
+.add-study-group-card .btn-secondary {
+  border-radius: 8px;
+  border: none;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 0.95rem;
 }
