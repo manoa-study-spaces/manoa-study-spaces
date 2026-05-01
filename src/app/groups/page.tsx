@@ -39,6 +39,9 @@ const GroupsPage = async () => {
       createdAt: 'desc',
     },
   });
+  groups.forEach((group) => {
+    console.log(JSON.stringify(group.members, null, 2));
+  });
 
   const studyGroups = groups.map((group) => ({
     groupID: group.groupID,
@@ -58,12 +61,26 @@ const GroupsPage = async () => {
 
     createdAt: group.createdAt.toISOString(),
 
-      membersList: group.members.map((m) => ({
+    membersList: group.members.map((m) => {
+      const imageFile = m.user.profile?.picture?.[0]?.fileName;
+
+      // Test Image
+      console.log('RAW IMAGE FILE:', imageFile);
+      console.log(
+        'FINAL URL:',
+        imageFile ? `/${imageFile.replace(/^\/?uploads\//, 'uploads/')}` : null
+        
+      );
+
+      return {
         id: m.user.id,
-        name: m.user.name,
-        image: m.user.image, 
-      })),
-    }));
+        name: m.user.profile?.fullName ?? 'Anonymous',
+        image: imageFile
+          ? `/${imageFile.replace(/^\/?uploads\//, 'uploads/')}`
+          : '/default-avatar.png',
+      };
+    }),
+  }));
 
   return (
     <main>

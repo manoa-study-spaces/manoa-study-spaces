@@ -38,6 +38,7 @@ const AddStudyGroupForm: React.FC = () => {
     redirect('/auth/signin');
   }
 
+  // Form submit handler
   const onSubmit = async (data: StudyGroupFormData) => {
     try {
       if (!session?.user?.email) {
