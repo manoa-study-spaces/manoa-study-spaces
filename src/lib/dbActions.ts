@@ -95,6 +95,65 @@ export async function addListing(data: {
 }
 
 /**
+ * Creates a new study group in the database.
+ */
+export async function createStudyGroup(data: {
+  title: string;
+  course: string;
+  description?: string;
+  location: string;
+  startTime: string | Date;
+  endTime: string | Date;
+  capacity: number;
+  organizerId: number;
+}) {
+  await prisma.studyGroup.create({
+    data: {
+      title: data.title,
+      course: data.course,
+      description: data.description,
+      location: data.location,
+      startTime: new Date(data.startTime),
+      endTime: new Date(data.endTime),
+      capacity: data.capacity,
+      organizerId: data.organizerId,
+    },
+  });
+}
+
+/**
+ * Joins study group in the database.
+ */
+export async function joinStudyGroup(data: {
+  groupId: number;
+  userId: number;
+}) {
+  await prisma.groupMember.create({
+    data: {
+      groupId: data.groupId,
+      userId: data.userId,
+    },
+  });
+}
+
+/**
+ * Leaves study group in the database.
+ */
+export async function leaveStudyGroup(data: {
+  groupId: number;
+  userId: number;
+}) {
+  await prisma.groupMember.delete({
+    where: {
+      groupId_userId: {
+        groupId: data.groupId,
+        userId: data.userId,
+      },
+    },
+  });
+}
+
+/**
  * Edits an existing stuff in the database.
  * @param stuff, an object with the following properties: id, name, quantity, owner, condition.
  */
