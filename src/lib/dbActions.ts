@@ -119,8 +119,38 @@ export async function createStudyGroup(data: {
       organizerId: data.organizerId,
     },
   });
+}
 
-  redirect('/studygroups');
+/**
+ * Joins study group in the database.
+ */
+export async function joinStudyGroup(data: {
+  groupId: number;
+  userId: number;
+}) {
+  await prisma.groupMember.create({
+    data: {
+      groupId: data.groupId,
+      userId: data.userId,
+    },
+  });
+}
+
+/**
+ * Leaves study group in the database.
+ */
+export async function leaveStudyGroup(data: {
+  groupId: number;
+  userId: number;
+}) {
+  await prisma.groupMember.delete({
+    where: {
+      groupId_userId: {
+        groupId: data.groupId,
+        userId: data.userId,
+      },
+    },
+  });
 }
 
 /**

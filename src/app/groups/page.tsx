@@ -6,9 +6,6 @@ import { loggedInProtectedPage } from '@/lib/page-protection';
 import { auth } from '@/lib/auth';
 import StudyGroupClient from '@/components/StudyGroupClient';
 
-/**
- * Groups Page - shows all study groups
- */
 const GroupsPage = async () => {
   const session = await auth();
 
@@ -18,9 +15,25 @@ const GroupsPage = async () => {
     } | null,
   );
 
-    const groups = await prisma.studyGroup.findMany({
+  const userId = session?.user?.id
+    ? Number(session.user.id)
+    : null;
+
+  const groups = await prisma.studyGroup.findMany({
     include: {
-      members: true,
+      members: {
+        include: {
+          user: {
+            include: {
+              profile: {
+                include: {
+                  picture: true,
+                },
+              },
+            },
+          },
+        },
+      },
     },
     orderBy: {
       createdAt: 'desc',
@@ -36,9 +49,21 @@ const GroupsPage = async () => {
     startTime: group.startTime.toISOString(),
     endTime: group.endTime.toISOString(),
     capacity: group.capacity,
+
     members: group.members.length,
+
+    isJoined: userId
+      ? group.members.some((m) => m.userId === userId)
+      : false,
+
     createdAt: group.createdAt.toISOString(),
-  }));
+
+      membersList: group.members.map((m) => ({
+        id: m.user.id,
+        name: m.user.name,
+        image: m.user.image, 
+      })),
+    }));
 
   return (
     <main>

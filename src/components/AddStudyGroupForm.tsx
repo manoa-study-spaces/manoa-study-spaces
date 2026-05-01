@@ -7,6 +7,7 @@ import swal from 'sweetalert';
 import { redirect } from 'next/navigation';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { createStudyGroup } from '@/lib/dbActions';
+import { useRouter } from 'next/navigation';
 
 type StudyGroupFormData = {
   title: string;
@@ -19,6 +20,7 @@ type StudyGroupFormData = {
 };
 
 const AddStudyGroupForm: React.FC = () => {
+  const router = useRouter();
   const { data: session, status } = useSession();
 
   const {
@@ -38,7 +40,7 @@ const AddStudyGroupForm: React.FC = () => {
 
   const onSubmit = async (data: StudyGroupFormData) => {
     try {
-      if (!session?.user?.id) {
+      if (!session?.user?.email) {
         alert('You must be logged in to create a study group');
         return;
       }
@@ -59,6 +61,8 @@ const AddStudyGroupForm: React.FC = () => {
       });
 
       reset();
+
+      router.push('/groups');
     } catch (err) {
       console.error(err);
       swal('Error', 'Failed to create study group', 'error');
