@@ -11,6 +11,23 @@ export const AddSpaceSchema = Yup.object({
   image: Yup.string().notRequired(),
 });
 
+export const AddStudyGroupSchema = Yup.object({
+  title: Yup.string().required('Title is required').max(100),
+  course: Yup.string().required('Course is required').max(100),
+  description: Yup.string().optional().max(500),
+  location: Yup.string().required('Location is required'),
+  startTime: Yup.date()
+    .required('Start time is required')
+    .min(new Date(), 'Start time must be in the future'),
+  endTime: Yup.date()
+    .required('End time is required')
+    .min(Yup.ref('startTime'), 'End time must be after start time'),
+  capacity: Yup.number()
+    .required('Capacity is required')
+    .min(1, 'Must allow at least 1 person')
+    .max(50, 'Too large'),
+});
+
 export const EditStuffSchema = Yup.object({
   id: Yup.number().required(),
   name: Yup.string().required(),
