@@ -19,11 +19,6 @@ const ListPage = async () => {
     } | null,
   );
 
-  /**
-   * IMPORTANT FIX:
-   * We must include amenities + nested amenity entity
-   * or TypeScript + UI will break.
-   */
   const listings = await prisma.listing.findMany({
     include: {
       pictures: true,
