@@ -43,9 +43,8 @@ const onSubmit = async (data: {
   /**
    * cleanedAmenities = ensures all values are valid strings (removes undefined).
    */
-  const cleanedAmenities = data.amenities.filter(
-    (a): a is string => typeof a === 'string'
-  );
+  const cleanedAmenities = data.amenities
+    .filter((a): a is string => typeof a === 'string' && a.length > 0);
 
   await addListing({
     ...data,

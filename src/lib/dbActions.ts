@@ -92,7 +92,7 @@ export async function addListing(data: {
     const amenityRecords = await prisma.amenityEntity.findMany({
       where: {
         name: {
-          in: amenities,
+          in: amenities as Prisma.Amenity[],
         },
       },
     });
