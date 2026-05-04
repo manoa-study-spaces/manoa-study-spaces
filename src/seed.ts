@@ -5,15 +5,6 @@ import * as config from '../config/settings.development.json';
 type SeedRole = 'USER' | 'ADMIN';
 type SeedCondition = 'excellent' | 'good' | 'fair' | 'poor';
 
-// const inferFullNameFromEmail = (email: string) => {
-//   const localPart = email.split('@')[0] ?? 'User';
-//   return localPart
-//     .split(/[._-]+/)
-//     .filter(Boolean)
-//     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-//     .join(' ');
-// };
-
 async function main() {
   console.log('Seeding the database');
   const password = await hash('changeme', 10);
