@@ -1,13 +1,14 @@
-import { config } from 'dotenv';
-config({ path: '../.env.local' });
+import 'dotenv/config';
 import { PrismaClient, Role, Condition } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { hash } from 'bcrypt';
 import * as configFile from '../config/settings.development.json';
 
-const connectionString = "postgresql://neondb_owner:npg_tQV9jJXI6fyA@ep-holy-leaf-amjq74xi-pooler.c-5.us-east-1.aws.neon.tech/neondb?channel_binding=require&sslmode=require";
-console.log('DATABASE_URL:', process.env.DATABASE_URL);
-console.log('connectionString:', connectionString);
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) {
+  throw new Error('DATABASE_URL is not set');
+}
+
 const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
