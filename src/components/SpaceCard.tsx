@@ -19,6 +19,11 @@ type SpaceCardProps = {
       imageID: number;
       fileName: string;
     }[];
+    amenities: {
+      amenity: {
+        name: string;
+      };
+    }[];
   };
 };
 
@@ -44,6 +49,16 @@ const SpaceCard = ({ listing }: SpaceCardProps) => {
             <p><strong>Food:</strong> {listing.foodAllowed}</p>
             <p><strong>Type:</strong> {listing.spaceType}</p>
             <p><strong>Capacity:</strong> {listing.capacity}</p>
+
+            {listing.amenities?.length > 0 && (
+              <div className="amenities-container">
+                {listing.amenities.map((a, index) => (
+                  <span key={index} className="amenity-badge">
+                    {a.amenity.name}
+                  </span>
+                ))}
+              </div>
+            )}
           </Col>
 
           {/* Image */}

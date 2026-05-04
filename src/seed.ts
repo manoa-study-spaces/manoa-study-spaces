@@ -31,6 +31,7 @@ async function main() {
       },
     });
     // console.log(`  Created user: ${user.email} with role: ${user.role}`);
+
   });
   for (const data of config.defaultData) {
     const condition: SeedCondition = (data.condition as SeedCondition) || 'good';
@@ -47,7 +48,25 @@ async function main() {
       },
     });
   }
-}
+
+  console.log('Seeding amenities...');
+    await prisma.amenityEntity.createMany({
+      data: [
+        { name: 'Outlets' },
+        { name: 'AirConditioning' },
+        { name: 'WiFi' },
+        { name: 'Printing' },
+        { name: 'Whiteboards' },
+        { name: 'ReservableRooms' },
+        { name: 'Accessible' },
+        { name: 'WaterRefill' },
+      ],
+      skipDuplicates: true,
+    });
+
+    console.log('✅ Amenities seeded successfully');
+  }
+  
 main()
   .then(() => prisma.$disconnect())
   .catch(async (e) => {

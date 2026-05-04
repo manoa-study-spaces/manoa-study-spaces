@@ -1,7 +1,7 @@
 'use server';
 
 import { hash } from 'bcrypt';
-import { Prisma } from '@prisma/client';
+import { Prisma, Amenity } from '@prisma/client';
 import { redirect } from 'next/navigation';
 import { prisma } from './prisma';
 
@@ -66,55 +66,43 @@ export async function addListing(data: {
   spaceType: 'Indoor' | 'Outdoor';
   capacity: number;
   image?: string;
-  amenities: string[]; 
+  amenities: Amenity[];
 }) {
-  
+
+  console.log('addListing HIT');
+  console.log('amenities received:', data.amenities);
+
   const { amenities, image, ...listingData } = data;
+
   const newListing = await prisma.listing.create({
     data: {
-      buildingName: listingData.buildingName,
-      roomNumber: listingData.roomNumber,
-      occupancy: listingData.occupancy,
-      foodAllowed: listingData.foodAllowed,
-      noiseLevel: listingData.noiseLevel,
-      spaceType: listingData.spaceType,
-      capacity: listingData.capacity,
-
+      ...listingData,
       pictures: image
         ? {
             create: [{ fileName: image }],
           }
         : undefined,
-    } as Prisma.ListingCreateInput,
+    },
   });
 
   if (amenities.length > 0) {
+    console.log('querying AmenityEntity with:', amenities);
     const amenityRecords = await prisma.amenityEntity.findMany({
       where: {
         name: {
-          in: amenities as Prisma.Amenity[],
+          in: amenities,
         },
       },
     });
 
-    await prisma.listing.update({
-      where: {
+    await prisma.listingAmenity.createMany({
+      data: amenityRecords.map((record) => ({
         listingID: newListing.listingID,
-      },
-      data: {
-        amenities: {
-          create: amenityRecords.map((record) => ({
-            amenity: {
-              connect: {
-                id: record.id,
-              },
-            },
-          })),
-        },
-      },
+        amenityID: record.id,
+      })),
     });
   }
-  
+
   redirect('/list');
 }
 

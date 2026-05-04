@@ -7,6 +7,21 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Seeding the database');
   const password = await hash('changeme', 10);
+
+  await prisma.amenityEntity.createMany({
+    data: [
+      { name: 'WiFi' },
+      { name: 'Outlets' },
+      { name: 'AirConditioning' },
+      { name: 'Printing' },
+      { name: 'Whiteboards' },
+      { name: 'ReservableRooms' },
+      { name: 'Accessible' },
+      { name: 'WaterRefill' },
+    ],
+    skipDuplicates: true,
+  });
+
   config.defaultAccounts.forEach(async (account) => {
     const role = account.role as Role || Role.USER;
     console.log(`  Creating user: ${account.email} with role: ${role}`);
@@ -37,6 +52,7 @@ async function main() {
       },
     });
   }
+  
 }
 main()
   .then(() => prisma.$disconnect())
