@@ -10,6 +10,24 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import { AddSpaceSchema } from '@/lib/validationSchemas';
 import { addListing } from '@/lib/dbActions';
 
+/**
+ * List of available amenities (must match Prisma enum values exactly)
+ */
+const AMENITIES = [
+  'Outlets',
+  'AirConditioning',
+  'WiFi',
+  'Printing',
+  'Whiteboards',
+  'ReservableRooms',
+  'Accessible',
+  'WaterRefill',
+];
+
+/**
+ * onSubmit = async function to handle form submission.
+ * Takes validated form data and sends it to the database.
+ */
 const onSubmit = async (data: {
   buildingName: string;
   roomNumber: string;
@@ -19,10 +37,20 @@ const onSubmit = async (data: {
   spaceType: 'Indoor' | 'Outdoor';
   capacity: number;
   image?: string | null;
+  amenities: string[]; 
 }) => {
+
+  /**
+   * cleanedAmenities = ensures all values are valid strings (removes undefined).
+   */
+  const cleanedAmenities = data.amenities.filter(
+    (a): a is string => typeof a === 'string'
+  );
+
   await addListing({
     ...data,
-    image: data.image ?? undefined, 
+    amenities: cleanedAmenities,
+    image: data.image ?? undefined,
   });
 
   swal('Success', 'Space added successfully', 'success', {
@@ -40,6 +68,9 @@ const AddSpaceForm: React.FC = () => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(AddSpaceSchema),
+    defaultValues: {
+      amenities: [],
+    },
   });
   
   if (status === 'loading') {
@@ -163,6 +194,27 @@ const AddSpaceForm: React.FC = () => {
                     </Form.Group>
                   </Col>
                 </Row>
+
+                {/* Amenities */}
+                <Row className="mt-3">
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>Amenities</Form.Label>
+                      <div>
+                        {AMENITIES.map((amenity) => (
+                          <Form.Check
+                            key={amenity}
+                            type="checkbox"
+                            label={amenity}
+                            value={amenity}
+                            {...register('amenities')}
+                          />
+                        ))}
+                      </div>
+                    </Form.Group>
+                  </Col>
+                </Row>
+
 
                 {/* Buttons */}
                 <Row className="mt-4">

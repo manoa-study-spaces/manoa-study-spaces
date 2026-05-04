@@ -55,42 +55,66 @@ function isDuplicateEmailError(error: unknown): boolean {
 
 /**
  * Adds a new space to the database.
- * @param stuff, an object with the following properties: building name, room number,
- * occupancy, food allowed, noise level, and image.
+ * @param data, an object with building info, space details, image, and amenities.
  */
 export async function addListing(data: {
-  buildingName: string,
-  roomNumber: string,
-  occupancy: 'Empty' | 'Moderate' | 'Crowded',
-  foodAllowed: 'Permitted' | 'Prohibited' | 'Water',
-  noiseLevel: 'Quiet' | 'Moderate' | 'Loud',
-  spaceType: 'Indoor' | 'Outdoor',
-  capacity: number,
-  image?: string,
+  buildingName: string;
+  roomNumber: string;
+  occupancy: 'Empty' | 'Moderate' | 'Crowded';
+  foodAllowed: 'Permitted' | 'Prohibited' | 'Water';
+  noiseLevel: 'Quiet' | 'Moderate' | 'Loud';
+  spaceType: 'Indoor' | 'Outdoor';
+  capacity: number;
+  image?: string;
+  amenities: string[]; 
 }) {
-  // eslint-disable-next-line
+  
+  const { amenities, image, ...listingData } = data;
   const newListing = await prisma.listing.create({
     data: {
-      buildingName: data.buildingName,
-      roomNumber: data.roomNumber,
-      occupancy: data.occupancy,
-      foodAllowed: data.foodAllowed,
-      noiseLevel: data.noiseLevel,
-      spaceType: data.spaceType,
-      capacity: data.capacity,
+      buildingName: listingData.buildingName,
+      roomNumber: listingData.roomNumber,
+      occupancy: listingData.occupancy,
+      foodAllowed: listingData.foodAllowed,
+      noiseLevel: listingData.noiseLevel,
+      spaceType: listingData.spaceType,
+      capacity: listingData.capacity,
 
-      pictures: data.image
+      pictures: image
         ? {
-            create: [
-              {
-                fileName: data.image,
-              },
-            ],
+            create: [{ fileName: image }],
           }
         : undefined,
     } as Prisma.ListingCreateInput,
   });
 
+  if (amenities.length > 0) {
+    const amenityRecords = await prisma.amenityEntity.findMany({
+      where: {
+        name: {
+          in: amenities,
+        },
+      },
+    });
+
+    await prisma.listing.update({
+      where: {
+        listingID: newListing.listingID,
+      },
+      data: {
+        amenities: {
+          create: amenityRecords.map((record) => ({
+            amenity: {
+              connect: {
+                id: record.id,
+              },
+            },
+          })),
+        },
+      },
+    });
+  }
+  
   redirect('/list');
 }
 
