@@ -20,12 +20,29 @@ type SpaceCardProps = {
       imageID: number;
       fileName: string;
     }[];
+    amenities: {
+      amenity: {
+        name: string;
+      };
+    }[];
   };
   href?: string;
 };
 
-const SpaceCard = ({ listing, href }: SpaceCardProps) => {
-  const card = (
+const SpaceCard = ({ listing }: SpaceCardProps) => {
+  // Map enum names to display names
+  const amenityDisplayNames: Record<string, string> = {
+    Outlets: 'Outlets',
+    AirConditioning: 'Air Conditioning',
+    WiFi: 'WiFi',
+    Printing: 'Printing',
+    Whiteboards: 'Whiteboards',
+    ReservableRooms: 'Reservation Req.',
+    Accessible: 'Accessibility',
+    WaterRefill: 'Water Refill',
+  };
+
+  return (
     <Card className="space-card">
       <Card.Body>
         <Row className="align-items-start">
@@ -58,6 +75,21 @@ const SpaceCard = ({ listing, href }: SpaceCardProps) => {
             />
           </Col>
         </Row>
+
+        {/* Amenities underneath */}
+        {listing.amenities?.length > 0 && (
+          <Row>
+            <Col>
+              <div className="amenities-container">
+                {listing.amenities.map((a, index) => (
+                  <span key={index} className="amenity-badge">
+                    {amenityDisplayNames[a.amenity.name] || a.amenity.name}
+                  </span>
+                ))}
+              </div>
+            </Col>
+          </Row>
+        )}
       </Card.Body>
     </Card>
   );

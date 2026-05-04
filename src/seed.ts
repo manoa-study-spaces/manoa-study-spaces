@@ -5,15 +5,6 @@ import * as config from '../config/settings.development.json';
 type SeedRole = 'USER' | 'ADMIN';
 type SeedCondition = 'excellent' | 'good' | 'fair' | 'poor';
 
-// const inferFullNameFromEmail = (email: string) => {
-//   const localPart = email.split('@')[0] ?? 'User';
-//   return localPart
-//     .split(/[._-]+/)
-//     .filter(Boolean)
-//     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-//     .join(' ');
-// };
-
 async function main() {
   console.log('Seeding the database');
   const password = await hash('changeme', 10);
@@ -31,6 +22,7 @@ async function main() {
       },
     });
     // console.log(`  Created user: ${user.email} with role: ${user.role}`);
+
   });
   for (const data of config.defaultData) {
     const condition: SeedCondition = (data.condition as SeedCondition) || 'good';
@@ -47,7 +39,25 @@ async function main() {
       },
     });
   }
-}
+
+  console.log('Seeding amenities...');
+    await prisma.amenityEntity.createMany({
+      data: [
+        { name: 'Outlets' },
+        { name: 'AirConditioning' },
+        { name: 'WiFi' },
+        { name: 'Printing' },
+        { name: 'Whiteboards' },
+        { name: 'ReservableRooms' },
+        { name: 'Accessible' },
+        { name: 'WaterRefill' },
+      ],
+      skipDuplicates: true,
+    });
+
+    console.log('✅ Amenities seeded successfully');
+  }
+  
 main()
   .then(() => prisma.$disconnect())
   .catch(async (e) => {
