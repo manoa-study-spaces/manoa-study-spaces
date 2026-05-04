@@ -25,6 +25,18 @@ const AMENITIES: Amenity[] = [
   'WaterRefill',
 ];
 
+// Map enum names to display names
+const amenityDisplayNames: Record<string, string> = {
+  Outlets: 'Outlets',
+  AirConditioning: 'Air Conditioning',
+  WiFi: 'WiFi',
+  Printing: 'Printing',
+  Whiteboards: 'Whiteboards',
+  ReservableRooms: 'Reservation Req.',
+  Accessible: 'Accessibility',
+  WaterRefill: 'Water Refill',
+};
+
 /**
  * Strongly typed form values
  */
@@ -216,7 +228,7 @@ const AddSpaceForm: React.FC = () => {
                           <Form.Check
                             key={amenity}
                             type="checkbox"
-                            label={amenity}
+                            label={amenityDisplayNames[amenity] || amenity}
                             value={amenity}
                             {...register('amenities')}
                             style={{

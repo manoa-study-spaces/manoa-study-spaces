@@ -28,6 +28,18 @@ type SpaceCardProps = {
 };
 
 const SpaceCard = ({ listing }: SpaceCardProps) => {
+  // Map enum names to display names
+  const amenityDisplayNames: Record<string, string> = {
+    Outlets: 'Outlets',
+    AirConditioning: 'Air Conditioning',
+    WiFi: 'WiFi',
+    Printing: 'Printing',
+    Whiteboards: 'Whiteboards',
+    ReservableRooms: 'Reservation Req.',
+    Accessible: 'Accessibility',
+    WaterRefill: 'Water Refill',
+  };
+
   return (
     <Card className="space-card">
       <Card.Body>
@@ -49,16 +61,6 @@ const SpaceCard = ({ listing }: SpaceCardProps) => {
             <p><strong>Food:</strong> {listing.foodAllowed}</p>
             <p><strong>Type:</strong> {listing.spaceType}</p>
             <p><strong>Capacity:</strong> {listing.capacity}</p>
-
-            {listing.amenities?.length > 0 && (
-              <div className="amenities-container">
-                {listing.amenities.map((a, index) => (
-                  <span key={index} className="amenity-badge">
-                    {a.amenity.name}
-                  </span>
-                ))}
-              </div>
-            )}
           </Col>
 
           {/* Image */}
@@ -72,6 +74,21 @@ const SpaceCard = ({ listing }: SpaceCardProps) => {
             />
           </Col>
         </Row>
+
+        {/* Amenities underneath */}
+        {listing.amenities?.length > 0 && (
+          <Row>
+            <Col>
+              <div className="amenities-container">
+                {listing.amenities.map((a, index) => (
+                  <span key={index} className="amenity-badge">
+                    {amenityDisplayNames[a.amenity.name] || a.amenity.name}
+                  </span>
+                ))}
+              </div>
+            </Col>
+          </Row>
+        )}
       </Card.Body>
     </Card>
   );

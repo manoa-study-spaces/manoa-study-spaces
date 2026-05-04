@@ -1,8 +1,15 @@
+import { config } from 'dotenv';
+config({ path: '../.env.local' });
 import { PrismaClient, Role, Condition } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
 import { hash } from 'bcrypt';
-import * as config from '../config/settings.development.json';
+import * as configFile from '../config/settings.development.json';
 
-const prisma = new PrismaClient();
+const connectionString = "postgresql://neondb_owner:npg_tQV9jJXI6fyA@ep-holy-leaf-amjq74xi-pooler.c-5.us-east-1.aws.neon.tech/neondb?channel_binding=require&sslmode=require";
+console.log('DATABASE_URL:', process.env.DATABASE_URL);
+console.log('connectionString:', connectionString);
+const adapter = new PrismaPg({ connectionString });
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
   console.log('Seeding the database');
@@ -22,7 +29,7 @@ async function main() {
     skipDuplicates: true,
   });
 
-  config.defaultAccounts.forEach(async (account) => {
+  configFile.defaultAccounts.forEach(async (account) => {
     const role = account.role as Role || Role.USER;
     console.log(`  Creating user: ${account.email} with role: ${role}`);
     await prisma.user.upsert({
@@ -38,11 +45,11 @@ async function main() {
     });
     // console.log(`  Created user: ${user.email} with role: ${user.role}`);
   });
-  for (const data of config.defaultData) {
+  for (const data of configFile.defaultData) {
     const condition = data.condition as Condition || Condition.good;
     console.log(`  Adding stuff: ${JSON.stringify(data)}`);
     await prisma.stuff.upsert({
-      where: { id: config.defaultData.indexOf(data) + 1 },
+      where: { id: configFile.defaultData.indexOf(data) + 1 },
       update: {},
       create: {
         name: data.name,
