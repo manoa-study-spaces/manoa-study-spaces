@@ -90,10 +90,10 @@ const SpaceListClient = ({ listings }: SpaceCardProps) => {
       <Row xs={1} md={2} className="g-3">
         {filteredListings.map((listing) => (
           <Col key={listing.listingID}>
-            <SpaceCard listing={listing} />
+            <SpaceCard listing={listing} href={`/list/${listing.listingID}`} />
           </Col>
         ))}
-      </Row>   
+      </Row>
     </Container>
   );
 };
