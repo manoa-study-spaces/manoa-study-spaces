@@ -34,6 +34,11 @@ export default async function TodayPage() {
     },
     include: {
       pictures: true,
+      amenities: {
+        include: {
+          amenity: true,
+        },
+      },
     },
     orderBy: {
       createdAt: 'desc',

@@ -29,7 +29,7 @@ type SpaceCardProps = {
   href?: string;
 };
 
-const SpaceCard = ({ listing }: SpaceCardProps) => {
+const SpaceCard = ({ listing, href }: SpaceCardProps) => {
   // Map enum names to display names
   const amenityDisplayNames: Record<string, string> = {
     Outlets: 'Outlets',
@@ -42,7 +42,7 @@ const SpaceCard = ({ listing }: SpaceCardProps) => {
     WaterRefill: 'Water Refill',
   };
 
-  return (
+  const card = (
     <Card className="space-card">
       <Card.Body>
         <Row className="align-items-start">
