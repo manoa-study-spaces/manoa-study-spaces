@@ -218,6 +218,20 @@ body {
   margin-bottom: 10px;
 }
 
+.space-card-image {
+  width: 180px;
+  height: 180px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+@media (max-width: 640px) {
+  .space-card-image {
+    width: 140px;
+    height: 140px;
+  }
+}
+
 .amenities-container {
   display: flex;
   flex-wrap: wrap;
