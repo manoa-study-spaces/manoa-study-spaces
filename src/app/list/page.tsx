@@ -18,8 +18,9 @@ const ListPage = async () => {
   );
 
   const listings = await prisma.listing.findMany({
-  include: {
+    include: {
       pictures: true,
+      reviews: true,
     },
   });
   // Test Listing

@@ -34,6 +34,7 @@ export default async function TodayPage() {
     },
     include: {
       pictures: true,
+      reviews: true,
     },
     orderBy: {
       createdAt: 'desc',
