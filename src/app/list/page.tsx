@@ -27,7 +27,6 @@ const ListPage = async () => {
           amenity: true,
         },
       },
-      reviews: true,
     },
   });
 

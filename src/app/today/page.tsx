@@ -3,8 +3,6 @@ import { prisma } from '@/lib/prisma';
 import { Container, Row, Col } from 'react-bootstrap';
 import { DateTime } from 'luxon';
 
-export const dynamic = 'force-dynamic';
-
 export default async function TodayPage() {
   // Current time in Hawaii (safe, no string parsing)
   const hawaiiNow = DateTime.now().setZone('Pacific/Honolulu');
@@ -41,7 +39,6 @@ export default async function TodayPage() {
           amenity: true,
         },
       },
-      reviews: true,
     },
     orderBy: {
       createdAt: 'desc',
