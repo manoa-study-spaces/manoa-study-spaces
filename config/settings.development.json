@@ -9,4 +9,64 @@
     { "name": "Banana", "quantity": 2, "owner": "admin@foo.com", "condition": "good" },
     { "name": "Boogie Board", "quantity": 2, "owner": "admin@foo.com", "condition": "excellent" }
   ]
+  ,
+  "defaultSpaces": [
+
+    {"listingID": 1, "buildingName": "Hamilton Library Group Study", "roomNumber": "202", "occupancy": "Empty", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 4},
+    {"listingID": 2, "buildingName": "Hamilton Library Group Study", "roomNumber": "204", "occupancy": "Empty", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 6},
+    {"listingID": 3, "buildingName": "Hamilton Library Group Study", "roomNumber": "205", "occupancy": "Empty", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 4},
+    {"listingID": 4, "buildingName": "Hamilton Library Group Study", "roomNumber": "206", "occupancy": "Empty", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 4},
+    {"listingID": 5, "buildingName": "Hamilton Library Group Study", "roomNumber": "207", "occupancy": "Empty", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 4},
+    {"listingID": 6, "buildingName": "Hamilton Library Group Study", "roomNumber": "208", "occupancy": "Empty", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 4},
+    {"listingID": 7, "buildingName": "Hamilton Library Group Study", "roomNumber": "211", "occupancy": "Empty", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 4},
+    {"listingID": 8, "buildingName": "Hamilton Library Group Study", "roomNumber": "A251", "occupancy": "Empty", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 4},
+    {"listingID": 9, "buildingName": "Hamilton Library Group Study", "roomNumber": "A252", "occupancy": "Empty", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 4},
+    {"listingID": 10, "buildingName": "Hamilton Library Group Study", "roomNumber": "A253", "occupancy": "Empty", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 4},
+    {"listingID": 11, "buildingName": "Hamilton Library Group Study", "roomNumber": "A254", "occupancy": "Empty", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 4},
+    
+    {"listingID": 12, "buildingName": "Hamilton Library Presentation Room", "roomNumber": "Presentation Rm 1", "occupancy": "Empty", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 6},
+    {"listingID": 13, "buildingName": "Hamilton Library Presentation Room", "roomNumber": "Presentation Rm 2", "occupancy": "Empty", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 6},
+
+    {"listingID": 14, "buildingName": "Hamilton Library Zoom Room", "roomNumber": "228", "occupancy": "Empty", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 1},
+    {"listingID": 15, "buildingName": "Hamilton Library Zoom Room", "roomNumber": "229", "occupancy": "Empty", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 1},
+    {"listingID": 16, "buildingName": "Hamilton Library Zoom Room", "roomNumber": "230", "occupancy": "Empty", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 1},
+    {"listingID": 17, "buildingName": "Hamilton Library Zoom Room", "roomNumber": "231", "occupancy": "Empty", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 1},
+    {"listingID": 18, "buildingName": "Hamilton Library Zoom Room", "roomNumber": "232", "occupancy": "Empty", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 1},
+    {"listingID": 19, "buildingName": "Hamilton Library Zoom Room", "roomNumber": "233", "occupancy": "Empty", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 1},
+    {"listingID": 20, "buildingName": "Hamilton Library Zoom Room", "roomNumber": "234", "occupancy": "Empty", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 1},
+    {"listingID": 21, "buildingName": "Hamilton Library Zoom Room", "roomNumber": "235", "occupancy": "Empty", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 1},
+    {"listingID": 22, "buildingName": "Hamilton Library Zoom Room", "roomNumber": "236", "occupancy": "Empty", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 1},
+
+    {"listingID": 23, "buildingName": "Hamilton Library First Floor", "roomNumber": "N/A", "occupancy": "Crowded", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 100},
+    {"listingID": 24, "buildingName": "Hamilton Library Second Floor", "roomNumber": "N/A", "occupancy": "Moderate", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 100},
+    {"listingID": 25, "buildingName": "Hamilton Library Third Floor", "roomNumber": "N/A", "occupancy": "Moderate", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 100},
+    {"listingID": 26, "buildingName": "Hamilton Library Fourth Floor", "roomNumber": "N/A", "occupancy": "Moderate", "foodAllowed": "Water", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 50},
+    {"listingID": 27, "buildingName": "Hamilton Library Fifth Floor", "roomNumber": "N/A", "occupancy": "Empty", "foodAllowed": "Prohibited", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 20},
+
+    {"listingID": 28, "buildingName": "Paradise Palms", "roomNumber": "N/A", "occupancy": "Crowded", "foodAllowed": "Permitted", "noiseLevel": "Moderate", "spaceType": "Indoor", "capacity": 300},
+    {"listingID": 29, "buildingName": "Bale Restaurant", "roomNumber": "N/A", "occupancy": "Moderate", "foodAllowed": "Permitted", "noiseLevel": "Moderate", "spaceType": "Indoor", "capacity": 100},
+
+    {"listingID": 30, "buildingName": "Esports iLab", "roomNumber": "Building 37", "occupancy": "Crowded", "foodAllowed": "Permitted", "noiseLevel": "Loud", "spaceType": "Indoor", "capacity": 50},
+    {"listingID": 31, "buildingName": "Edmondson", "roomNumber": "112", "occupancy": "Moderate", "foodAllowed": "Water", "noiseLevel": "Moderate", "spaceType": "Indoor", "capacity": 20},
+    {"listingID": 32, "buildingName": "Edmondson", "roomNumber": "113", "occupancy": "Empty", "foodAllowed": "Permitted", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 20},
+    {"listingID": 33, "buildingName": "ICSpace in POST", "roomNumber": "318B", "occupancy": "Moderate", "foodAllowed": "Permitted", "noiseLevel": "Moderate", "spaceType": "Indoor", "capacity": 40},
+
+
+
+}
+
+
+model Listing {
+  listingID        Int          @id @default(autoincrement())
+  buildingName     String 
+  roomNumber       String
+  times            Times[]
+  pictures         Image[]
+  occupancy        Occupancy    @default(Moderate)
+  foodAllowed      FoodAllowed  @default(Prohibited)
+  noiseLevel       NoiseLevel   @default(Moderate)
+  spaceType        SpaceType    @default(Indoor)
+  capacity         Int          @default(1)
+  createdAt        DateTime     @default(now())
+  amenities        ListingAmenity[]
 }
