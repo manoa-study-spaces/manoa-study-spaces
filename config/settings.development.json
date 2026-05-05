@@ -51,6 +51,12 @@
     {"listingID": 32, "buildingName": "Edmondson", "roomNumber": "113", "occupancy": "Empty", "foodAllowed": "Permitted", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 20},
     {"listingID": 33, "buildingName": "ICSpace in POST", "roomNumber": "318B", "occupancy": "Moderate", "foodAllowed": "Permitted", "noiseLevel": "Moderate", "spaceType": "Indoor", "capacity": 40},
 
+    {"listingID": 34, "buildingName": "ART First Floor", "roomNumber": "N/A", "occupancy": "Moderate", "foodAllowed": "Permitted", "noiseLevel": "Moderate", "spaceType": "Outdoor", "capacity": 50},
+    {"listingID": 35, "buildingName": "ART Second Floor", "roomNumber": "N/A", "occupancy": "Empty", "foodAllowed": "Permitted", "noiseLevel": "Quiet", "spaceType": "Outdoor", "capacity": 50},
+    {"listingID": 36, "buildingName": "ART Third Floor", "roomNumber": "N/A", "occupancy": "Empty", "foodAllowed": "Permitted", "noiseLevel": "Quiet", "spaceType": "Outdoor", "capacity": 50},
+
+    {"listingID": 37, "buildingName": "QLC", "roomNumber": "312", "occupancy": "Empty", "foodAllowed": "Permitted", "noiseLevel": "Quiet", "spaceType": "Indoor", "capacity": 20},
+    
 
 
 }
