@@ -24,6 +24,8 @@ type SpaceCardProps = {
       amenity: {
         name: string;
       };
+    reviews?: {
+      rating: number;
     }[];
   };
   href?: string;
@@ -41,14 +43,26 @@ const SpaceCard = ({ listing, href }: SpaceCardProps) => {
     Accessible: 'Accessibility',
     WaterRefill: 'Water Refill',
   };
+  // Calculate average rating
+  const avgRating = listing.reviews && listing.reviews.length > 0
+    ? (listing.reviews.reduce((sum, review) => sum + review.rating, 0) / listing.reviews.length).toFixed(1)
+    : null;
 
   const card = (
     <Card className="space-card">
       <Card.Body>
         <Row className="align-items-start">
           {/* Card Content */}
-          <Col xs style={{ minWidth: 0, flexGrow: 1 }}>
-            <Card.Title>{listing.buildingName}</Card.Title>
+          <Col xs={12} md style={{ minWidth: 0 }}>
+            <div className="d-flex justify-content-between align-items-center mb-2">
+              <Card.Title className="mb-0">{listing.buildingName}</Card.Title>
+              {avgRating && (
+                <span style={{ fontSize: '0.9rem', whiteSpace: 'nowrap', marginLeft: '1rem' }}>
+                  {'★'.repeat(Math.round(Number(avgRating)))}{'☆'.repeat(5 - Math.round(Number(avgRating)))}
+                  <span className="ms-1 text-muted">({avgRating})</span>
+                </span>
+              )}
+            </div>
 
             <Card.Subtitle className="mb-2 pb-2 border-bottom d-flex justify-content-between" style={{ minWidth: 0 }}>
               <span style={{ minWidth: 0, overflowWrap: 'anywhere' }}>Room {listing.roomNumber}</span>

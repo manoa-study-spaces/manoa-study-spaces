@@ -166,6 +166,25 @@ export async function leaveStudyGroup(data: {
 }
 
 /**
+ * Creates a review for a listing.
+ */
+export async function createReview(data: {
+  listingId: number;
+  authorId: number;
+  rating: number;
+  content: string;
+}) {
+  await prisma.review.create({
+    data: {
+      listingID: data.listingId,
+      authorId: data.authorId,
+      rating: data.rating,
+      content: data.content,
+    },
+  });
+}
+
+/**
  * Edits an existing stuff in the database.
  * @param stuff, an object with the following properties: id, name, quantity, owner, condition.
  */
