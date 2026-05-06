@@ -44,7 +44,7 @@ const ListingDetailPage = async ({ params }: ListingDetailProps) => {
   const times = listing.times.map((time) => `${time.startTime} — ${time.endTime}`);
 
   return (
-    <main className="p-4">
+    <main className="listing-detail-page">
       <Container>
         <Row className="mb-4">
           <Col>
@@ -56,76 +56,78 @@ const ListingDetailPage = async ({ params }: ListingDetailProps) => {
 
         <Row className="g-4">
           <Col lg={7}>
-            <div className="space-detail-image mb-4">
+            <div className="listing-image-container">
               <img
                 src={listing.pictures?.[0]?.fileName || '/placeholder.jpg'}
                 alt={listing.buildingName}
-                style={{ width: '100%', borderRadius: '12px', objectFit: 'cover', maxHeight: '420px' }}
+                className="listing-image"
               />
             </div>
           </Col>
 
           <Col lg={5}>
-            <h1>{listing.buildingName}</h1>
-            <p className="text-muted">Room {listing.roomNumber}</p>
-            <p>
-              <strong>Listed on:</strong>{' '}
-              {new Date(listing.createdAt).toLocaleDateString()}
-            </p>
+            <div className="listing-content">
+              <h1 className="listing-title">{listing.buildingName}</h1>
+              <p className="listing-room">Room {listing.roomNumber}</p>
+              <p className="listing-date">
+                <strong>Listed on:</strong>{' '}
+                {new Date(listing.createdAt).toLocaleDateString()}
+              </p>
 
-            <div className="mb-3">
-              <Badge bg="success" className="me-2">
-                {listing.spaceType}
-              </Badge>
-              <Badge bg="info" className="me-2">
-                Capacity: {listing.capacity}
-              </Badge>
-              <Badge bg="secondary" className="me-2">
-                {listing.occupancy}
-              </Badge>
-            </div>
+              <div className="listing-badges mb-3">
+                <Badge bg="success" className="me-2">
+                  {listing.spaceType}
+                </Badge>
+                <Badge bg="info" className="me-2">
+                  Capacity: {listing.capacity}
+                </Badge>
+                <Badge bg="secondary" className="me-2">
+                  {listing.occupancy}
+                </Badge>
+              </div>
 
-            <div className="mb-4">
-              <h4>Details</h4>
-              <dl className="row">
-                <dt className="col-sm-5">Noise Level:</dt>
-                <dd className="col-sm-7">{listing.noiseLevel}</dd>
+              <div className="listing-section">
+                <h4 className="section-title">Details</h4>
+                <dl className="details-list">
+                  <dt>Noise Level:</dt>
+                  <dd>{listing.noiseLevel}</dd>
 
-                <dt className="col-sm-5">Food Allowed:</dt>
-                <dd className="col-sm-7">{listing.foodAllowed}</dd>
+                  <dt>Food Allowed:</dt>
+                  <dd>{listing.foodAllowed}</dd>
 
-                <dt className="col-sm-5">Space Type:</dt>
-                <dd className="col-sm-7">{listing.spaceType}</dd>
+                  <dt>Space Type:</dt>
+                  <dd>{listing.spaceType}</dd>
 
-                <dt className="col-sm-5">Capacity:</dt>
-                <dd className="col-sm-7">{listing.capacity}</dd>
-              </dl>
-            </div>
+                  <dt>Capacity:</dt>
+                  <dd>{listing.capacity}</dd>
+                </dl>
+              </div>
 
-            <div className="mb-4">
-              <h4>Amenities</h4>
-              {amenities.length ? (
-                <ul>
-                  {amenities.map((amenity) => (
-                    <li key={amenity}>{amenity}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-muted">No amenities listed.</p>
-              )}
-            </div>
+              <div className="listing-section">
+                <h4 className="section-title">Amenities</h4>
+                {amenities.length ? (
+                  <ul className="amenities-list">
+                    {amenities.map((amenity) => (
+                      <li key={amenity}>{amenity}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-muted">No amenities listed.</p>
+                )}
+              </div>
 
-            <div>
-              <h4>Available Times</h4>
-              {times.length ? (
-                <ul>
-                  {times.map((time) => (
-                    <li key={time}>{time}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-muted">No schedule information provided.</p>
-              )}
+              <div className="listing-section">
+                <h4 className="section-title">Available Times</h4>
+                {times.length ? (
+                  <ul className="times-list">
+                    {times.map((time) => (
+                      <li key={time}>{time}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-muted">No schedule information provided.</p>
+                )}
+              </div>
             </div>
           </Col>
         </Row>
