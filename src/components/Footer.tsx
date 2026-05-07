@@ -14,6 +14,9 @@ const Footer = () => (
         <a href="http://ics-software-engineering.github.io/nextjs-application-template">
           Template Home Page
         </a>
+        <a href="https://manoa-study-spaces.github.io/">
+          Check out our project page!
+        </a>
       </Col>
     </Container>
   </footer>

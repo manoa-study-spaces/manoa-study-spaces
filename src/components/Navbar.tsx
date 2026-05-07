@@ -25,7 +25,7 @@ const NavBar: React.FC = () => {
   
   return (
     <>
-    {/* ---------------- Top Navbar ---------------- */}
+    {/* ---------------- Combined into One Navbar ---------------- */}
       <Navbar className="top-navbar" expand="lg">
         <Container fluid className="d-flex justify-content-between align-items-center">
           {/* Left Logo + Page Title Text*/}
@@ -46,16 +46,12 @@ const NavBar: React.FC = () => {
 
           
         </Container>
-      </Navbar>
+      </Navbar> {/* end of top navbar */}
 
-    {/* ---------------- Bottom Navbar ---------------- */}
-      <Navbar className="bottom-navbar px-3" expand="lg">
         <div className="d-flex align-items-center w-100">
 
           {/* Left Text */}
-          <div className="navbar-bottom-text">
-            UHM, let&apos;s study!
-          </div>
+
 
           <div className="ms-auto d-flex align-items-center gap-1">
             {/* Profile Icon */}
@@ -121,7 +117,6 @@ const NavBar: React.FC = () => {
             )}
           </Nav>
         </Navbar.Collapse>
-      </Navbar>
     </>
   );
 };
