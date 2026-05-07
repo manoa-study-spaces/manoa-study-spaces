@@ -1,7 +1,7 @@
 'use server';
 
 import { hash } from 'bcrypt';
-import { Prisma, Amenity } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { redirect } from 'next/navigation';
 import { prisma } from './prisma';
 
@@ -55,34 +55,40 @@ function isDuplicateEmailError(error: unknown): boolean {
 
 /**
  * Adds a new space to the database.
- * @param data, an object with building info, space details, image, and amenities.
+ * @param stuff, an object with the following properties: building name, room number,
+ * occupancy, food allowed, noise level, and image.
  */
 export async function addListing(data: {
-  buildingName: string;
-  roomNumber: string;
-  occupancy: 'Empty' | 'Moderate' | 'Crowded';
-  foodAllowed: 'Permitted' | 'Prohibited' | 'Water';
-  noiseLevel: 'Quiet' | 'Moderate' | 'Loud';
-  spaceType: 'Indoor' | 'Outdoor';
-  capacity: number;
-  image?: string;
-  amenities: Amenity[];
+  buildingName: string,
+  roomNumber: string,
+  occupancy: 'Empty' | 'Moderate' | 'Crowded',
+  foodAllowed: 'Permitted' | 'Prohibited' | 'Water',
+  noiseLevel: 'Quiet' | 'Moderate' | 'Loud',
+  spaceType: 'Indoor' | 'Outdoor',
+  capacity: number,
+  image?: string,
 }) {
-
-  console.log('addListing HIT');
-  console.log('amenities received:', data.amenities);
-
-  const { amenities, image, ...listingData } = data;
-
+  // eslint-disable-next-line
   const newListing = await prisma.listing.create({
     data: {
-      ...listingData,
-      pictures: image
+      buildingName: data.buildingName,
+      roomNumber: data.roomNumber,
+      occupancy: data.occupancy,
+      foodAllowed: data.foodAllowed,
+      noiseLevel: data.noiseLevel,
+      spaceType: data.spaceType,
+      capacity: data.capacity,
+
+      pictures: data.image
         ? {
-            create: [{ fileName: image }],
+            create: [
+              {
+                fileName: data.image,
+              },
+            ],
           }
         : undefined,
-    },
+    } as Prisma.ListingCreateInput,
   });
 
   if (amenities.length > 0) {
@@ -104,7 +110,7 @@ export async function addListing(data: {
   }
 
   // Return the newly created listing so the client can update local state/localStorage.
-  return newListing;
+  redirect('/list');
 }
 
 /**
@@ -162,6 +168,25 @@ export async function leaveStudyGroup(data: {
         groupId: data.groupId,
         userId: data.userId,
       },
+    },
+  });
+}
+
+/**
+ * Creates a review for a listing.
+ */
+export async function createReview(data: {
+  listingId: number;
+  authorId: number;
+  rating: number;
+  content: string;
+}) {
+  await prisma.review.create({
+    data: {
+      listingID: data.listingId,
+      authorId: data.authorId,
+      rating: data.rating,
+      content: data.content,
     },
   });
 }

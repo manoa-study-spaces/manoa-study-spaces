@@ -25,12 +25,6 @@ type Listing = {
     imageID: number;
     fileName: string;
   }[];
-  amenities: {
-    amenity: {
-      id: number;
-      name: string;
-    };
-  }[];
 };
 
 // listings: array of Listing objects fetched from the database 
