@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma';
 import { Container, Row, Col } from 'react-bootstrap';
 import { DateTime } from 'luxon';
 
+export const revalidate = 0; // Disable caching for real-time updates
+
 export default async function TodayPage() {
   // Current time in Hawaii (safe, no string parsing)
   const hawaiiNow = DateTime.now().setZone('Pacific/Honolulu');
