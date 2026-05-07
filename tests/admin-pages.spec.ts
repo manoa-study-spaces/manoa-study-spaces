@@ -6,44 +6,44 @@
 //   const adminPage = await getUserPage('admin@foo.com', 'changeme');
 
 //   // Navigate to the home page and wait for post-login indicator
-//   await adminPage.goto('http://localhost:3000/');
-//   await expect(
-//     adminPage.getByRole('button', { name: 'admin@foo.com' })
-//   ).toBeVisible({ timeout: 10000 });
+//   // await adminPage.goto('http://localhost:3000/');
+//   // await expect(
+//   //   adminPage.getByRole('button', { name: 'admin@foo.com' })
+//   // ).toBeVisible({ timeout: 10000 });
 
 //   // Check for navigation elements
+//   // await expect(
+//   //   adminPage.getByRole('link', { name: 'Next.js Application Template' })
+//   // ).toBeVisible({ timeout: 5000 });
 //   await expect(
-//     adminPage.getByRole('link', { name: 'Next.js Application Template' })
+//     adminPage.getByRole('link', { name: "Today's Spaces" })
 //   ).toBeVisible({ timeout: 5000 });
 //   await expect(
-//     adminPage.getByRole('link', { name: 'Add Stuff' })
+//     adminPage.getByRole('link', { name: "Study Spaces" })
 //   ).toBeVisible({ timeout: 5000 });
 //   await expect(
-//     adminPage.getByRole('link', { name: 'List Stuff' })
-//   ).toBeVisible({ timeout: 5000 });
-//   await expect(
-//     adminPage.getByRole('link', { name: 'Admin' })
+//     adminPage.getByRole('link', { name: "Study Groups" })
 //   ).toBeVisible({ timeout: 5000 });
 
 //   // Test Add Stuff adminPage
-//   await adminPage.getByRole('link', { name: 'Add Stuff' }).click();
+//   await adminPage.getByRole('link', { name: "Study Spaces" }).click();
 //   await expect(
-//     adminPage.getByRole('heading', { name: 'Add Stuff' })
+//     adminPage.getByRole('heading', { name: "Study Spaces" })
 //   ).toBeVisible({ timeout: 5000 });
 
 //   // Test List Stuff adminPage
-//   await adminPage.getByRole('link', { name: 'List Stuff' }).click();
+//   await adminPage.getByRole('link', { name: "Today's Spaces" }).click();
 //   await expect(
-//     adminPage.getByRole('heading', { name: 'Stuff' })
+//     adminPage.getByRole('heading', { name: "Today's Spaces" })
 //   ).toBeVisible({ timeout: 5000 });
 
 //   // Test Admin adminPage
 //   await adminPage.getByRole('link', { name: 'Admin' }).click();
 //   await expect(
-//     adminPage.getByRole('heading', { name: 'List Stuff Admin' })
+//     adminPage.getByRole('heading', { name: "Study Spaces" })
 //   ).toBeVisible({ timeout: 5000 });
 //   await expect(
-//     adminPage.getByRole('heading', { name: 'List Users Admin' })
+//     adminPage.getByRole('heading', { name: "Study Spaces" })
 //   ).toBeVisible({ timeout: 5000 });
 
 // });
