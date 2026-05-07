@@ -50,16 +50,8 @@ const SpaceCard = ({ listing, href, email }: SpaceCardProps) => {
       <Card.Body>
         <Row className="align-items-start">
           {/* Card Content */}
-          <Col xs={12} md style={{ minWidth: 0 }}>
-            <div className="d-flex justify-content-between align-items-center mb-2">
-              <Card.Title className="mb-0">{listing.buildingName}</Card.Title>
-              {avgRating && (
-                <span style={{ fontSize: '0.9rem', whiteSpace: 'nowrap', marginLeft: '1rem' }}>
-                  {'★'.repeat(Math.round(Number(avgRating)))}{'☆'.repeat(5 - Math.round(Number(avgRating)))}
-                  <span className="ms-1 text-muted">({avgRating})</span>
-                </span>
-              )}
-            </div>
+          <Col xs style={{ minWidth: 0, flexGrow: 1 }}>
+            <Card.Title>{listing.buildingName}</Card.Title>
 
             <Card.Subtitle className="mb-2 pb-2 border-bottom d-flex justify-content-between" style={{ minWidth: 0 }}>
               <span style={{ minWidth: 0, overflowWrap: 'anywhere' }}>Room {listing.roomNumber}</span>
@@ -76,13 +68,14 @@ const SpaceCard = ({ listing, href, email }: SpaceCardProps) => {
           </Col>
 
           {/* Image */}
-          <Col xs={12} md="auto" className="d-flex justify-content-end align-items-start" style={{ minWidth: 0, flexShrink: 0 }}>
+          <Col xs="auto" className="d-flex justify-content-end align-items-start" style={{ minWidth: 0, flexShrink: 0 }}>
             <Image
               src={listing.pictures?.[0]?.fileName || '/placeholder.jpg'}
               alt={listing.buildingName}
-              width={200}
-              height={200}
-              style={{ borderRadius: '8px', objectFit: 'cover' }}
+              width={180}
+              height={180}
+              className="space-card-image"
+              style={{ objectFit: 'cover' }}
             />
           </Col>
         </Row>
