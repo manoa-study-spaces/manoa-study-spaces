@@ -2,45 +2,15 @@
 
 import { useSession } from 'next-auth/react';
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
-import { useForm, Resolver } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import swal from 'sweetalert';
 import { redirect } from 'next/navigation';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { AddSpaceSchema } from '@/lib/validationSchemas';
 import { addListing } from '@/lib/dbActions';
-import type { Amenity } from '@prisma/client';
 
-/**
- * List of available amenities (must match Prisma enum values exactly)
- */
-const AMENITIES: Amenity[] = [
-  'Outlets',
-  'AirConditioning',
-  'WiFi',
-  'Printing',
-  'Whiteboards',
-  'ReservableRooms',
-  'Accessible',
-  'WaterRefill',
-];
-
-// Map enum names to display names
-const amenityDisplayNames: Record<string, string> = {
-  Outlets: 'Outlets',
-  AirConditioning: 'Air Conditioning',
-  WiFi: 'WiFi',
-  Printing: 'Printing',
-  Whiteboards: 'Whiteboards',
-  ReservableRooms: 'Reservation Req.',
-  Accessible: 'Accessibility',
-  WaterRefill: 'Water Refill',
-};
-
-/**
- * Strongly typed form values
- */
-type AddSpaceFormValues = {
+const onSubmit = async (data: {
   buildingName: string;
   roomNumber: string;
   occupancy: 'Empty' | 'Moderate' | 'Crowded';
@@ -48,26 +18,11 @@ type AddSpaceFormValues = {
   noiseLevel: 'Quiet' | 'Moderate' | 'Loud';
   spaceType: 'Indoor' | 'Outdoor';
   capacity: number;
-  image?: string;
-  amenities: string[]; // checkbox output stays string[]
-};
-
-/**
- * onSubmit = async function to handle form submission.
- * Takes validated form data and sends it to the database.
- */
-const onSubmit = async (data: AddSpaceFormValues) => {
-  /**
-   * FIX: convert string[] → Amenity[]
-   * This is the ONLY safe place to do conversion (boundary layer)
-   */
-  const cleanedAmenities: Amenity[] = data.amenities
-    .filter((a): a is Amenity => AMENITIES.includes(a as Amenity));
-
+  image?: string | null;
+}) => {
   await addListing({
     ...data,
-    amenities: cleanedAmenities,
-    image: data.image ?? undefined,
+    image: data.image ?? undefined, 
   });
 
   swal('Success', 'Space added successfully', 'success', {
@@ -83,13 +38,10 @@ const AddSpaceForm: React.FC = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<AddSpaceFormValues>({
-    resolver: yupResolver(AddSpaceSchema) as Resolver<AddSpaceFormValues>,
-    defaultValues: {
-      amenities: [],
-    },
+  } = useForm({
+    resolver: yupResolver(AddSpaceSchema),
   });
-
+  
   if (status === 'loading') {
     return <LoadingSpinner />;
   }
@@ -107,15 +59,14 @@ const AddSpaceForm: React.FC = () => {
               <Form
                 onSubmit={handleSubmit(
                   (data) => {
-                    console.log('✅ Valid Submit', data);
+                    console.log("✅ Valid Submit", data);
                     onSubmit(data);
                   },
                   (errors) => {
-                    console.log('❌ Invalid Submit:', errors);
+                    console.log("❌ Invalid Submit:", errors);
                   }
                 )}
-              >
-
+                >
                 {/* Building Name */}
                 <Form.Group className="mb-3">
                   <Form.Label>Building Name</Form.Label>
@@ -143,6 +94,7 @@ const AddSpaceForm: React.FC = () => {
                 </Form.Group>
 
                 <Row className="g-3">
+                  {/* Left Column */}
                   <Col md={6}>
                     <Form.Group>
                       <Form.Label>Occupancy</Form.Label>
@@ -155,7 +107,7 @@ const AddSpaceForm: React.FC = () => {
 
                     <Form.Group className="mt-3">
                       <Form.Label>Food Allowed</Form.Label>
-                      <Form.Select {...register('foodAllowed')}>
+                      <Form.Select {...register('foodAllowed')} isInvalid={!!errors.foodAllowed}>
                         <option value="">Select one</option>
                         <option value="Permitted">Permitted</option>
                         <option value="Prohibited">Prohibited</option>
@@ -173,6 +125,7 @@ const AddSpaceForm: React.FC = () => {
                     </Form.Group>
                   </Col>
 
+                  {/* Right Column */}
                   <Col md={6}>
                     <Form.Group>
                       <Form.Label>Space Type</Form.Label>
@@ -187,7 +140,7 @@ const AddSpaceForm: React.FC = () => {
                       <Form.Control
                         type="number"
                         min={1}
-                        {...register('capacity', { valueAsNumber: true })}
+                        {...register('capacity')}
                         isInvalid={!!errors.capacity}
                       />
                       <Form.Control.Feedback type="invalid">
@@ -197,7 +150,7 @@ const AddSpaceForm: React.FC = () => {
                   </Col>
                 </Row>
 
-                {/* Image */}
+                {/* Image Row */}
                 <Row className="mt-3">
                   <Col>
                     <Form.Group>
@@ -211,36 +164,6 @@ const AddSpaceForm: React.FC = () => {
                   </Col>
                 </Row>
 
-                {/* Amenities */}
-                <Row className="mt-3">
-                  <Col>
-                    <Form.Group>
-                      <Form.Label>Amenities</Form.Label>
-
-                      <div
-                        style={{
-                          display: 'flex',
-                          flexWrap: 'wrap',
-                          gap: '12px 24px',
-                        }}
-                      >
-                        {AMENITIES.map((amenity) => (
-                          <Form.Check
-                            key={amenity}
-                            type="checkbox"
-                            label={amenityDisplayNames[amenity] || amenity}
-                            value={amenity}
-                            {...register('amenities')}
-                            style={{
-                              minWidth: '160px',
-                            }}
-                          />
-                        ))}
-                      </div>
-                    </Form.Group>
-                  </Col>
-                </Row>
-
                 {/* Buttons */}
                 <Row className="mt-4">
                   <Col>
@@ -249,12 +172,7 @@ const AddSpaceForm: React.FC = () => {
                     </Button>
                   </Col>
                   <Col>
-                    <Button
-                      type="button"
-                      variant="secondary"
-                      className="w-100"
-                      onClick={() => reset()}
-                    >
+                    <Button type="button" variant="secondary" className="w-100" onClick={() => reset()}>
                       Reset
                     </Button>
                   </Col>
