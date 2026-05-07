@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Container, Row, Col, Button, Badge } from 'react-bootstrap';
+import Image from 'next/image';
+import { Container, Row, Col, Badge } from 'react-bootstrap';
 import { prisma } from '@/lib/prisma';
 import { loggedInProtectedPage } from '@/lib/page-protection';
 import { auth } from '@/lib/auth';
@@ -56,11 +57,13 @@ const ListingDetailPage = async ({ params }: ListingDetailProps) => {
 
         <Row className="g-4">
           <Col lg={7}>
-            <div className="space-detail-image mb-4">
-              <img
+            <div className="space-detail-image mb-4" style={{ position: 'relative', width: '100%', height: 420, borderRadius: 12, overflow: 'hidden' }}>
+              <Image
                 src={listing.pictures?.[0]?.fileName || '/placeholder.jpg'}
                 alt={listing.buildingName}
-                style={{ width: '100%', borderRadius: '12px', objectFit: 'cover', maxHeight: '420px' }}
+                fill
+                style={{ objectFit: 'cover' }}
+                sizes="(max-width: 1024px) 100vw, 800px"
               />
             </div>
           </Col>

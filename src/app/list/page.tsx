@@ -10,7 +10,7 @@ import SpaceListClient from '@/components/SpaceListClient';
  * Page that renders all listings for logged-in users.
  */
 const ListPage = async () => {
-  // Protect route
+  // Protect route and get email
   const session = await auth();
 
   loggedInProtectedPage(
@@ -18,6 +18,7 @@ const ListPage = async () => {
       user: { email: string; id: string; name: string };
     } | null,
   );
+  const email = session?.user?.email ?? '';
 
   const listings = await prisma.listing.findMany({
     include: {
@@ -35,7 +36,7 @@ const ListPage = async () => {
       <Container id="list" fluid className="py-3">
         <Row>
           <Col>
-            <SpaceListClient listings={listings} />
+            <SpaceListClient listings={listings} email={email} />
           </Col>
         </Row>
       </Container>

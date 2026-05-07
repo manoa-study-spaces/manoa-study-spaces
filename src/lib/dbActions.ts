@@ -103,7 +103,8 @@ export async function addListing(data: {
     });
   }
 
-  redirect('/list');
+  // Return the newly created listing so the client can update local state/localStorage.
+  return newListing;
 }
 
 /**

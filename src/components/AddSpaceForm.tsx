@@ -5,7 +5,7 @@ import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import { useForm, Resolver } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import swal from 'sweetalert';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { AddSpaceSchema } from '@/lib/validationSchemas';
 import { addListing } from '@/lib/dbActions';
@@ -52,31 +52,46 @@ type AddSpaceFormValues = {
   amenities: string[]; // checkbox output stays string[]
 };
 
-/**
- * onSubmit = async function to handle form submission.
- * Takes validated form data and sends it to the database.
- */
-const onSubmit = async (data: AddSpaceFormValues) => {
-  /**
-   * FIX: convert string[] → Amenity[]
-   * This is the ONLY safe place to do conversion (boundary layer)
-   */
-  const cleanedAmenities: Amenity[] = data.amenities
-    .filter((a): a is Amenity => AMENITIES.includes(a as Amenity));
-
-  await addListing({
-    ...data,
-    amenities: cleanedAmenities,
-    image: data.image ?? undefined,
-  });
-
-  swal('Success', 'Space added successfully', 'success', {
-    timer: 2000,
-  });
-};
+/* submit handler moved inside component to access session */
 
 const AddSpaceForm: React.FC = () => {
-  const { status } = useSession();
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  const onSubmit = async (data: AddSpaceFormValues) => {
+    const cleanedAmenities: Amenity[] = data.amenities
+      .filter((a): a is Amenity => AMENITIES.includes(a as Amenity));
+
+    try {
+      const newListing = await addListing({
+        ...data,
+        amenities: cleanedAmenities,
+        image: data.image ?? undefined,
+      });
+
+      // store in localStorage under profile:{email}.addedSpaces
+      try {
+        const email = session?.user?.email ?? 'anonymous';
+        const key = `profile:${email}`;
+        const raw = window.localStorage.getItem(key);
+        const parsed = raw ? JSON.parse(raw) : {};
+        const arr: number[] = parsed.addedSpaces && Array.isArray(parsed.addedSpaces) ? parsed.addedSpaces : [];
+        if (newListing && newListing.listingID && !arr.includes(newListing.listingID)) {
+          arr.push(newListing.listingID);
+          window.localStorage.setItem(key, JSON.stringify({ ...(parsed || {}), addedSpaces: arr }));
+        }
+      } catch {
+        // ignore
+      }
+
+  swal('Success', 'Space added successfully', 'success', { timer: 1600 });
+  // navigate using router to satisfy react-hooks/immutability
+  router.push('/list');
+    } catch (err) {
+      console.error(err);
+      swal('Error', 'Failed to add space', 'error');
+    }
+  };
 
   const {
     register,
@@ -95,7 +110,8 @@ const AddSpaceForm: React.FC = () => {
   }
 
   if (status === 'unauthenticated') {
-    redirect('/auth/signin');
+    router.push('/auth/signin');
+    return null;
   }
 
   return (

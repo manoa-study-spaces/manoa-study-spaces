@@ -1,7 +1,10 @@
 "use client";
 
 import './profile.css';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import SpaceCard, { Listing } from '@/components/SpaceCard';
+import StudyGroupCard, { StudyGroup } from '@/components/StudyGroupCard';
 
 type ProfileShape = {
 	fullName?: string;
@@ -14,6 +17,10 @@ type ProfileShape = {
 	status?: string;
 	picture?: Array<{ fileName: string }>;
 	pictureUrl?: string;
+	// client-only lists persisted in localStorage
+	savedSpaces?: number[];
+	joinedStudyGroups?: number[];
+	addedSpaces?: number[];
 };
 
 export default function ProfileClient({ profile, email }: { profile: ProfileShape | null; email?: string }) {
@@ -68,8 +75,7 @@ export default function ProfileClient({ profile, email }: { profile: ProfileShap
 										<div className="profile-avatar-wrap">
 											<div className="profile-image avatar-large">
 												{imageSrc ? (
-													// eslint-disable-next-line @next/next/no-img-element
-													<img src={imageSrc} alt="profile" />
+													<Image src={imageSrc} alt="profile" width={120} height={120} style={{ borderRadius: '50%' }} />
 												) : (
 													// compute initials from name/username
 													(() => {
@@ -160,20 +166,112 @@ export default function ProfileClient({ profile, email }: { profile: ProfileShap
 								<div className="profile-right">
 									<div className="study-group-card profile-box">
 										<h3>Added Spaces</h3>
-										<p className="muted">(no spaces added yet)</p>
+										{(() => {
+											const added: number[] = clientProfile.addedSpaces || [];
+											if (!added || added.length === 0) return <p className="muted">(No spaces added yet)</p>;
+
+											return (
+												<>
+													<div style={{ marginTop: 8 }}>
+														{added.slice(0, 2).map((id) => (
+															<div key={id} style={{ marginBottom: 8 }}>
+																<ProfileSavedListing id={id} email={clientProfile && clientProfile.email} />
+															</div>
+														))}
+													</div>
+													<div style={{ marginTop: 8 }}>
+														<a className="btn btn-link" href="/profile/added-spaces">View all ({added.length})</a>
+													</div>
+												</>
+											);
+										})()}
 									</div>
 
 									<div className="study-group-card profile-box" style={{ marginTop: 16 }}>
 										<h3>Study Groups</h3>
-										<p className="muted">(not a member of any study groups yet)</p>
+										{(() => {
+											const joined: number[] = clientProfile.joinedStudyGroups || [];
+											if (!joined || joined.length === 0) return <p className="muted">(Not a member of any study groups yet)</p>;
+
+											return (
+												<>
+													<div style={{ marginTop: 8 }}>
+														{joined.slice(0, 2).map((id) => (
+															<div key={id} style={{ marginBottom: 8 }}>
+																<ProfileStudyGroupListing id={id} />
+															</div>
+														))}
+													</div>
+													<div style={{ marginTop: 8 }}>
+														<a className="btn btn-link" href="/profile/study-groups">View all ({joined.length})</a>
+													</div>
+												</>
+											);
+										})()}
 									</div>
 
 									<div className="study-group-card profile-box" style={{ marginTop: 16 }}>
 										<h3>Saved Spaces</h3>
-										<p className="muted">(no spaces favorited yet)</p>
+										{(() => {
+											const saved: number[] = clientProfile.savedSpaces || [];
+											if (!saved || saved.length === 0) return <p className="muted">(No spaces favorited yet)</p>;
+
+											return (
+												<>
+													<div style={{ marginTop: 8 }}>
+														{/** Fetch up to 2 saved listings client-side */}
+														{saved.slice(0, 2).map((id) => (
+															<div key={id} style={{ marginBottom: 8 }}>
+																<ProfileSavedListing id={id} email={clientProfile && clientProfile.email} />
+															</div>
+														))}
+													</div>
+													<div style={{ marginTop: 8 }}>
+														<a className="btn btn-link" href="/profile/saved">View all ({saved.length})</a>
+													</div>
+												</>
+											);
+										})()}
 									</div>
 								</div>
 							</div>
 						</div>
 					);
+}
+
+function ProfileSavedListing({ id, email }: { id: number; email?: string }) {
+	const [listing, setListing] = useState<Listing | null>(null);
+
+	useEffect(() => {
+		let cancelled = false;
+		fetch(`/api/listings?ids=${id}`).then((r) => r.json()).then((data) => {
+			if (cancelled) return;
+			const l = (data.listings && data.listings[0]) || null;
+			setListing(l as Listing | null);
+		}).catch(() => {});
+		return () => { cancelled = true; };
+	}, [id]);
+
+	if (!listing) return <div className="muted">Loading...</div>;
+
+	return <SpaceCard listing={listing} href={`/list/${listing.listingID}`} email={email} />;
+}
+
+function ProfileStudyGroupListing({ id }: { id: number }) {
+	const [group, setGroup] = useState<StudyGroup | null>(null);
+
+	useEffect(() => {
+		let cancelled = false;
+		fetch(`/api/studygroups?ids=${id}`).then((r) => r.json()).then((data) => {
+			if (cancelled) return;
+				const g = (data.groups && data.groups[0]) || null;
+				if (g) (g as StudyGroup).isJoined = true;
+			setGroup(g as StudyGroup | null);
+		}).catch(() => {});
+		return () => { cancelled = true; };
+	}, [id]);
+
+	if (!group) return <div className="muted">Loading...</div>;
+
+	return <StudyGroupCard group={group} />;
 }
