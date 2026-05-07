@@ -9,7 +9,7 @@ test('can authenticate a specific user', async ({ getUserPage }) => {
   // Navigate to the home page and wait for post-login indicator
   await customUserPage.goto('https://manoa-study-spaces-powwrfvsx-brians-projects-1f312bea.vercel.app/');
   await expect(
-    customUserPage.getByRole('button', { name: 'Study Spaces' })
+    customUserPage.getByRole('link', { name: 'Study Spaces' })
   ).toBeVisible({ timeout: 10000 });
 
   // Now check for navigation links and headings
