@@ -10,7 +10,7 @@ import SpaceListClient from '@/components/SpaceListClient';
  * Page that renders all listings for logged-in users.
  */
 const ListPage = async () => {
-  // Protect route and get email
+  // Protect route
   const session = await auth();
 
   loggedInProtectedPage(
