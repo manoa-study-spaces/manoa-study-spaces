@@ -7,7 +7,7 @@ test('can authenticate a specific user', async ({ getUserPage }) => {
   const customUserPage = await getUserPage('brianiki@hawaii.edu', '102938');
 
   // Navigate to the home page and wait for post-login indicator
-  await customUserPage.goto('http://localhost:3000/');
+  await customUserPage.goto('https://manoa-study-spaces-powwrfvsx-brians-projects-1f312bea.vercel.app/');
   await expect(
     customUserPage.getByRole('button', { name: 'brianiki@hawaii.edu' })
   ).toBeVisible({ timeout: 10000 });
