@@ -36,9 +36,10 @@ type Listing = {
 // listings: array of Listing objects fetched from the database 
 type SpaceCardProps = {
   listings: Listing[];
+  email?: string;
 };
 
-const SpaceListClient = ({ listings }: SpaceCardProps) => {
+const SpaceListClient = ({ listings, email }: SpaceCardProps) => {
   /**
    * search = state variable to hold the current search query for filtering listings by building name.
    * setSearch = function to update the search state variable when the user types in the search bar.
@@ -90,7 +91,7 @@ const SpaceListClient = ({ listings }: SpaceCardProps) => {
       <Row xs={1} md={2} className="g-3">
         {filteredListings.map((listing) => (
           <Col key={listing.listingID}>
-            <SpaceCard listing={listing} href={`/list/${listing.listingID}`} />
+            <SpaceCard listing={listing} href={`/list/${listing.listingID}`} email={email} />
           </Col>
         ))}
       </Row>

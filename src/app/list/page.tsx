@@ -18,6 +18,7 @@ const ListPage = async () => {
       user: { email: string; id: string; name: string };
     } | null,
   );
+  const email = session?.user?.email ?? '';
 
   const listings = await prisma.listing.findMany({
     include: {
@@ -35,7 +36,7 @@ const ListPage = async () => {
       <Container id="list" fluid className="py-3">
         <Row>
           <Col>
-            <SpaceListClient listings={listings} />
+            <SpaceListClient listings={listings} email={email} />
           </Col>
         </Row>
       </Container>

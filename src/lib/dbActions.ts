@@ -103,7 +103,24 @@ export async function addListing(data: {
     });
   }
 
-  redirect('/list');
+  // Return the newly created listing so the client can update local state/localStorage.
+  return newListing;
+}
+
+export async function createReview(data: {
+  listingId: number;
+  authorId: number;
+  rating: number;
+  content: string;
+}) {
+  await prisma.review.create({
+    data: {
+      listingID: data.listingId,
+      authorId: data.authorId,
+      rating: data.rating,
+      content: data.content,
+    },
+  });
 }
 
 /**

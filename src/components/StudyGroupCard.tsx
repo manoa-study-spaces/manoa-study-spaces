@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import { joinStudyGroup, leaveStudyGroup } from '@/lib/dbActions';
 // import Image from 'next/image';
 
-type StudyGroup = {
+export type StudyGroup = {
   groupID: number;
   title: string;
   course: string;
@@ -60,6 +60,21 @@ const StudyGroupCard = ({ group }: Props) => {
         });
 
         alert('Left group');
+        // remove from local storage profile joinedStudyGroups
+        try {
+          const email = session.user.email ?? 'anonymous';
+          const key = `profile:${email}`;
+          const raw = window.localStorage.getItem(key);
+          const parsed = raw ? JSON.parse(raw) : {};
+          const arr: number[] = parsed.joinedStudyGroups && Array.isArray(parsed.joinedStudyGroups) ? parsed.joinedStudyGroups : [];
+          const idx = arr.indexOf(group.groupID);
+          if (idx !== -1) {
+            arr.splice(idx, 1);
+            window.localStorage.setItem(key, JSON.stringify({ ...(parsed || {}), joinedStudyGroups: arr }));
+          }
+        } catch {
+          // ignore
+        }
       } else {
         await joinStudyGroup({
           groupId: group.groupID,
@@ -67,6 +82,20 @@ const StudyGroupCard = ({ group }: Props) => {
         });
 
         alert('Joined group');
+        // add to local storage profile joinedStudyGroups
+        try {
+          const email = session.user.email ?? 'anonymous';
+          const key = `profile:${email}`;
+          const raw = window.localStorage.getItem(key);
+          const parsed = raw ? JSON.parse(raw) : {};
+          const arr: number[] = parsed.joinedStudyGroups && Array.isArray(parsed.joinedStudyGroups) ? parsed.joinedStudyGroups : [];
+          if (!arr.includes(group.groupID)) {
+            arr.push(group.groupID);
+            window.localStorage.setItem(key, JSON.stringify({ ...(parsed || {}), joinedStudyGroups: arr }));
+          }
+        } catch {
+          // ignore
+        }
       }
       router.refresh();
 
