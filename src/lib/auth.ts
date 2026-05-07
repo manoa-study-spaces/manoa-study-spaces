@@ -19,6 +19,7 @@ class InvalidRequestSigninError extends CredentialsSignin {
 declare module 'next-auth' {
   interface Session {
     user: {
+      id: string;
       role?: string;
     } & DefaultSession['user'];
   }
@@ -80,6 +81,7 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
         ...session,
         user: {
           ...session.user,
+          id: token.id as string,
           role: (token as { role?: string }).role,
         },
       };
@@ -87,6 +89,7 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
     jwt({ token, user }) {
       // user is type: { id?: string; email?: string; name?: string; role?: string }
       if (user && typeof (user as { role?: string }).role === 'string') {
+        token.id = user.id;
         token.role = (user as { role?: string }).role;
       }
       return token;

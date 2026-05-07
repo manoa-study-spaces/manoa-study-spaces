@@ -1,22 +1,29 @@
 import SpaceCard from '@/components/SpaceCard';
 import { prisma } from '@/lib/prisma';
 import { Container, Row, Col } from 'react-bootstrap';
+import { DateTime } from 'luxon';
 
 export default async function TodayPage() {
-  const today = new Date();
+  // Current time in Hawaii (safe, no string parsing)
+  const hawaiiNow = DateTime.now().setZone('Pacific/Honolulu');
 
-  const formattedDate = today.toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+  // Format date for display
+  const formattedDate = hawaiiNow.toFormat('EEEE, MMMM d, yyyy');
 
-  const startOfToday = new Date();
-  startOfToday.setHours(0, 0, 0, 0);
+  // Start of today in Hawaii
+  const startOfToday = hawaiiNow.startOf('day').toJSDate();
 
-  const startOfTomorrow = new Date(startOfToday);
-  startOfTomorrow.setDate(startOfTomorrow.getDate() + 1);
+  // Start of tomorrow in Hawaii
+  const startOfTomorrow = hawaiiNow
+    .plus({ days: 1 })
+    .startOf('day')
+    .toJSDate();
+
+  // Time Test
+  console.log("Now (server UTC):", new Date().toISOString());
+  console.log("startOfToday:", startOfToday.toISOString());
+  console.log("startOfTomorrow:", startOfTomorrow.toISOString());
+  console.log("formattedDate:", formattedDate);
 
   const listings = await prisma.listing.findMany({
     where: {
@@ -27,6 +34,11 @@ export default async function TodayPage() {
     },
     include: {
       pictures: true,
+      amenities: {
+        include: {
+          amenity: true,
+        },
+      },
     },
     orderBy: {
       createdAt: 'desc',
@@ -45,7 +57,7 @@ export default async function TodayPage() {
           <Row xs={1} md={2} className="g-3">
             {listings.map((listing) => (
               <Col key={listing.listingID}>
-                <SpaceCard listing={listing} />
+                <SpaceCard listing={listing} href={`/list/${listing.listingID}`} />
               </Col>
             ))}
           </Row>

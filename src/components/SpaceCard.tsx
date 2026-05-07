@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
 import { Row, Col } from 'react-bootstrap';
@@ -19,22 +20,39 @@ type SpaceCardProps = {
       imageID: number;
       fileName: string;
     }[];
+    amenities: {
+      amenity: {
+        name: string;
+      };
+    }[];
   };
+  href?: string;
 };
 
-const SpaceCard = ({ listing }: SpaceCardProps) => {
-  return (
+const SpaceCard = ({ listing, href }: SpaceCardProps) => {
+  // Map enum names to display names
+  const amenityDisplayNames: Record<string, string> = {
+    Outlets: 'Outlets',
+    AirConditioning: 'Air Conditioning',
+    WiFi: 'WiFi',
+    Printing: 'Printing',
+    Whiteboards: 'Whiteboards',
+    ReservableRooms: 'Reservation Req.',
+    Accessible: 'Accessibility',
+    WaterRefill: 'Water Refill',
+  };
+
+  const card = (
     <Card className="space-card">
       <Card.Body>
-
-        <Row>
+        <Row className="align-items-start">
           {/* Card Content */}
-          <Col xs={8} md={8}>
+          <Col xs style={{ minWidth: 0, flexGrow: 1 }}>
             <Card.Title>{listing.buildingName}</Card.Title>
 
-            <Card.Subtitle className="mb-2 pb-2 border-bottom d-flex justify-content-between">
-              <span>Room {listing.roomNumber}</span>
-              <span className="text-muted">
+            <Card.Subtitle className="mb-2 pb-2 border-bottom d-flex justify-content-between" style={{ minWidth: 0 }}>
+              <span style={{ minWidth: 0, overflowWrap: 'anywhere' }}>Room {listing.roomNumber}</span>
+              <span className="text-muted" style={{ whiteSpace: 'nowrap' }}>
                 {new Date(listing.createdAt).toLocaleDateString()}
               </span>
             </Card.Subtitle>
@@ -47,18 +65,44 @@ const SpaceCard = ({ listing }: SpaceCardProps) => {
           </Col>
 
           {/* Image */}
-          <Col xs={4} md={4} className="d-flex justify-content-end align-items-start">
+          <Col xs="auto" className="d-flex justify-content-end align-items-start" style={{ minWidth: 0, flexShrink: 0 }}>
             <Image
               src={listing.pictures?.[0]?.fileName || '/placeholder.jpg'}
               alt={listing.buildingName}
-              width={200}
-              height={200}
-              style={{ borderRadius: '8px', objectFit: 'cover' }}
+              width={180}
+              height={180}
+              className="space-card-image"
+              style={{ objectFit: 'cover' }}
             />
           </Col>
         </Row>
+
+        {/* Amenities underneath */}
+        {listing.amenities?.length > 0 && (
+          <Row>
+            <Col>
+              <div className="amenities-container">
+                {listing.amenities.map((a, index) => (
+                  <span key={index} className="amenity-badge">
+                    {amenityDisplayNames[a.amenity.name] || a.amenity.name}
+                  </span>
+                ))}
+              </div>
+            </Col>
+          </Row>
+        )}
       </Card.Body>
     </Card>
+  );
+
+  if (!href) {
+    return card;
+  }
+
+  return (
+    <Link href={href} className="text-decoration-none text-dark" style={{ display: 'block' }}>
+      {card}
+    </Link>
   );
 };
 

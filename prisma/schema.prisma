@@ -38,8 +38,12 @@ model User {
   email    String   @unique
   password String
   role     Role     @default(USER)
-  organizedGroups StudyGroup[]
-  groupMemberships GroupMember[]
+
+  profile  Profile?   @relation(fields: [profileId], references: [profileID])
+  profileId Int?    @unique
+
+  organizedGroups   StudyGroup[]
+  groupMemberships  GroupMember[]
 }
 
 enum Standing {
@@ -68,6 +72,7 @@ model Profile {
   picture   ProfileImage[] 
   status    String
   standing  Standing @default(Freshman)
+  user      User?
 }
 
 enum Occupancy {
