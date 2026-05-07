@@ -1,10 +1,4 @@
-import path from "path";
-import { fileURLToPath } from "url";
+/** @type {import('next').NextConfig} */
+const nextConfig = {};
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-export default {
-  turbopack: {
-    root: __dirname,
-  },
-};
+export default nextConfig;

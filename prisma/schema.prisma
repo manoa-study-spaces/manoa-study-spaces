@@ -1,132 +1,15 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-}
-
-model User {
-  id               Int           @id @default(autoincrement())
-  email            String        @unique
-  password         String
-  role             Role          @default(USER)
-  profileId        Int?          @unique
-  groupMemberships GroupMember[]
-  reviews          Review[]
-  organizedGroups  StudyGroup[]
-  profile          Profile?      @relation(fields: [profileId], references: [profileID])
-}
-
-model ProfileImage {
-  imageID   Int     @id @default(autoincrement())
-  profileID Int
-  fileName  String
-  profile   Profile @relation(fields: [profileID], references: [profileID])
-}
-
-model Profile {
-  id        Int
-  profileID Int            @id @default(autoincrement())
-  fullName  String
-  major     String
-  classes   String
-  Interests String
-  status    String
-  standing  Standing       @default(Freshman)
-  picture   ProfileImage[]
-  user      User?
-}
-
-model Listing {
-  listingID    Int              @id @default(autoincrement())
-  buildingName String
-  roomNumber   String
-  occupancy    Occupancy        @default(Moderate)
-  foodAllowed  FoodAllowed      @default(Prohibited)
-  noiseLevel   NoiseLevel       @default(Moderate)
-  capacity     Int              @default(1)
-  createdAt    DateTime         @default(now())
-  spaceType    SpaceType        @default(Indoor)
-  pictures     Image[]
-  amenities    ListingAmenity[]
-  reviews      Review[]
-  times        Times[]
-}
-
-model StudyGroup {
-  groupID     Int           @id @default(autoincrement())
-  title       String
-  course      String
-  description String?
-  location    String
-  startTime   DateTime
-  endTime     DateTime
-  capacity    Int           @default(6)
-  createdAt   DateTime      @default(now())
-  organizerId Int
-  members     GroupMember[]
-  organizer   User          @relation(fields: [organizerId], references: [id])
-}
-
-model GroupMember {
-  id       Int        @id @default(autoincrement())
-  groupId  Int
-  userId   Int
-  joinedAt DateTime   @default(now())
-  group    StudyGroup @relation(fields: [groupId], references: [groupID], onDelete: Cascade)
-  user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([groupId, userId])
-}
-
-model AmenityEntity {
-  id       Int              @id @default(autoincrement())
-  name     Amenity          @unique
-  listings ListingAmenity[]
-}
-
-model ListingAmenity {
-  listingID Int
-  amenityID Int
-  amenity   AmenityEntity @relation(fields: [amenityID], references: [id], onDelete: Cascade)
-  listing   Listing       @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
-
-  @@id([listingID, amenityID])
-}
-
-model Image {
-  imageID   Int     @id @default(autoincrement())
-  listingID Int
-  fileName  String
-  listing   Listing @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
-}
-
-model Times {
-  timeID    Int     @id @default(autoincrement())
-  listingID Int
-  startTime String
-  endTime   String
-  listing   Listing @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
-}
-
-model Review {
-  reviewID  Int      @id @default(autoincrement())
-  listingID Int
-  authorId  Int
-  rating    Int      @default(5)
-  content   String
-  createdAt DateTime @default(now())
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  listing   Listing  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
-}
-
-model Stuff {
-  id        Int       @id @default(autoincrement())
-  name      String
-  quantity  Int
-  condition Condition @default(good)
-  owner     String
 }
 
 enum Role {
@@ -150,6 +33,19 @@ enum Amenity {
   WaterRefill
 }
 
+model User {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  password String
+  role     Role     @default(USER)
+
+  profile  Profile?   @relation(fields: [profileId], references: [profileID])
+  profileId Int?    @unique
+
+  organizedGroups   StudyGroup[]
+  groupMemberships  GroupMember[]
+}
+
 enum Standing {
   Freshman
   Sophmore
@@ -157,6 +53,26 @@ enum Standing {
   Senior
   Graduate
   Other
+}
+
+model ProfileImage {
+  imageID          Int      @id @default(autoincrement())
+  profileID        Int      
+  fileName         String
+  profile          Profile  @relation(fields: [profileID], references: [profileID])
+}
+
+model Profile {
+  id        Int  
+  profileID Int  @id @default(autoincrement())
+  fullName  String
+  major     String
+  classes   String
+  Interests String
+  picture   ProfileImage[] 
+  status    String
+  standing  Standing @default(Freshman)
+  user      User?
 }
 
 enum Occupancy {
@@ -177,9 +93,88 @@ enum FoodAllowed {
   Water
 }
 
+model Listing {
+  listingID        Int          @id @default(autoincrement())
+  buildingName     String 
+  roomNumber       String
+  times            Times[]
+  pictures         Image[]
+  occupancy        Occupancy    @default(Moderate)
+  foodAllowed      FoodAllowed  @default(Prohibited)
+  noiseLevel       NoiseLevel   @default(Moderate)
+  spaceType        SpaceType    @default(Indoor)
+  capacity         Int          @default(1)
+  createdAt        DateTime     @default(now())
+  amenities        ListingAmenity[]
+}
+
+model StudyGroup {
+  groupID     Int      @id @default(autoincrement())
+  title       String
+  course      String
+  description String?
+  location    String
+  startTime   DateTime
+  endTime     DateTime
+  capacity    Int      @default(6)
+  createdAt   DateTime @default(now())
+  organizerId Int
+  organizer   User     @relation(fields: [organizerId], references: [id])
+  members     GroupMember[]
+}
+
+model GroupMember {
+  id        Int      @id @default(autoincrement())
+  groupId   Int
+  userId    Int
+  joinedAt  DateTime @default(now())
+  group     StudyGroup @relation(fields: [groupId], references: [groupID], onDelete: Cascade)
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([groupId, userId])
+}
+
+model AmenityEntity {
+  id        Int      @id @default(autoincrement())
+  name      Amenity  @unique
+  listings  ListingAmenity[]
+}
+
+model ListingAmenity {
+  listingID Int
+  amenityID Int
+
+  listing   Listing        @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
+  amenity   AmenityEntity  @relation(fields: [amenityID], references: [id], onDelete: Cascade)
+
+  @@id([listingID, amenityID])
+}
+
+model Image {
+  imageID          Int      @id @default(autoincrement())
+  listingID        Int
+  fileName         String
+  listing          Listing  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
+}
+
+model Times {
+  timeID           Int      @id @default(autoincrement())
+  listingID        Int
+  startTime        String   
+  endTime          String   
+  listing          Listing  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
+}
+
 enum Condition {
   excellent
   good
   fair
   poor
+}
+
+model Stuff {
+  id        Int       @id @default(autoincrement())
+  name      String
+  quantity  Int
+  condition Condition @default(good)
+  owner     String
 }
