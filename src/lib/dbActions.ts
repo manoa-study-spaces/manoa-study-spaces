@@ -107,6 +107,22 @@ export async function addListing(data: {
   return newListing;
 }
 
+export async function createReview(data: {
+  listingId: number;
+  authorId: number;
+  rating: number;
+  content: string;
+}) {
+  await prisma.review.create({
+    data: {
+      listingID: data.listingId,
+      authorId: data.authorId,
+      rating: data.rating,
+      content: data.content,
+    },
+  });
+}
+
 /**
  * Creates a new study group in the database.
  */
