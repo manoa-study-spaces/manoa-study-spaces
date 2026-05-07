@@ -34,16 +34,17 @@ enum Amenity {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
+  id       Int    @id @default(autoincrement())
+  email    String @unique
   password String
-  role     Role     @default(USER)
+  role     Role   @default(USER)
 
-  profile  Profile?   @relation(fields: [profileId], references: [profileID])
-  profileId Int?    @unique
+  profile   Profile? @relation(fields: [profileId], references: [profileID])
+  profileId Int?     @unique
 
-  organizedGroups   StudyGroup[]
-  groupMemberships  GroupMember[]
+  organizedGroups  StudyGroup[]
+  groupMemberships GroupMember[]
+  reviews          Review[]
 }
 
 enum Standing {
@@ -56,23 +57,24 @@ enum Standing {
 }
 
 model ProfileImage {
-  imageID          Int      @id @default(autoincrement())
-  profileID        Int      
-  fileName         String
-  profile          Profile  @relation(fields: [profileID], references: [profileID])
+  imageID   Int     @id @default(autoincrement())
+  profileID Int
+  fileName  String
+  profile   Profile @relation(fields: [profileID], references: [profileID])
 }
 
 model Profile {
-  id        Int  
-  profileID Int  @id @default(autoincrement())
+  id        Int
+  profileID Int            @id @default(autoincrement())
   fullName  String
   major     String
   classes   String
   Interests String
-  picture   ProfileImage[] 
+  picture   ProfileImage[]
   status    String
-  standing  Standing @default(Freshman)
+  standing  Standing       @default(Freshman)
   user      User?
+  reviews   Review[]
 }
 
 enum Occupancy {
@@ -94,74 +96,76 @@ enum FoodAllowed {
 }
 
 model Listing {
-  listingID        Int          @id @default(autoincrement())
-  buildingName     String 
-  roomNumber       String
-  times            Times[]
-  pictures         Image[]
-  occupancy        Occupancy    @default(Moderate)
-  foodAllowed      FoodAllowed  @default(Prohibited)
-  noiseLevel       NoiseLevel   @default(Moderate)
-  spaceType        SpaceType    @default(Indoor)
-  capacity         Int          @default(1)
-  createdAt        DateTime     @default(now())
-  amenities        ListingAmenity[]
+  listingID    Int              @id @default(autoincrement())
+  buildingName String
+  roomNumber   String
+  times        Times[]
+  pictures     Image[]
+  occupancy    Occupancy        @default(Moderate)
+  foodAllowed  FoodAllowed      @default(Prohibited)
+  noiseLevel   NoiseLevel       @default(Moderate)
+  spaceType    SpaceType        @default(Indoor)
+  capacity     Int              @default(1)
+  createdAt    DateTime         @default(now())
+  amenities    ListingAmenity[]
+  reviews      Review[]
 }
 
 model StudyGroup {
-  groupID     Int      @id @default(autoincrement())
+  groupID     Int           @id @default(autoincrement())
   title       String
   course      String
   description String?
   location    String
   startTime   DateTime
   endTime     DateTime
-  capacity    Int      @default(6)
-  createdAt   DateTime @default(now())
+  capacity    Int           @default(6)
+  createdAt   DateTime      @default(now())
   organizerId Int
-  organizer   User     @relation(fields: [organizerId], references: [id])
+  organizer   User          @relation(fields: [organizerId], references: [id])
   members     GroupMember[]
 }
 
 model GroupMember {
-  id        Int      @id @default(autoincrement())
-  groupId   Int
-  userId    Int
-  joinedAt  DateTime @default(now())
-  group     StudyGroup @relation(fields: [groupId], references: [groupID], onDelete: Cascade)
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id       Int        @id @default(autoincrement())
+  groupId  Int
+  userId   Int
+  joinedAt DateTime   @default(now())
+  group    StudyGroup @relation(fields: [groupId], references: [groupID], onDelete: Cascade)
+  user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@unique([groupId, userId])
 }
 
 model AmenityEntity {
-  id        Int      @id @default(autoincrement())
-  name      Amenity  @unique
-  listings  ListingAmenity[]
+  id       Int              @id @default(autoincrement())
+  name     Amenity          @unique
+  listings ListingAmenity[]
 }
 
 model ListingAmenity {
   listingID Int
   amenityID Int
 
-  listing   Listing        @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
-  amenity   AmenityEntity  @relation(fields: [amenityID], references: [id], onDelete: Cascade)
+  listing Listing       @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
+  amenity AmenityEntity @relation(fields: [amenityID], references: [id], onDelete: Cascade)
 
   @@id([listingID, amenityID])
 }
 
 model Image {
-  imageID          Int      @id @default(autoincrement())
-  listingID        Int
-  fileName         String
-  listing          Listing  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
+  imageID   Int     @id @default(autoincrement())
+  listingID Int
+  fileName  String
+  listing   Listing @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
 }
 
 model Times {
-  timeID           Int      @id @default(autoincrement())
-  listingID        Int
-  startTime        String   
-  endTime          String   
-  listing          Listing  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
+  timeID    Int     @id @default(autoincrement())
+  listingID Int
+  startTime String
+  endTime   String
+  listing   Listing @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
 }
 
 enum Condition {
@@ -177,4 +181,17 @@ model Stuff {
   quantity  Int
   condition Condition @default(good)
   owner     String
+}
+
+model Review {
+  reviewID         Int      @id @default(autoincrement())
+  listingID        Int
+  authorId         Int
+  rating           Int      @default(5)
+  content          String
+  createdAt        DateTime @default(now())
+  author           User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  listing          Listing  @relation(fields: [listingID], references: [listingID], onDelete: Cascade)
+  profile          Profile? @relation(fields: [profileProfileID], references: [profileID])
+  profileProfileID Int?
 }
