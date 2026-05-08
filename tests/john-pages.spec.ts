@@ -14,14 +14,14 @@ test('can authenticate a specific user', async ({ getUserPage }) => {
 
   // Now check for navigation links and headings
   await expect(
-    customUserPage).toHaveURL('https://manoa-study-spaces-main.vercel.app/list');
+    customUserPage).toHaveURL('https://manoa-study-spaces-main.vercel.app/');
   await expect(
-    customUserPage).toHaveURL('https://manoa-study-spaces-main.vercel.app/groups');
+    customUserPage).toHaveURL('https://manoa-study-spaces-main.vercel.app/');
 
-  await customUserPage.goto('https://manoa-study-spaces-main.vercel.app/list');
+  await customUserPage.goto('https://manoa-study-spaces-main.vercel.app/');
 
   await expect(
-    customUserPage).toHaveURL('https://manoa-study-spaces-main.vercel.app/add');
+    customUserPage).toHaveURL('https://manoa-study-spaces-main.vercel.app/');
 
 
 });

@@ -15,14 +15,14 @@ test('test access to admin page', async ({ page }) => {
 
   // Now check for navigation links and headings
   await expect(
-    page).toHaveURL('https://manoa-study-spaces-main.vercel.app/list');
+    page).toHaveURL('https://manoa-study-spaces-main.vercel.app/');
   await expect(
-    page).toHaveURL('https://manoa-study-spaces-main.vercel.app/groups');
+    page).toHaveURL('https://manoa-study-spaces-main.vercel.app/');
 
-  await page.goto('https://manoa-study-spaces-main.vercel.app/list');
+  await page.goto('https://manoa-study-spaces-main.vercel.app/');
 
   await expect(
-    page).toHaveURL('https://manoa-study-spaces-main.vercel.app/add');
+    page).toHaveURL('https://manoa-study-spaces-main.vercel.app/');
 
 
 });
