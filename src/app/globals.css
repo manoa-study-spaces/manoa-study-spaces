@@ -20,7 +20,7 @@ body {
 
 /* ---------------- Top Navbar ---------------- */
 .top-navbar {
-  background-color: #55d19d;
+  background-color: #5dca9c;
   padding: 0.85rem 0; /* slightly taller header like the mock */
   box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
 }
@@ -39,7 +39,7 @@ body {
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   display: flex;
   align-items: center; /* vertically center text */
-    color: #c2eee0;
+    color: #c2e7d6;
 }
 
 /* Hover effect on logo */
@@ -60,7 +60,7 @@ body {
   margin-left: 0.8rem;
   font-weight: 400;
   font-size: 1.05rem;
-  color: #3e7969;
+  color: #d3ece1;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   display: flex;
   align-items: center;
@@ -106,7 +106,7 @@ body {
 }
 
 .footer-text a {
-  color: #30e78f;
+  color: #48de96;
   text-decoration: none;
 }
 
@@ -136,13 +136,13 @@ body {
   font-weight: 650;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   transform: scaleX(0.9);
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6);
 }
 
 .hero-carousel .carousel-caption p {
   font-size: 1.25rem;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6);
 }
 
 .hero-carousel .carousel-item::after {
@@ -288,17 +288,17 @@ body {
 }
 
 .group-tab-btn.btn-dark {
-  background-color: #3f7a69 !important;
-  border-color: #3f7a69 !important;
+  background-color: #c2e7d6 !important;
+  border-color: #c2e7d6 !important;
 }
 
 .group-tab-btn.btn-outline-dark {
-  border-color: #3f7a69 !important;
-  color: #3f7a69 !important;
+  border-color: #c2e7d6 !important;
+  color: #c2e7d6 !important;
 }
 
 .group-tab-btn.btn-outline-dark:hover {
-  background-color: #3f7a69 !important;
+  background-color: #c2e7d6 !important;
   color: white !important;
 }
 

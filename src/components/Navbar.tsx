@@ -42,16 +42,10 @@ const NavBar: React.FC = () => {
             {title}
           </div>
 
-          {/* Right Side */}
-
-          
         </Container>
-      </Navbar> {/* end of top navbar */}
 
+          {/* Right Side? */}
         <div className="d-flex align-items-center w-100">
-
-          {/* Left Text */}
-
 
           <div className="ms-auto d-flex align-items-center gap-1">
             {/* Profile Icon */}
@@ -60,7 +54,7 @@ const NavBar: React.FC = () => {
                 href={session ? '/profile' : '/auth/signin'}
                 active={pathName === '/profile' || pathName === '/auth/signin'}
               >
-                <PersonFill size={22} color="#3e7969" />
+                <PersonFill size={22} color="#c2e7d6" />
               </Nav.Link>
             </Nav>
 
@@ -117,7 +111,10 @@ const NavBar: React.FC = () => {
             )}
           </Nav>
         </Navbar.Collapse>
-    </>
+      </Navbar> {/* end of top navbar */}
+
+
+    </> 
   );
 };
 
