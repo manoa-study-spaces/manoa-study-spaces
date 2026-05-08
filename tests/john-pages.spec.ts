@@ -9,25 +9,19 @@ test('can authenticate a specific user', async ({ getUserPage }) => {
   // Navigate to the home page and wait for post-login indicator
   await customUserPage.goto('https://manoa-study-spaces-main.vercel.app');
   await expect(
-    customUserPage.getByRole('link', { name: 'Study Spaces' })
-  ).toBeVisible({ timeout: 10000 });
+    customUserPage
+  ).toHaveTitle('Manoa Study Spaces');
 
   // Now check for navigation links and headings
   await expect(
-    customUserPage.getByRole('link', { name: "Study Spaces" })
-  ).toBeVisible({ timeout: 5000 });
+    customUserPage).toHaveURL('https://manoa-study-spaces-main.vercel.app/list');
   await expect(
-    customUserPage.getByRole('link', { name: "Today's Spaces" })
-  ).toBeVisible({ timeout: 5000 });
+    customUserPage).toHaveURL('https://manoa-study-spaces-main.vercel.app/groups');
 
-  await customUserPage.getByRole('link', { name: "Study Spaces" }).click();
-  await expect(
-    customUserPage.getByRole('heading', { name: "Study Spaces" })
-  ).toBeVisible({ timeout: 5000 });
+  await customUserPage.goto('https://manoa-study-spaces-main.vercel.app/list');
 
-  await customUserPage.getByRole('link', { name: "Today's Spaces" }).click();
   await expect(
-    customUserPage.getByRole('heading', { name: "Today's Spaces" })
-  ).toBeVisible({ timeout: 5000 });
+    customUserPage).toHaveURL('https://manoa-study-spaces-main.vercel.app/add');
+
 
 });
