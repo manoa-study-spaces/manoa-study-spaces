@@ -9,6 +9,18 @@ export const AddSpaceSchema = Yup.object({
   spaceType: Yup.string().oneOf(['Indoor', 'Outdoor']).required(),
   capacity: Yup.number().min(1).required(),
   image: Yup.string().notRequired(),
+  amenities: Yup.array()
+    .of(Yup.string().oneOf([
+      'Outlets',
+      'AirConditioning',
+      'WiFi',
+      'Printing',
+      'Whiteboards',
+      'ReservableRooms',
+      'Accessible',
+      'WaterRefill',
+    ]))
+    .default([]),
 });
 
 export const AddStudyGroupSchema = Yup.object({

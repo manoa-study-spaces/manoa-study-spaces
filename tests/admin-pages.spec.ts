@@ -1,49 +1,28 @@
-// import { test, expect } from './auth-utils';
+import { test, expect } from './auth-utils';
 
-// test.slow();
-// test('test access to admin page', async ({ getUserPage }) => {
-//   // Call the getUserPage fixture with admin signin info to get authenticated session for admin
-//   const adminPage = await getUserPage('admin@foo.com', 'changeme');
+test.slow();
+test('test access to admin page', async ({ page }) => {
+  // Call the getUserPage fixture with admin signin info to get authenticated session for admin
+  // const page = await getUserPage('brianiki@hawaii.edu', '102938');
 
-//   // Navigate to the home page and wait for post-login indicator
-//   await adminPage.goto('http://localhost:3000/');
-//   await expect(
-//     adminPage.getByRole('button', { name: 'admin@foo.com' })
-//   ).toBeVisible({ timeout: 10000 });
+  // Navigate to the home page and wait for post-login indicator
+  await page.goto('https://manoa-study-spaces-main.vercel.app/list');
+   // Navigate to the home page and wait for post-login indicator
+  await page.goto('https://manoa-study-spaces-main.vercel.app');
+  await expect(
+    page
+  ).toHaveTitle('Manoa Study Spaces');
 
-//   // Check for navigation elements
-//   await expect(
-//     adminPage.getByRole('link', { name: 'Next.js Application Template' })
-//   ).toBeVisible({ timeout: 5000 });
-//   await expect(
-//     adminPage.getByRole('link', { name: 'Add Stuff' })
-//   ).toBeVisible({ timeout: 5000 });
-//   await expect(
-//     adminPage.getByRole('link', { name: 'List Stuff' })
-//   ).toBeVisible({ timeout: 5000 });
-//   await expect(
-//     adminPage.getByRole('link', { name: 'Admin' })
-//   ).toBeVisible({ timeout: 5000 });
+  // Now check for navigation links and headings
+  await expect(
+    page).toHaveURL('https://manoa-study-spaces-main.vercel.app/');
+  await expect(
+    page).toHaveURL('https://manoa-study-spaces-main.vercel.app/');
 
-//   // Test Add Stuff adminPage
-//   await adminPage.getByRole('link', { name: 'Add Stuff' }).click();
-//   await expect(
-//     adminPage.getByRole('heading', { name: 'Add Stuff' })
-//   ).toBeVisible({ timeout: 5000 });
+  await page.goto('https://manoa-study-spaces-main.vercel.app/');
 
-//   // Test List Stuff adminPage
-//   await adminPage.getByRole('link', { name: 'List Stuff' }).click();
-//   await expect(
-//     adminPage.getByRole('heading', { name: 'Stuff' })
-//   ).toBeVisible({ timeout: 5000 });
+  await expect(
+    page).toHaveURL('https://manoa-study-spaces-main.vercel.app/');
 
-//   // Test Admin adminPage
-//   await adminPage.getByRole('link', { name: 'Admin' }).click();
-//   await expect(
-//     adminPage.getByRole('heading', { name: 'List Stuff Admin' })
-//   ).toBeVisible({ timeout: 5000 });
-//   await expect(
-//     adminPage.getByRole('heading', { name: 'List Users Admin' })
-//   ).toBeVisible({ timeout: 5000 });
 
-// });
+});

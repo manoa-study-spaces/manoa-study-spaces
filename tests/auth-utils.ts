@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Base configuration
-const BASE_URL = process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3000';
+const BASE_URL = 'https://manoa-study-spaces-main.vercel.app';
 const SESSION_STORAGE_PATH = path.join(__dirname, 'playwright-auth-sessions');
 
 // Ensure session directory exists
@@ -43,9 +43,9 @@ async function authenticateWithUI(
 
       // Check if we're authenticated by looking for a sign-out option or user email
       const isAuthenticated = await Promise.race([
-        page.getByText(email).isVisible().then((visible) => visible),
-        page.getByRole('button', { name: email }).isVisible().then((visible) => visible),
-        page.getByText('Sign out').isVisible().then((visible) => visible),
+        page.getByText(email).first().isVisible().then((visible) => visible),
+        page.getByRole('button', { name: email }).first().isVisible().then((visible) => visible),
+        page.getByText('Sign out').first().isVisible().then((visible) => visible),
         page.getByRole('button', { name: 'Sign out' }).isVisible().then((visible) => visible),
         new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 3000)),
       ]);
@@ -76,18 +76,18 @@ async function authenticateWithUI(
     ]);
 
     // Click submit button and wait for navigation
-    const submitButton = page.getByRole('button', { name: /sign[ -]?in/i });
+    const submitButton = page.getByRole('button', { name: /sign[ -]?in/i }).first();
     if (!await submitButton.isVisible({ timeout: 1000 })) {
       // Try alternative selector if the first one doesn't work
-      await page.getByRole('button', { name: /log[ -]?in/i }).click();
+      await page.getByRole('button', { name: /log[ -]?in/i }).first();
     } else {
       await submitButton.click();
     }
 
 
     // Wait for a clear post-login indicator (user button or sign out button)
-    const userButton = page.getByRole('button', { name: email });
-    const signOutButton = page.getByRole('button', { name: /sign out/i });
+    const userButton = page.getByRole('button', { name: email }).first();
+    const signOutButton = page.getByRole('button', { name: /sign out/i }).first();
     await Promise.any([
       expect(userButton).toBeVisible({ timeout: 10000 }),
       expect(signOutButton).toBeVisible({ timeout: 10000 })

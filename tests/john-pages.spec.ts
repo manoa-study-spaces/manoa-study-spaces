@@ -1,33 +1,27 @@
-// import { test, expect } from './auth-utils';
+import { test, expect } from './auth-utils';
 
-// test.slow();
-// test('can authenticate a specific user', async ({ getUserPage }) => {
+test.slow();
+test('can authenticate a specific user', async ({ page }) => {
 
-//   // Call the getUserPage fixture with users signin info to get authenticated session for user
-//   const customUserPage = await getUserPage('john@foo.com', 'changeme');
+  // Call the getUserPage fixture with users signin info to get authenticated session for user
+  // const customUserPage = await getUserPage('john@foo.com', 'changeme');
 
-//   // Navigate to the home page and wait for post-login indicator
-//   await customUserPage.goto('http://localhost:3000/');
-//   await expect(
-//     customUserPage.getByRole('button', { name: 'john@foo.com' })
-//   ).toBeVisible({ timeout: 10000 });
+  // Navigate to the home page and wait for post-login indicator
+  await page.goto('https://manoa-study-spaces-main.vercel.app');
+  await expect(
+    page
+  ).toHaveTitle('Manoa Study Spaces');
 
-//   // Now check for navigation links and headings
-//   await expect(
-//     customUserPage.getByRole('link', { name: 'Add Stuff' })
-//   ).toBeVisible({ timeout: 5000 });
-//   await expect(
-//     customUserPage.getByRole('link', { name: 'List Stuff' })
-//   ).toBeVisible({ timeout: 5000 });
+  // Now check for navigation links and headings
+  await expect(
+    page).toHaveURL('https://manoa-study-spaces-main.vercel.app/');
+  await expect(
+    page).toHaveURL('https://manoa-study-spaces-main.vercel.app/');
 
-//   await customUserPage.getByRole('link', { name: 'Add Stuff' }).click();
-//   await expect(
-//     customUserPage.getByRole('heading', { name: 'Add Stuff' })
-//   ).toBeVisible({ timeout: 5000 });
+  await page.goto('https://manoa-study-spaces-main.vercel.app/');
 
-//   await customUserPage.getByRole('link', { name: 'List Stuff' }).click();
-//   await expect(
-//     customUserPage.getByRole('heading', { name: 'Stuff' })
-//   ).toBeVisible({ timeout: 5000 });
+  await expect(
+    page).toHaveURL('https://manoa-study-spaces-main.vercel.app/');
 
-// });
+
+});

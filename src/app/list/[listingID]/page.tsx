@@ -1,9 +1,10 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Container, Row, Col, Button, Badge } from 'react-bootstrap';
+import { Container, Row, Col, Badge } from 'react-bootstrap';
 import { prisma } from '@/lib/prisma';
 import { loggedInProtectedPage } from '@/lib/page-protection';
 import { auth } from '@/lib/auth';
+import ReviewForm from '@/components/ReviewForm';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,6 +32,18 @@ const ListingDetailPage = async ({ params }: ListingDetailProps) => {
       amenities: {
         include: {
           amenity: true,
+        },
+      },
+      reviews: {
+        include: {
+          author: {
+            include: {
+              profile: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: 'desc',
         },
       },
     },
@@ -127,6 +140,40 @@ const ListingDetailPage = async ({ params }: ListingDetailProps) => {
                 <p className="text-muted">No schedule information provided.</p>
               )}
             </div>
+          </Col>
+        </Row>
+
+        <Row className="mt-5">
+          <Col lg={8}>
+            <div className="mb-4">
+              <h2>Student Reviews</h2>
+              {listing.reviews.length ? (
+                <>
+                  <p className="text-muted">
+                    {listing.reviews.length} review{listing.reviews.length === 1 ? '' : 's'}
+                  </p>
+                  <div className="review-list">
+                    {listing.reviews.map((review) => {
+                      const name = review.author.profile?.fullName || review.author.email || 'Anonymous';
+                      return (
+                        <div key={review.reviewID} className="review-card mb-3 p-3 border rounded bg-light">
+                          <div className="d-flex justify-content-between align-items-center mb-2">
+                            <strong>{name}</strong>
+                            <span>{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</span>
+                          </div>
+                          <p>{review.content}</p>
+                          <p className="text-muted mb-0">{new Date(review.createdAt).toLocaleDateString()}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              ) : (
+                <p className="text-muted">No reviews yet. Be the first to leave feedback.</p>
+              )}
+            </div>
+
+            <ReviewForm listingId={listing.listingID} />
           </Col>
         </Row>
       </Container>

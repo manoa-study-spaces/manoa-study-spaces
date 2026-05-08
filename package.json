@@ -8,7 +8,7 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
-    "seed": "npx tsx src/seed.ts",
+    "seed": "npx tsx prisma/seed.ts",
     "playwright": "npx playwright test"
   },
   "dependencies": {
@@ -33,7 +33,7 @@
     "yup": "^1.7.1"
   },
   "devDependencies": {
-    "@playwright/test": "^1.58.2",
+    "@playwright/test": "^1.59.1",
     "@types/bcrypt": "^6.0.0",
     "@types/luxon": "^3.7.1",
     "@types/node": "^20.19.35",

@@ -1,6 +1,6 @@
 // import { test, expect } from '@playwright/test';
 
-// const BASE_URL = process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3000';
+// const BASE_URL = process.env.PLAYWRIGHT_TEST_BASE_URL || 'https://manoa-study-spaces-main.vercel.app';
 
 // test('shows a specific message when email does not exist', async ({ page }) => {
 //   await page.goto(`${BASE_URL}/auth/signin`);
