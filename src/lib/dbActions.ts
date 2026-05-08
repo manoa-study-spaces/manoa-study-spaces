@@ -104,7 +104,7 @@ export async function addListing(data: {
   }
 
   // Return the newly created listing so the client can update local state/localStorage.
-  return newListing;
+  redirect(`/list`);
 }
 
 export async function createReview(data: {
