@@ -46,7 +46,7 @@ async function authenticateWithUI(
         page.getByText(email).isVisible().then((visible) => visible),
         //page.getByRole('button', { name: email }).isVisible().then((visible) => visible),
         page.getByText('Sign out').isVisible().then((visible) => visible),
-        page.getByRole('button', { name: 'Sign out' }).isVisible().then((visible) => visible),
+        //page.getByRole('button', { name: 'Sign out' }).isVisible().then((visible) => visible),
         new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 3000)),
       ]);
 
@@ -76,10 +76,10 @@ async function authenticateWithUI(
     ]);
 
     // Click submit button and wait for navigation
-    const submitButton = page.getByRole('button', { name: /sign[ -]?in/i });
+    const submitButton = page.getByText('Sign in');
     if (!await submitButton.isVisible({ timeout: 1000 })) {
       // Try alternative selector if the first one doesn't work
-      await page.getByRole('button', { name: /log[ -]?in/i }).click();
+      await page.getByText('login').click();
     } else {
       await submitButton.click();
     }
