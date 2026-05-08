@@ -7,45 +7,22 @@ test('test access to admin page', async ({ getUserPage }) => {
 
   // Navigate to the home page and wait for post-login indicator
   await adminPage.goto('https://manoa-study-spaces-main.vercel.app/list');
-  // await expect(
-  //   adminPage.getByRole('button', { name: 'brianiki@hawaii.edu' })
-  // ).toBeVisible({ timeout: 10000 });
+   // Navigate to the home page and wait for post-login indicator
+  await adminPage.goto('https://manoa-study-spaces-main.vercel.app');
+  await expect(
+    adminPage
+  ).toHaveTitle('Manoa Study Spaces');
 
-  // // Check for navigation elements
-  // await expect(
-  //   adminPage.getByRole('link', { name: 'Manoa Study Spaces' })
-  // ).toBeVisible({ timeout: 5000 });
-  // await expect(
-  //   adminPage.getByRole('link', { name: "Today's Spaces" })
-  // ).toBeVisible({ timeout: 5000 });
-  // await expect(
-  //   adminPage
-  //   .getByRole('link', { name: "Study Spaces" })
-  //   .first()
-  // ).toBeVisible({ timeout: 5000 });
-  // await expect(
-  //   adminPage.getByRole('link', { name: "Study Groups" })
-  // ).toBeVisible({ timeout: 5000 });
+  // Now check for navigation links and headings
+  await expect(
+    adminPage).toHaveURL('https://manoa-study-spaces-main.vercel.app/list');
+  await expect(
+    adminPage).toHaveURL('https://manoa-study-spaces-main.vercel.app/groups');
 
-  // // Test Add Stuff adminPage
-  // await adminPage.getByRole('link', { name: "Study Spaces" }).click();
-  // await expect(
-  //   adminPage.getByRole('heading', { name: "Study Spaces" })
-  // ).toBeVisible({ timeout: 5000 });
+  await adminPage.goto('https://manoa-study-spaces-main.vercel.app/list');
 
-  // // Test List Stuff adminPage
-  // await adminPage.getByRole('link', { name: "Today's Spaces" }).click();
-  // await expect(
-  //   adminPage.getByRole('heading', { name: "Today's Spaces" })
-  // ).toBeVisible({ timeout: 5000 });
+  await expect(
+    adminPage).toHaveURL('https://manoa-study-spaces-main.vercel.app/add');
 
-  // // Test Admin adminPage
-  // await adminPage.getByRole('link', { name: 'Admin' }).click();
-  // await expect(
-  //   adminPage.getByRole('heading', { name: "Study Spaces" })
-  // ).toBeVisible({ timeout: 5000 });
-  // await expect(
-  //   adminPage.getByRole('heading', { name: "Study Spaces" })
-  // ).toBeVisible({ timeout: 5000 });
 
 });
