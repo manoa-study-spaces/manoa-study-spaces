@@ -13,76 +13,53 @@ const NavBar: React.FC = () => {
   const currentUser = session?.user?.email;
   const role = session?.user?.role;
 
-  const titles: Record<string, string> = {
+  /*const titles: Record<string, string> = {
     '/today': "Today's Spaces",
-    '/list': "Study Spaces",
-    '/groups': "Study Groups",
-    '/admin': "Admin Panel",
-    '/profile': "Profile",
-    '/add': "Add Spaces",
-  };
-  const title = titles[pathName] || "Manoa Study Spaces";
-  
+    '/list': 'Study Spaces',
+    '/groups': 'Study Groups',
+    '/admin': 'Admin Panel',
+    '/profile': 'Profile',
+    '/add': 'Add Spaces',
+  };*/
+
+  // Single combined navbar: logo + page title on the left, links + profile on the right
   return (
-    <>
-    {/* ---------------- Top Navbar ---------------- */}
-      <Navbar className="top-navbar" expand="lg">
-        <Container fluid className="d-flex justify-content-between align-items-center">
-          {/* Left Logo */}
-          <Navbar.Brand href="/">
-            <Image
-              src="/StudySpacesLogo.png"
-              alt="Logo"
-              width={90}
-              height={60}
-            />
-          </Navbar.Brand>
+    <Navbar className="bottom-navbar px-3" expand="lg">
+      <Container fluid className="d-flex align-items-center">
+        {/* Logo */}
+        <Navbar.Brand href="/" className="d-flex align-items-center me-3">
+          <Image src="/StudySpacesLogo.png" alt="Logo" width={120} height={80} />
+        </Navbar.Brand>
 
-          {/* Right Text */}
-          <div className="navbar-top-text">
-            {title}
-          </div>
-        </Container>
-      </Navbar>
+        {/* left area (logo only) */}
 
-    {/* ---------------- Bottom Navbar ---------------- */}
-      <Navbar className="bottom-navbar px-3" expand="lg">
-        <div className="d-flex align-items-center w-100">
-
-          {/* Left Text */}
-          <div className="navbar-bottom-text">
-            UHM, let&apos;s study!
-          </div>
-
-          <div className="ms-auto d-flex align-items-center gap-1">
-            {/* Profile Icon */}
-            <Nav>
-              <Nav.Link
-                href={session ? '/profile' : '/auth/signin'}
-                active={pathName === '/profile' || pathName === '/auth/signin'}
-              >
-                <PersonFill size={22} color="#3e7969" />
-              </Nav.Link>
-            </Nav>
-
-            {/* Hamburger */}
-            <Navbar.Toggle aria-controls="basic-navbar-nav" className="hamburger-toggle"/>
-          </div>
+        <div className="ms-auto d-flex align-items-center gap-2">
+          <Navbar.Toggle aria-controls="basic-navbar-nav" className="hamburger-toggle" />
         </div>
 
-        {/* Collapsible Section */}
         <Navbar.Collapse id="basic-navbar-nav">
+          {currentUser && (
+            <Nav className="me-auto">
+              <Nav.Link href="/today" active={pathName === '/today'}>
+                Today&apos;s Spaces
+              </Nav.Link>
+              <Nav.Link href="/list" active={pathName === '/list'}>
+                Study Spaces
+              </Nav.Link>
+              <Nav.Link href="/groups" active={pathName === '/groups'}>
+                Study Groups
+              </Nav.Link>
+            </Nav>
+          )}
           <Nav className="ms-auto">
             {currentUser && (
               <>
-                <Nav.Link href="/today" active={pathName === '/today'}>
-                  Today&apos;s Spaces
-                </Nav.Link>
-                <Nav.Link href="/list" active={pathName === '/list'}>
-                  Study Spaces
-                </Nav.Link>
-                <Nav.Link href="/groups" active={pathName === '/groups'}>
-                  Study Groups
+                <Nav.Link
+                  href={session ? '/profile' : '/auth/signin'}
+                  active={pathName === '/profile' || pathName === '/auth/signin'}
+                  className="profile-link d-flex align-items-center"
+                >
+                  <PersonFill size={22} color="#3e7969" />
                 </Nav.Link>
               </>
             )}
@@ -118,36 +95,10 @@ const NavBar: React.FC = () => {
             )}
           </Nav>
         </Navbar.Collapse>
-      </Navbar>
-    </>
+      </Container>
+    </Navbar>
   );
+
 };
 
 export default NavBar;
-
-// Profile Stuff
-            // <Nav>
-            //   {session ? (
-            //     <NavDropdown id="login-dropdown" title={currentUser}>
-            //       <NavDropdown.Item id="login-dropdown-sign-out" href="/api/auth/signout">
-            //         <BoxArrowRight />
-            //         Sign Out
-            //       </NavDropdown.Item>
-            //       <NavDropdown.Item id="login-dropdown-change-password" href="/auth/change-password">
-            //         <Lock />
-            //         Change Password
-            //       </NavDropdown.Item>
-            //     </NavDropdown>
-            //   ) : (
-            //     <NavDropdown id="login-dropdown" title="Login">
-            //       <NavDropdown.Item id="login-dropdown-sign-in" href="/auth/signin">
-            //         <PersonFill />
-            //         Sign in
-            //       </NavDropdown.Item>
-            //       <NavDropdown.Item id="login-dropdown-sign-up" href="/auth/signup">
-            //         <PersonPlusFill />
-            //         Sign up
-            //       </NavDropdown.Item>
-            //     </NavDropdown>
-            //   )}
-            // </Nav>
