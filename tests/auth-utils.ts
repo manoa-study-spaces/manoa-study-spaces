@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Base configuration
-const BASE_URL = process.env.PLAYWRIGHT_TEST_BASE_URL || 'https://manoa-study-spaces-main.vercel.app';
+const BASE_URL = 'https://manoa-study-spaces-main.vercel.app';
 const SESSION_STORAGE_PATH = path.join(__dirname, 'playwright-auth-sessions');
 
 // Ensure session directory exists
