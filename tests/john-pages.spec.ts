@@ -7,7 +7,7 @@ test('can authenticate a specific user', async ({ getUserPage }) => {
   const customUserPage = await getUserPage('john@foo.com', 'changeme');
 
   // Navigate to the home page and wait for post-login indicator
-  await customUserPage.goto('https://manoa-study-spaces-main.vercel.app/');
+  await customUserPage.goto('https://manoa-study-spaces-main.vercel.app');
   await expect(
     customUserPage.getByRole('link', { name: 'Study Spaces' })
   ).toBeVisible({ timeout: 10000 });
