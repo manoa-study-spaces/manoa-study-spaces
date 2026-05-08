@@ -44,7 +44,7 @@ async function authenticateWithUI(
       // Check if we're authenticated by looking for a sign-out option or user email
       const isAuthenticated = await Promise.race([
         page.getByText(email).isVisible().then((visible) => visible),
-        page.getByRole('button', { name: email }).isVisible().then((visible) => visible),
+        //page.getByRole('button', { name: email }).isVisible().then((visible) => visible),
         page.getByText('Sign out').isVisible().then((visible) => visible),
         page.getByRole('button', { name: 'Sign out' }).isVisible().then((visible) => visible),
         new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 3000)),
