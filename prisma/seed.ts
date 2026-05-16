@@ -46,6 +46,7 @@ async function main() {
     });
     // console.log(`  Created user: ${user.email} with role: ${user.role}`);
   });
+
   for (const data of configFile.defaultData) {
     const condition = data.condition as Condition || Condition.good;
     console.log(`  Adding stuff: ${JSON.stringify(data)}`);
@@ -60,7 +61,25 @@ async function main() {
       },
     });
   }
-  
+
+  for (const data of configFile.defaultSpaces) {
+    console.log(`  Adding spaces pls work: ${JSON.stringify(data)}`);
+    await prisma.listing.upsert({
+      where: { listingID: data.listingID },
+      update: {},
+      create: {
+        buildingName: data.buildingName,
+        roomNumber: data.roomNumber,
+        occupancy: data.occupancy,
+        foodAllowed: data.foodAllowed,
+        noiseLevel: data.noiseLevel,
+        spaceType: data.spaceType,
+        capacity: data.capacity,
+    
+      },
+    });
+  }
+
 }
 main()
   .then(() => prisma.$disconnect())
