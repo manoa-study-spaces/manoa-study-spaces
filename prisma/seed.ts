@@ -64,8 +64,8 @@ async function main() {
 
   for (const data of configFile.defaultSpaces) {
     console.log(`  Adding spaces pls work: ${JSON.stringify(data)}`);
-    await prisma.stuff.upsert({
-      where: { id: data.listingID },
+    await prisma.listing.upsert({
+      where: { listingID: data.listingID },
       update: {},
       create: {
         buildingName: data.buildingName,
@@ -75,7 +75,7 @@ async function main() {
         noiseLevel: data.noiseLevel,
         spaceType: data.spaceType,
         capacity: data.capacity,
-        image: "https://media.discordapp.net/attachments/1486117508124639280/1501315291127353405/MSS_NoImage.png?ex=6a08cf52&is=6a077dd2&hm=491c51de3fea977410c4f37dcab41f41fcf19521838da291f888cba6d2474508&=&format=webp&quality=lossless&width=420&height=420",
+    
       },
     });
   }
